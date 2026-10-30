@@ -1,42 +1,45 @@
 name: Test Bot
-
 on:
   workflow_dispatch:
-
-# Add concurrency group to prevent parallel runs
+permissions:
+  contents: read
 concurrency:
-  group: ${{ github.workflow }}
+  group: futureeval-s0-single-test
   cancel-in-progress: false
-
-
-# Daily job to run the simple forecast bot
 jobs:
-  forecast_job:
-    runs-on: ubuntu-latest # determines the machine that will run the job - keep as is
-    steps: # sets up the steps that will be run in order
-      # setup repository with all necessary dependencies - keep as is
-      - name: Check out repository
+  one_question_only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out approved code
         uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Python 3.11
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
       - name: Install uv
         uses: astral-sh/setup-uv@v10.3.0
         with:
-          version: "0.13.1"
-      - name: Install dependencies
-        run: uv sync --locked
-      - name: Run bot
-        run: |
-          uv run python main.py --mode test_questions
-        # this reads the environment variables from the github repository.
-        # Store under Settings --> Secrets and variables --> Actions
+          version: '0.13.1'
+      - name: Safe static gate BEFORE dependency installation
+        run: python tools/s0_safety_gate.py --repo .
+      - name: Install exactly locked official dependencies
+        run: uv sync --locked --no-dev
+      - name: Submit one binary TEST AREA forecast using free route only
         env:
-          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }} # replace this with the name of the variable under which you stored your own Metaculus token
-          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
-          EXA_API_KEY: ${{ secrets.EXA_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_ACTIONS: 'true'
+          S0_TEST_ONLY: '1'
+          S0_FREE_MODEL: 'openrouter/free'
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ASKNEWS_CLIENT_ID: ${{ secrets.ASKNEWS_CLIENT_ID }}
-          ASKNEWS_SECRET: ${{ secrets.ASKNEWS_SECRET }}
+        run: uv run python s0_one_test.py
+      - name: Retain sanitized result candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: futureeval-s0-one-test-sanitized
+          path: |
+            s0_receipt_candidate.json
+            s0_preflight.json
+          if-no-files-found: warn
+          retention-days: 7
