@@ -61,6 +61,23 @@ def fail(code: str, base: dict) -> int:
     return 1
 
 
+def readback_selected_question(client, selected_question) -> bool:
+    """Read back the exact selected subquestion, including grouped posts."""
+    question_id = getattr(selected_question, "id_of_question", None)
+    if not isinstance(question_id, int):
+        raise ValueError("Selected question has no integer question ID")
+
+    refreshed = client.get_question_by_post_id(
+        selected_question.id_of_post,
+        group_question_mode="unpack_subquestions",
+    )
+    questions = refreshed if isinstance(refreshed, list) else [refreshed]
+    matches = [q for q in questions if getattr(q, "id_of_question", None) == question_id]
+    if len(matches) != 1:
+        raise ValueError("Could not uniquely read back selected question")
+    return getattr(matches[0], "already_forecasted", None) is True
+
+
 async def submit_once(question, client):
     from main import FallTemplateBot2026
     from forecasting_tools import GeneralLlm
@@ -153,9 +170,7 @@ def main() -> int:
 
     # Secondary authenticated readback (read-only), not a second submission.
     try:
-        updated = client.get_question_by_post_id(q.id_of_post)
-        base["platform_readback_already_forecasted"] = (
-            getattr(updated, "already_forecasted", None) is True)
+        base["platform_readback_already_forecasted"] = readback_selected_question(client, q)
     except Exception as e:
         base["platform_readback_error_type"] = type(e).__name__
     base["timestamp_utc"] = now_utc()
