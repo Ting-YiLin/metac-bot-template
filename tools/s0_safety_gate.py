@@ -10,7 +10,7 @@ TWO_DISABLED = (
     'run_bot_on_tournament.yaml',
     'run_bot_on_metaculus_cup.yaml',
 )
-KNOWN = set(TWO_DISABLED + ('test_bot.yaml', 'review_bot.yaml'))
+KNOWN = set(TWO_DISABLED + ('test_bot.yaml', 'review_bot.yaml', 'practice_five.yaml'))
 ONE_TEST_ENTRY = 'uv run python s0_one_test.py'
 
 

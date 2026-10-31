@@ -1,0 +1,12 @@
+{
+  "scope": "PUBLIC_LINK_INDEX_ONLY_NOT_FULL_QUESTION_DOWNLOAD",
+  "verified_date": "2026-10-31",
+  "warning": "Full resolution criteria, live answer status, and question JSON not verified in this unauthenticated environment. For complete practice, use your authorized Metaculus account, observe API terms, and avoid reuse in model development beyond authorized purposes.",
+  "official_test_area": "https://www.metaculus.com/tournament/bot-testing-area/",
+  "official_references": [
+    {"id":"Q1","type":"group_test_area","title":"What will the average interest rate on the US federal government's total debt be at the end of these fiscal years?","url":"https://www.metaculus.com/questions/43322/what-will-the-interest-rate-on-us-federal-governments-debt-be-in-these-years/","source":"Metaculus public search indexed page"},
+    {"id":"Q2","type":"binary_historical_example","title":"Will humans go extinct before 2100?","url":"https://www.metaculus.com/questions/578/human-extinction-by-2100/","source":"Official forecasting-tools README example"},
+    {"id":"Q3","type":"numeric_historical_example","title":"Age of oldest human as of 2100","url":"https://www.metaculus.com/questions/14333/age-of-oldest-human-as-of-2100/","source":"Official forecasting-tools example bot"},
+    {"id":"Q4","type":"multiple_choice_historical_example","title":"Number of new leading AI labs","url":"https://www.metaculus.com/questions/22427/number-of-new-leading-ai-labs/","source":"Official forecasting-tools example bot"}
+  ]
+}

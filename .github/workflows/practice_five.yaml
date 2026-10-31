@@ -1,0 +1,76 @@
+name: FutureEval V2 - 5 Question Practice (NO SUBMISSION)
+on:
+  workflow_dispatch:
+    inputs:
+      free_tier_confirmed:
+        description: 'Set yes ONLY after confirming Google project has NO billing and free quota available'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - 'no'
+          - 'yes'
+      mode:
+        description: 'Choose offline-test, fetch-only, or live-practice (Gemini free quota)'
+        required: true
+        default: fetch-only
+        type: choice
+        options:
+          - offline-test
+          - fetch-only
+          - live-practice
+permissions:
+  contents: read
+concurrency:
+  group: futureeval-v2-five-practice-no-submission
+  cancel-in-progress: false
+jobs:
+  practice_only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout approved code
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Offline fail-closed safety checks BEFORE installing dependencies
+        run: |
+          python tools/s0_safety_gate.py --repo .
+          python tools/v2_safety_gate.py --repo .
+          python -m unittest discover -s tests -v
+      - name: Install pinned official dependencies
+        run: uv sync --locked --no-dev
+      - name: Run practice (read-only Metaculus, no forecasting submit)
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MODE: ${{ inputs.mode }}
+          FREE_ACK: ${{ inputs.free_tier_confirmed }}
+          V2_FREE_TIER_CONFIRMED: ${{ inputs.free_tier_confirmed == 'yes' && 'YES' || 'NO' }}
+        run: |
+          case "$MODE" in
+            offline-test|fetch-only|live-practice) ;;
+            *) echo 'Unapproved mode'; exit 2;;
+          esac
+          uv run python -m practice.run --mode "$MODE"
+      - name: Retain permitted evidence even if run was partial
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: futureeval-v2-practice-no-submit
+          path: |
+            OUTPUT/SELECTED_QUESTIONS.json
+            OUTPUT/STATUS.json
+            OUTPUT/SUMMARY.json
+            OUTPUT/QUESTION_REPORTS/*.json
+            OUTPUT/usage_ledger.json
+            v2_preflight.json
+            s0_preflight.json
+          if-no-files-found: warn
+          retention-days: 7
