@@ -1,107 +1,123 @@
-name: FutureEval V2.1 - Five Angle Adaptive Research (NO SUBMISSION)
+name: FutureEval V2.2 - HIGH + 30s Pacing + Free Fallback (NO SUBMISSION)
 on:
   workflow_dispatch:
     inputs:
-      free_tier_confirmed:
-        description: 'YES only if Gemini project still has free-tier access and billing is OFF'
-        required: true
-        default: 'no'
-        type: choice
-        options: ['no','yes']
-      data_permission_confirmed:
-        description: 'YES only if authorization for Metaculus question research remains valid'
-        required: true
-        default: 'no'
-        type: choice
-        options: ['no','yes']
       mode:
-        description: 'offline-test; fetch-only; research-only; live-practice'
-        required: true
-        default: 'fetch-only'
+        description: 'offline-test -> fetch-only -> diagnostic -> live-practice (2 then 5)'
         type: choice
-        options: ['offline-test','fetch-only','research-only','live-practice']
+        required: true
+        default: offline-test
+        options: [offline-test, fetch-only, research-only, diagnostic, live-practice]
+      question_count:
+        description: '2 for pilot; 5 only after two-question pilot passes'
+        type: choice
+        required: true
+        default: '2'
+        options: ['2', '5']
       dataset:
-        description: 'Re-use previous five authorized questions, or re-fetch authorized testing-area questions'
-        required: true
-        default: 'previous-five'
+        description: 'Previous authorized five testing-area questions, or authorized-live'
         type: choice
-        options: ['previous-five','authorized-live']
-      max_questions:
-        description: 'Use 1 for a low-volume live API smoke check; use 5 for the full experiment'
         required: true
-        default: '5'
+        default: previous-five
+        options: [previous-five, authorized-live]
+      free_tier_confirmed:
+        description: 'YES only if Google project billing still OFF and free-tier valid'
         type: choice
-        options: ['1','5']
+        required: true
+        default: 'no'
+        options: ['no', 'yes']
+      data_permission_confirmed:
+        description: 'YES only if authorized to process the test-area question content'
+        type: choice
+        required: true
+        default: 'no'
+        options: ['no', 'yes']
+      free_router_fallback_authorized:
+        description: 'YES only if OPENROUTER_API_KEY is present and only openrouter/free is allowed'
+        type: choice
+        required: true
+        default: 'no'
+        options: ['no', 'yes']
       already_used_lite:
-        description: 'Actual Google AI Studio today used requests for Gemini 3.5 Lite before this run'
+        description: 'Actual Google AI Studio DAILY used requests for Gemini 3.5 Lite'
         required: true
-        default: 'NOT_CHECKED'
+        default: NOT_CHECKED
         type: string
       already_used_38:
-        description: 'Actual Google AI Studio today used requests for Gemini 3.8 before this run'
+        description: 'Actual Google AI Studio DAILY used requests for Gemini 3.8'
         required: true
-        default: 'NOT_CHECKED'
+        default: NOT_CHECKED
         type: string
       already_used_36:
-        description: 'Actual Google AI Studio today used requests for Gemini 3.6 before this run'
+        description: 'Actual Google AI Studio DAILY used requests for Gemini 3.6'
         required: true
-        default: 'NOT_CHECKED'
+        default: NOT_CHECKED
+        type: string
+      already_used_openrouter:
+        description: 'OpenRouter free daily attempts; read Activity first, else NOT_CHECKED disables fallback'
+        required: true
+        default: NOT_CHECKED
         type: string
 permissions:
   contents: read
 concurrency:
-  group: futureeval-v21-practice-single-run
+  group: futureeval-v22-practice-only-single-run
   cancel-in-progress: false
 jobs:
   practice_only:
     runs-on: ubuntu-latest
-    timeout-minutes: 110
+    timeout-minutes: 300
     steps:
-      - name: Check out reviewed code
+      - name: Checkout reviewed fork
         uses: actions/checkout@v4
       - name: Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install uv
+      - name: uv official pinned environment
         uses: astral-sh/setup-uv@v10.3.0
         with:
           version: '0.13.1'
-      - name: All original safety gates and offline tests BEFORE installing packages
+      - name: Fail-closed safety gates and offline tests BEFORE dependency install
         run: |
           python tools/s0_safety_gate.py --repo .
           python tools/v2_safety_gate.py --repo .
           python -m unittest discover -s tests -v
-      - name: Install official pinned dependencies
+      - name: Install locked official dependencies
         run: uv sync --locked --no-dev
-      - name: Run practice (read-only question source; no prediction submit)
+      - name: Run read-only practice (never submit)
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           MODE: ${{ inputs.mode }}
           DATASET: ${{ inputs.dataset }}
-          MAX_QUESTIONS: ${{ inputs.max_questions }}
+          QCOUNT: ${{ inputs.question_count }}
           V21_FREE_TIER_CONFIRMED: ${{ inputs.free_tier_confirmed == 'yes' && 'YES' || 'NO' }}
           V21_AUTHORIZED_METACULUS_DATA_USE: ${{ inputs.data_permission_confirmed == 'yes' && 'YES' || 'NO' }}
+          V22_OPENROUTER_FREE_AUTHORIZED: ${{ inputs.free_router_fallback_authorized == 'yes' && 'YES' || 'NO' }}
           V21_ALREADY_USED_LITE: ${{ inputs.already_used_lite }}
           V21_ALREADY_USED_38: ${{ inputs.already_used_38 }}
           V21_ALREADY_USED_36: ${{ inputs.already_used_36 }}
+          V22_ALREADY_USED_OPENROUTER: ${{ inputs.already_used_openrouter }}
         run: |
-          case "$MODE" in offline-test|fetch-only|research-only|live-practice) ;; *) exit 2;; esac
-          case "$MAX_QUESTIONS" in 1|5) ;; *) exit 2;; esac
-          uv run python -m practice.run --mode "$MODE" --dataset "$DATASET" --max-questions "$MAX_QUESTIONS"
-      - name: Always preserve sanitized outputs, even for partial runs
+          case "$MODE" in offline-test|fetch-only|research-only|diagnostic|live-practice) ;; *) exit 2;; esac
+          case "$DATASET" in previous-five|authorized-live) ;; *) exit 2;; esac
+          case "$QCOUNT" in 2|5) ;; *) exit 2;; esac
+          uv run python -m practice.run --mode "$MODE" --dataset "$DATASET" --max-questions "$QCOUNT"
+      - name: Persist evidence even if partial or errors
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: futureeval-v21-five-angle-no-submit
+          name: futureeval-v22-high-thinking-practice-no-submit
           path: |
             OUTPUT/SELECTED_QUESTIONS.json
             OUTPUT/STATUS.json
             OUTPUT/SUMMARY.json
+            OUTPUT/DIAGNOSTIC.json
             OUTPUT/QUESTION_REPORTS/*.json
             OUTPUT/usage_ledger.json
             v2_preflight.json
             s0_preflight.json
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 14

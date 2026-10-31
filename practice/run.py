@@ -9,7 +9,8 @@ import os
 from pathlib import Path
 from practice import core,prompts,research
 from practice.fetch import fetch_authorized
-from practice.gemini import Gemini,QuotaLedger,ModelFailure,BudgetExceeded,LIMITS
+from practice.gemini import Gemini,QuotaLedger,ModelFailure,BudgetExceeded,LIMITS,GOOGLE_LIMITS,ROUTER_MODEL
+from practice.router import FreeFallbackLLM
 
 ROOT=Path(__file__).resolve().parents[1]
 CAPTURE=ROOT/'FIXTURES/official_5_previous_run.json'
@@ -134,7 +135,7 @@ def evaluate_question(q,gem,folder,*,research_only=False,fetcher=research.fetch_
     result={'question_id':q['id'],'question':q,'status':'IN_PROGRESS',
             'safe_to_submit':False,'submission_count':0,
             'started_at_utc':dt.datetime.now(dt.timezone.utc).isoformat(),
-            'pipeline':'V21_SEARCH_ADAPTIVE'}
+            'pipeline':'V22_HIGH_THINKING_LOW_FREQ_FREE_FALLBACK'}
     hist_before=len(gem.history)
     def save():dump(path,result)
     save()
@@ -147,46 +148,49 @@ def evaluate_question(q,gem,folder,*,research_only=False,fetcher=research.fetch_
             result['status']='PASS_RESEARCH_ONLY' if result['source_quality']['pass_for_bounded_research'] else 'PARTIAL_RESEARCH_WEAK'
             return result
         a=b=third=None
-        # Distinct role output without sharing A/B reasoning with each other.
-        def primary(role):
-            if getattr(gem,'switch_to_36',False):model='gemini-3.6-flash'
-            else:model='gemini-3.8-flash'
+        # A/B use independent HIGH-thinking Gemini 3.8 requests, unless persistent 503
+        # triggers OpenRouter/free for THAT role alone; never silently switch all roles to 3.6.
+        def provenance(role,requested):
+            # Mock test doubles may not implement provenance; production FreeFallbackLLM does.
+            details=gem.last_success(role) if hasattr(gem,'last_success') else None
+            return details or {'provider':'google','model_requested':requested,
+                               'model_returned':requested,'thinking_level':'high'}
+        for role in ('A','B'):
+            model='gemini-3.8-flash'
             prompt=prompts.primary_prompt(q,result['public_research'],result['evidence_lite'],role)
             try:
-                v=gem.call(model,prompt,role=role)
-                return core.validate_primary(v,q),model
+                reply=gem.call(model,prompt,role=role)
+                result['forecast_'+role]=core.validate_primary(reply,q)
+                pmeta=provenance(role,model)
+                result['model_'+role]=pmeta['model_returned']
+                result['provenance_'+role]=pmeta
+                save()
             except (ModelFailure,BudgetExceeded,ValueError,TypeError,KeyError) as e:
-                result[f'{role}_error']={'type':type(e).__name__,'code':str(e)[:100], 'attempted_model':model};save()
-                if model=='gemini-3.8-flash' and isinstance(e,ModelFailure):
-                    # A degraded-but-traceable fallback; never count it as a 3.8 result.
-                    gem.switch_to_36=True
-                    v=gem.call('gemini-3.6-flash',prompt,role=role+'_fallback_3_6',max_attempts=2)
-                    return core.validate_primary(v,q),'gemini-3.6-flash'
-                raise
-        for role in ('A','B'):
-            try:
-                response,model=primary(role);result['forecast_'+role]=response
-                result['model_'+role]=model;save()
-            except (ModelFailure,BudgetExceeded,ValueError,TypeError,KeyError) as e:
-                result[role+'_final_failure']={'type':type(e).__name__,'code':str(e)[:90]};save()
+                result[role+'_final_failure']={'type':type(e).__name__,'code':str(e)[:90],
+                                               'model_requested':model}
+                save()
         a=result.get('forecast_A');b=result.get('forecast_B')
         if a is not None and b is not None:
             route=core.compare_forecasts(q,a,b);result['route']=route;save()
             try:
                 route_name=route['route']
-                model='gemini-3.6-flash' if route_name=='check' or getattr(gem,'switch_to_36',False) else 'gemini-3.8-flash'
+                model='gemini-3.6-flash' if route_name=='check' else 'gemini-3.8-flash'
+                role='check' if route_name=='check' else 'C'
                 prompt=prompts.third_prompt(q,result['public_research'],result['evidence_lite'],route_name,a,b)
-                third=core.validate_third(gem.call(model,prompt,role='check' if route_name=='check' else 'C'),q)
-                result['forecast_third']=third;result['model_third']=model;save()
+                third=core.validate_third(gem.call(model,prompt,role=role),q)
+                result['forecast_third']=third
+                pmeta=provenance(role,model)
+                result['model_third']=pmeta['model_returned'];result['provenance_third']=pmeta
+                save()
             except (ModelFailure,BudgetExceeded,ValueError,TypeError,KeyError) as e:
                 result['third_failure']={'type':type(e).__name__,'code':str(e)[:90]};save()
-            p=[a,b]+([third] if third else [])
-            result['aggregate']=core.aggregate(q,p)
-            result['aggregate_model_count']=len(p)
-            result['aggregate_class']='FULL_3_MODEL' if third else 'DEGRADED_2_MODEL'
-            if third:result['complexity']=core.complexity_summary(a,b,third)
-            else:result['complexity']=core.complexity_summary(a,b,None)
-            result['status']='PASS_PRACTICE_NO_SUBMISSION' if third else 'PARTIAL_TWO_MODEL_AGGREGATE'
+            responses=[a,b]+([third] if third else [])
+            result['aggregate']=core.aggregate(q,responses)
+            result['aggregate_model_count']=len(responses)
+            fallback=any(result.get('provenance_'+k,{}).get('provider')=='openrouter' for k in ('A','B','third'))
+            result['aggregate_class']=('FULL_3_RESPONSE_WITH_FREE_FALLBACK' if fallback else 'FULL_3_GEMINI') if third else 'DEGRADED_2_MODEL'
+            result['complexity']=core.complexity_summary(a,b,third)
+            result['status']=('PASS_PRACTICE_WITH_FALLBACK' if fallback else 'PASS_PRACTICE_NO_SUBMISSION') if third else 'PARTIAL_TWO_MODEL_AGGREGATE'
         else:
             result['status']='PARTIAL_INSUFFICIENT_PRIMARY_FORECASTS'
         if not result['source_quality']['pass_for_bounded_research']:
@@ -204,7 +208,7 @@ def evaluate_question(q,gem,folder,*,research_only=False,fetcher=research.fetch_
 
 def main(argv=None):
     p=argparse.ArgumentParser()
-    p.add_argument('--mode',required=True,choices=('offline-test','fetch-only','research-only','live-practice','mock-live'))
+    p.add_argument('--mode',required=True,choices=('offline-test','fetch-only','research-only','live-practice','diagnostic'))
     p.add_argument('--dataset',choices=('previous-five','authorized-live','synthetic'),default='previous-five')
     p.add_argument('--max-questions',type=int,default=5)
     p.add_argument('--outdir',default=str(ROOT/'OUTPUT'))
@@ -219,16 +223,17 @@ def main(argv=None):
         dump(out/'STATUS.json',{'mode':args.mode,'status':'PASS' if r.wasSuccessful() else 'FAIL',
                                 'tests_run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors)})
         return 0 if r.wasSuccessful() else 1
-    if args.dataset!='synthetic' and os.getenv('V21_AUTHORIZED_METACULUS_DATA_USE')!='YES':
+    if args.mode!='diagnostic' and args.dataset!='synthetic' and os.getenv('V21_AUTHORIZED_METACULUS_DATA_USE')!='YES':
         dump(out/'STATUS.json',{'mode':args.mode,'status':'NEED_USER_DATA_AUTH_CONFIRMATION'});return 5
-    try:q,provenance=load_questions(args.dataset,count=args.max_questions)
-    except Exception as e:
-        dump(out/'STATUS.json',{'status':'FETCH_FAILED','error_type':type(e).__name__});return 3
-    dump(out/'SELECTED_QUESTIONS.json',{'questions':q,'provenance':provenance})
-    if args.mode=='fetch-only':
-        dump(out/'STATUS.json',{'mode':args.mode,'status':'PASS_FIVE_QUESTIONS' if len(q)==5 else 'PARTIAL_FEWER_THAN_FIVE',
-                                'selected':len(q)});return 0 if q else 4
-    if args.mode in ('research-only','live-practice','mock-live'):
+    if args.mode!='diagnostic':
+        try:q,provenance=load_questions(args.dataset,count=args.max_questions)
+        except Exception as e:
+            dump(out/'STATUS.json',{'status':'FETCH_FAILED','error_type':type(e).__name__});return 3
+        dump(out/'SELECTED_QUESTIONS.json',{'questions':q,'provenance':provenance})
+        if args.mode=='fetch-only':
+            dump(out/'STATUS.json',{'mode':args.mode,'status':'PASS_FIVE_QUESTIONS' if len(q)==5 else 'PARTIAL_FEWER_THAN_FIVE',
+                                    'selected':len(q)});return 0 if q else 4
+    if args.mode in ('research-only','live-practice','diagnostic'):
         if os.getenv('GITHUB_ACTIONS')!='true' or os.getenv('GITHUB_RUN_ATTEMPT')!='1' or os.getenv('GITHUB_REPOSITORY')!='Ting-YiLin/metac-bot-template':
             dump(out/'STATUS.json',{'status':'STOP_NOT_APPROVED_FIRST_GITHUB_RUN'});return 5
         if os.getenv('V21_FREE_TIER_CONFIRMED')!='YES':
@@ -237,6 +242,7 @@ def main(argv=None):
             dump(out/'STATUS.json',{'status':'NEED_USER_AUTH','secret_name':'GEMINI_API_KEY'});return 2
     # Baselines must be declared from Google AI Studio before using any model quota.
     baseline={}
+    router_authorized=os.getenv('V22_OPENROUTER_FREE_AUTHORIZED')=='YES'
     try:
         for model,suffix in [('gemini-3.5-flash-lite','LITE'),('gemini-3.8-flash','38'),('gemini-3.6-flash','36')]:
             raw=os.getenv('V21_ALREADY_USED_'+suffix,'')
@@ -244,26 +250,47 @@ def main(argv=None):
             n=int(raw)
             if not 0<=n<=LIMITS[model]:raise ValueError('INVALID_BASELINE_'+suffix)
             baseline[model]=n
+        router_raw=os.getenv('V22_ALREADY_USED_OPENROUTER','NOT_CHECKED')
+        if router_authorized and (not router_raw.isdecimal() or not 0<=int(router_raw)<=LIMITS[ROUTER_MODEL]):
+            raise ValueError('UNDECLARED_OR_INVALID_OPENROUTER_FREE_USAGE')
+        baseline[ROUTER_MODEL]=int(router_raw) if router_authorized else 0
     except ValueError as e:
         dump(out/'STATUS.json',{'status':'STOP_UNDECLARED_OR_INVALID_DAILY_BASELINE','code':str(e)});return 5
     ledger=QuotaLedger(out/'usage_ledger.json',baseline=baseline)
-    gem=Gemini(ledger)
+    google=Gemini(ledger)
+    gem=FreeFallbackLLM(google,allow_free_fallback=router_authorized)
+    if args.mode=='diagnostic':
+        # Diagnostic never searches, never submits, never retries, never uses OpenRouter.
+        trials=[]
+        for model,role in [('gemini-3.8-flash','DIAG_38'),('gemini-3.6-flash','DIAG_36')]:
+            try:
+                obj=google.call(model,'Return a JSON object with only {"status":"OK"}.',
+                                role=role,thinking_level='high',max_attempts=1)
+                trials.append({'model':model,'role':role,'status':'SUCCESS' if obj.get('status')=='OK' else 'UNEXPECTED_CONTENT'})
+            except (ModelFailure,BudgetExceeded) as e:
+                trials.append({'model':model,'role':role,'status':'FAILED','code':str(e)[:90]})
+            dump(out/'DIAGNOSTIC.json',{'trials':trials,'calls':google.history,
+                                        'quota_ledger':ledger.snapshot(),'submission_count':0})
+        ok=all(z['status']=='SUCCESS' for z in trials)
+        dump(out/'STATUS.json',{'mode':'diagnostic','status':'PASS' if ok else 'PARTIAL_DIAGNOSTIC',
+                                'submission_count':0})
+        return 0 if ok else 6
     reports=[]
-    for x in q[:5]:
+    for x in q[:args.max_questions]:
         reports.append(evaluate_question(x,gem,out/'QUESTION_REPORTS',research_only=args.mode=='research-only'))
         dump(out/'SUMMARY.json',{'mode':args.mode,'total':len(reports),
-                                'complete':sum(z['status']=='PASS_PRACTICE_NO_SUBMISSION' for z in reports),
+                                'complete':sum(z['status'] in ('PASS_PRACTICE_NO_SUBMISSION','PASS_PRACTICE_WITH_FALLBACK') for z in reports),
                                 'two_model_aggregate':sum(z['status']=='PARTIAL_TWO_MODEL_AGGREGATE' for z in reports),
                                 'research_complete':sum(z['status']=='PASS_RESEARCH_ONLY' for z in reports),
                                 'partial':sum(z['status'].startswith('PARTIAL') for z in reports),
                                 'results':[{k:z.get(k) for k in ('question_id','status','aggregate_class','source_quality')} for z in reports],
                                 'quota_ledger':ledger.snapshot(),'submission_count':0})
     statuses={r['status'] for r in reports}
-    code=0 if all(s in ('PASS_PRACTICE_NO_SUBMISSION','PASS_RESEARCH_ONLY') for s in statuses) else 6
+    code=0 if all(s in ('PASS_PRACTICE_NO_SUBMISSION','PASS_PRACTICE_WITH_FALLBACK','PASS_RESEARCH_ONLY') for s in statuses) else 6
     dump(out/'STATUS.json',{'status':'PASS' if code==0 else 'PARTIAL_NEEDS_REVIEW',
-                            'total':len(reports),'complete':sum(r['status']=='PASS_PRACTICE_NO_SUBMISSION' for r in reports),
+                            'total':len(reports),'complete':sum(r['status'] in ('PASS_PRACTICE_NO_SUBMISSION','PASS_PRACTICE_WITH_FALLBACK') for r in reports),
                             'submission_count':0,'source':'TEST_ONLY'})
-    print('V21 practice:', 'PASS' if code==0 else 'PARTIAL', 'questions:',len(reports), 'submissions: 0')
+    print('V22 practice:', 'PASS' if code==0 else 'PARTIAL', 'questions:',len(reports), 'submissions: 0')
     return code
 
 if __name__=='__main__':raise SystemExit(main())

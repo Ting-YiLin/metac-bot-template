@@ -32,6 +32,14 @@ def inspect(root):
         if 'uv run python main.py' in s:errs.append('ORIGINAL_BOT_ENTRY')
         if s.count('uv run python -m practice.run --mode "$MODE"')!=1:errs.append('PRACTICE_ENTRY_COUNT_NOT_ONE')
         if 'permissions:\n  contents: read' not in s:errs.append('EXCESS_GITHUB_PERMISSIONS')
+        if 'OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}' not in s:
+            errs.append('FALLBACK_SECRET_NOT_GITHUB_SECRET')
+        if 'V22_OPENROUTER_FREE_AUTHORIZED' not in s:
+            errs.append('MISSING_FALLBACK_EXPLICIT_AUTH')
+        if 'diagnostic' not in s or 'question_count' not in s:
+            errs.append('MISSING_STAGED_RUN_CONTROLS')
+        if 'timeout-minutes: 300' not in s:
+            errs.append('MISSING_BOUNDED_WORKFLOW_TIMEOUT')
     scripts=[p for p in (root/'practice').rglob('*.py')]
     if len(scripts)<4:errs.append('PRACTICE_SOURCE_MISSING')
     for file in scripts:
@@ -39,11 +47,19 @@ def inspect(root):
         for forbidden in ('publish_report_to_metaculus(','.forecast_on_tournament(','.post_forecast(',
                           'requests.post(', 'api/questions/forecast/', 'subprocess.run('):
             if forbidden in s: errs.append('PROHIBITED_SUBMISSION_OR_EXEC:'+file.name)
+    router=root/'practice'/'router.py'
+    if not router.is_file():errs.append('FREE_FALLBACK_SOURCE_MISSING')
+    else:
+        src=router.read_text(encoding='utf-8')
+        if "ROUTER_MODEL = 'openrouter/free'" not in (root/'practice'/'gemini.py').read_text(encoding='utf-8'):
+            errs.append('ROUTER_MODEL_NOT_STRICTLY_FREE')
+        if 'openrouter/auto' in src or 'openrouter/auto' in (root/'practice'/'gemini.py').read_text(encoding='utf-8'):
+            errs.append('PAID_AUTO_ROUTER_FORBIDDEN')
     s0=root/'tools'/'s0_safety_gate.py'
     if not s0.exists() or "'practice_five.yaml'" not in s0.read_text(encoding='utf-8'):
         errs.append('LEGACY_S0_GATE_NOT_UPDATED')
     return {'status':'PASS' if not errs else 'FAIL','problems':errs,'checked_workflows':sorted(files),
-            'submission_enabled':False,'models_allowlisted':['gemini-3.5-flash-lite','gemini-3.8-flash','gemini-3.6-flash']}
+            'submission_enabled':False,'models_allowlisted':['gemini-3.5-flash-lite','gemini-3.8-flash','gemini-3.6-flash','openrouter/free']}
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--repo',default='.')

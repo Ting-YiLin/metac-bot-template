@@ -41,12 +41,11 @@ class PipelineTests(unittest.TestCase):
         out,h=self.run_case(.45,.70)
         self.assertEqual(out['route']['route'],'C')
         self.assertEqual([z['model_requested'] for z in h],['gemini-3.8-flash']*3)
-    def test_transient_38_failure_switches_to_36(self):
+    def test_38_failure_never_silently_promotes_36_to_primary(self):
         out,h=self.run_case(.46,.75,fail_roles=('A',))
-        self.assertEqual(out['status'],'PASS_PRACTICE_NO_SUBMISSION')
-        self.assertEqual(out['model_A'],'gemini-3.6-flash')
-        self.assertEqual([z['role'] for z in h],['A','A_fallback_3_6','B','C'])
-        self.assertEqual(h[-1]['model_requested'],'gemini-3.6-flash')
+        self.assertEqual(out['status'],'PARTIAL_INSUFFICIENT_PRIMARY_FORECASTS')
+        self.assertEqual([z['role'] for z in h],['A','B'])
+        self.assertEqual(h[-1]['model_requested'],'gemini-3.8-flash')
     def test_third_failure_keeps_two_forecasts(self):
         out,h=self.run_case(.60,.65,fail_roles=('check',))
         self.assertEqual(out['status'],'PARTIAL_TWO_MODEL_AGGREGATE')
@@ -54,7 +53,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(out['aggregate_model_count'],2)
         self.assertAlmostEqual(out['aggregate']['probability'],.625)
     def test_one_valid_forecast_not_marked_aggregate(self):
-        out,h=self.run_case(.60,.65,fail_roles=('B','B_fallback_3_6'))
+        out,h=self.run_case(.60,.65,fail_roles=('B',))
         self.assertEqual(out['status'],'PARTIAL_INSUFFICIENT_PRIMARY_FORECASTS')
         self.assertNotIn('aggregate',out)
     def test_fetch_authorization_gate(self):
