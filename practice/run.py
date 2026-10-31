@@ -33,9 +33,61 @@ def evaluate_question(q,gem,output_folder):
     output_folder=Path(output_folder)
     result={'question_id':q['id'],'question':q,'status':'IN_PROGRESS','safe_to_submit':False,
             'notes':['NO_METACULUS_FORECAST_POST_IN_THIS_PROGRAM'],
-            'started_at_utc':dt.datetime.now(dt.timezone.utc).isoformat()}
+            'started_at_utc':dt.datetime.now(dt.timezone.utc).isoformat(),
+            'model_policy_at_start':'gemini-3.6-flash_after_prior_3.8_failure' if getattr(gem,'switch_to_36',False) else 'gemini-3.8-flash_until_failure'}
     file=output_folder/(q['id']+'.json')
     def save():dump(file,result)
+    call_errors=(ModelFailure,BudgetExceeded,ValueError,TypeError,KeyError,IndexError)
+    def call_primary(role,prompt):
+        if getattr(gem,'switch_to_36',False):
+            return core.validate_primary(gem.call('gemini-3.6-flash',prompt,role=role+'_3_6'),q)
+        try:
+            return core.validate_primary(gem.call('gemini-3.8-flash',prompt,role=role),q)
+        except call_errors as error:
+            # Switch the rest of this run to 3.6. The one fallback repeats this
+            # same independent role with the same prompt, and is never retried.
+            gem.switch_to_36=True
+            result[role+'_3_8_error_code']=str(error)[:120]
+            result['fallback_3_6_trigger_role']=role
+            result['fallback_3_6_status']='IN_PROGRESS'
+            save()
+            try:
+                value=core.validate_primary(gem.call('gemini-3.6-flash',prompt,role=role+'_fallback_3_6'),q)
+            except call_errors as fallback_error:
+                result['fallback_3_6_status']='FAILED'
+                result['fallback_3_6_error_code']=str(fallback_error)[:120]
+                result['status']='PARTIAL_3_8_AND_3_6_FAILURE'
+                save()
+                raise
+            result['fallback_3_6_status']='SUCCESS'
+            result['fallback_3_6_used_for_role']=role
+            result['model_switch_triggered_this_question']=True
+            save()
+            return value
+    def call_c(prompt):
+        if getattr(gem,'switch_to_36',False):
+            return core.validate_third(gem.call('gemini-3.6-flash',prompt,role='C_3_6'),q),'C_3_6'
+        try:
+            return core.validate_third(gem.call('gemini-3.8-flash',prompt,role='C'),q),'C'
+        except call_errors as error:
+            gem.switch_to_36=True
+            result['C_3_8_error_code']=str(error)[:120]
+            result['fallback_3_6_trigger_role']='C'
+            result['fallback_3_6_status']='IN_PROGRESS'
+            save()
+            try:
+                value=core.validate_third(gem.call('gemini-3.6-flash',prompt,role='C_fallback_3_6'),q)
+            except call_errors as fallback_error:
+                result['fallback_3_6_status']='FAILED'
+                result['fallback_3_6_error_code']=str(fallback_error)[:120]
+                result['status']='PARTIAL_3_8_AND_3_6_FAILURE'
+                save()
+                raise
+            result['fallback_3_6_status']='SUCCESS'
+            result['fallback_3_6_used_for_role']='C'
+            result['model_switch_triggered_this_question']=True
+            save()
+            return value,'C_fallback_3_6'
     save()
     try:
         research=headlines(q)
@@ -53,15 +105,14 @@ def evaluate_question(q,gem,output_folder):
                 raise ValueError('LITE_HALLUCINATED_SOURCE_ID_'+key)
         result['evidence_lite']=evidence;save()
         # A and B are fully independent: same frozen evidence, never see each other's answer.
-        a=core.validate_primary(gem.call('gemini-3.8-flash',prompts.primary_prompt(q,research['sources'],evidence,'A'),role='A'),q)
+        a=call_primary('A',prompts.primary_prompt(q,research['sources'],evidence,'A'))
         result['forecast_A']=a;save()
-        b=core.validate_primary(gem.call('gemini-3.8-flash',prompts.primary_prompt(q,research['sources'],evidence,'B'),role='B'),q)
+        b=call_primary('B',prompts.primary_prompt(q,research['sources'],evidence,'B'))
         result['forecast_B']=b;save()
         route=core.compare_forecasts(q,a,b)
         result['route']=route;save()
         if route['route']=='C':
-            role='C'
-            third=core.validate_third(gem.call('gemini-3.8-flash',prompts.third_prompt(q,research['sources'],evidence,'C',a,b),role=role),q)
+            third,role=call_c(prompts.third_prompt(q,research['sources'],evidence,'C',a,b))
         else:
             role='check'
             third=core.validate_third(gem.call('gemini-3.6-flash',prompts.third_prompt(q,research['sources'],evidence,'check'),role=role),q)
@@ -70,7 +121,8 @@ def evaluate_question(q,gem,output_folder):
         result['status']='PASS_PRACTICE_NO_SUBMISSION' if research['sources'] else 'PARTIAL_NO_PUBLIC_SOURCES'
     except (ModelFailure,BudgetExceeded,ValueError,TypeError,KeyError,IndexError) as e:
         # Known errors have no credential-bearing body; never serialize exception tracebacks.
-        result['status']='PARTIAL_'+type(e).__name__.upper()
+        if result.get('fallback_3_6_status')!='FAILED':
+            result['status']='PARTIAL_'+type(e).__name__.upper()
         result['error_code']=str(e)[:120]
     except Exception as e:
         result['status']='PARTIAL_UNHANDLED_EXCEPTION'
