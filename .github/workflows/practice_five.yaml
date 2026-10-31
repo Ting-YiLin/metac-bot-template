@@ -1,69 +1,100 @@
-name: FutureEval V2 - 5 Question Practice (NO SUBMISSION)
+name: FutureEval V2.1 - Five Angle Adaptive Research (NO SUBMISSION)
 on:
   workflow_dispatch:
     inputs:
       free_tier_confirmed:
-        description: 'Set yes ONLY after confirming Google project has NO billing and free quota available'
+        description: 'YES only if Gemini project still has free-tier access and billing is OFF'
         required: true
         default: 'no'
         type: choice
-        options:
-          - 'no'
-          - 'yes'
-      mode:
-        description: 'Choose offline-test, fetch-only, or live-practice (Gemini free quota)'
+        options: ['no','yes']
+      data_permission_confirmed:
+        description: 'YES only if authorization for Metaculus question research remains valid'
         required: true
-        default: fetch-only
+        default: 'no'
         type: choice
-        options:
-          - offline-test
-          - fetch-only
-          - live-practice
+        options: ['no','yes']
+      mode:
+        description: 'offline-test; fetch-only; research-only; live-practice'
+        required: true
+        default: 'fetch-only'
+        type: choice
+        options: ['offline-test','fetch-only','research-only','live-practice']
+      dataset:
+        description: 'Re-use previous five authorized questions, or re-fetch authorized testing-area questions'
+        required: true
+        default: 'previous-five'
+        type: choice
+        options: ['previous-five','authorized-live']
+      max_questions:
+        description: 'Use 1 for a low-volume live API smoke check; use 5 for the full experiment'
+        required: true
+        default: '5'
+        type: choice
+        options: ['1','5']
+      already_used_lite:
+        description: 'Actual Google AI Studio today used requests for Gemini 3.5 Lite before this run'
+        required: true
+        default: 'NOT_CHECKED'
+        type: string
+      already_used_38:
+        description: 'Actual Google AI Studio today used requests for Gemini 3.8 before this run'
+        required: true
+        default: 'NOT_CHECKED'
+        type: string
+      already_used_36:
+        description: 'Actual Google AI Studio today used requests for Gemini 3.6 before this run'
+        required: true
+        default: 'NOT_CHECKED'
+        type: string
 permissions:
   contents: read
 concurrency:
-  group: futureeval-v2-five-practice-no-submission
+  group: futureeval-v21-practice-single-run
   cancel-in-progress: false
 jobs:
   practice_only:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 110
     steps:
-      - name: Checkout approved code
+      - name: Check out reviewed code
         uses: actions/checkout@v4
       - name: Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Set up uv
+      - name: Install uv
         uses: astral-sh/setup-uv@v10.3.0
         with:
           version: '0.13.1'
-      - name: Offline fail-closed safety checks BEFORE installing dependencies
+      - name: All original safety gates and offline tests BEFORE installing packages
         run: |
           python tools/s0_safety_gate.py --repo .
           python tools/v2_safety_gate.py --repo .
           python -m unittest discover -s tests -v
-      - name: Install pinned official dependencies
+      - name: Install official pinned dependencies
         run: uv sync --locked --no-dev
-      - name: Run practice (read-only Metaculus, no forecasting submit)
+      - name: Run practice (read-only question source; no prediction submit)
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           MODE: ${{ inputs.mode }}
-          FREE_ACK: ${{ inputs.free_tier_confirmed }}
-          V2_FREE_TIER_CONFIRMED: ${{ inputs.free_tier_confirmed == 'yes' && 'YES' || 'NO' }}
+          DATASET: ${{ inputs.dataset }}
+          MAX_QUESTIONS: ${{ inputs.max_questions }}
+          V21_FREE_TIER_CONFIRMED: ${{ inputs.free_tier_confirmed == 'yes' && 'YES' || 'NO' }}
+          V21_AUTHORIZED_METACULUS_DATA_USE: ${{ inputs.data_permission_confirmed == 'yes' && 'YES' || 'NO' }}
+          V21_ALREADY_USED_LITE: ${{ inputs.already_used_lite }}
+          V21_ALREADY_USED_38: ${{ inputs.already_used_38 }}
+          V21_ALREADY_USED_36: ${{ inputs.already_used_36 }}
         run: |
-          case "$MODE" in
-            offline-test|fetch-only|live-practice) ;;
-            *) echo 'Unapproved mode'; exit 2;;
-          esac
-          uv run python -m practice.run --mode "$MODE"
-      - name: Retain permitted evidence even if run was partial
+          case "$MODE" in offline-test|fetch-only|research-only|live-practice) ;; *) exit 2;; esac
+          case "$MAX_QUESTIONS" in 1|5) ;; *) exit 2;; esac
+          uv run python -m practice.run --mode "$MODE" --dataset "$DATASET" --max-questions "$MAX_QUESTIONS"
+      - name: Always preserve sanitized outputs, even for partial runs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: futureeval-v2-practice-no-submit
+          name: futureeval-v21-five-angle-no-submit
           path: |
             OUTPUT/SELECTED_QUESTIONS.json
             OUTPUT/STATUS.json

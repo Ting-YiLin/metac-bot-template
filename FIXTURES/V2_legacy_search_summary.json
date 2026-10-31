@@ -1,0 +1,50 @@
+{
+  "notes": "Previous V2 experiments: headline only. Comparing with V21 is descriptive; search budget and prompt differ.",
+  "questions": [
+    {
+      "question_id": "POST43322_Q43324",
+      "previous_queries": 2,
+      "previous_source_count": 8,
+      "previous_body_extracted": 0,
+      "previous_headline_only": 8,
+      "previous_model_successes": 2,
+      "previous_status": "PARTIAL_MODELFAILURE"
+    },
+    {
+      "question_id": "POST43326_Q43331",
+      "previous_queries": 2,
+      "previous_source_count": 7,
+      "previous_body_extracted": 0,
+      "previous_headline_only": 7,
+      "previous_model_successes": 0,
+      "previous_status": "PARTIAL_BUDGETEXCEEDED"
+    },
+    {
+      "question_id": "POST43325_Q43330",
+      "previous_queries": 2,
+      "previous_source_count": 8,
+      "previous_body_extracted": 0,
+      "previous_headline_only": 8,
+      "previous_model_successes": 1,
+      "previous_status": "PARTIAL_BUDGETEXCEEDED"
+    },
+    {
+      "question_id": "POST43324_Q43326",
+      "previous_queries": 2,
+      "previous_source_count": 6,
+      "previous_body_extracted": 0,
+      "previous_headline_only": 6,
+      "previous_model_successes": 0,
+      "previous_status": "PARTIAL_MODELFAILURE"
+    },
+    {
+      "question_id": "POST43325_Q43329",
+      "previous_queries": 2,
+      "previous_source_count": 8,
+      "previous_body_extracted": 0,
+      "previous_headline_only": 8,
+      "previous_model_successes": 2,
+      "previous_status": "PARTIAL_MODELFAILURE"
+    }
+  ]
+}

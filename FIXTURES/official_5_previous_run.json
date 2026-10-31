@@ -1,0 +1,105 @@
+{
+  "questions": [
+    {
+      "id": "POST43322_Q43324",
+      "source": "Metaculus authorized API:bot-testing-area",
+      "type": "numeric",
+      "text": "What will the average interest rate on the US federal government's total debt be at the end of these fiscal years? (FY 2028 (ending Sep 30, 2028))",
+      "post_id": 43322,
+      "question_id": 43324,
+      "url": "https://www.metaculus.com/questions/43322",
+      "resolution_criteria": "These subquestions resolve as the average interest rate amount, expressed as a percent, paid by the United States government on its total interest-bearing debt [according to the US Treasury](https://fiscaldata.treasury.gov/interest-expense-avg-interest-rates/) at the end of each respective fiscal year.&#x20;",
+      "fine_print": "Specifically, the underlying data set, which can be found [here](https://fiscaldata.treasury.gov/datasets/average-interest-rates-treasury-securities/average-interest-rates-on-u-s-treasury-securities), reports the Average Interest Rate Amount for the Security Type Description \"Interest-bearing Debt\" with the Security Description being \"Total Interest-bearing Debt.\" For the end of Fiscal Year 2024, dated 9/30/24, this was 3.324 percent.&#x20;\n\nFor purposes of this question, the US government's fiscal year will be considered to run from October 1st of the preceding calendar year to September 30th of the named year, aligning with [current reported US government practices](https://www.usa.gov/federal-budget-process). For example, FY 2028 will be considered to run from October 1, 2027 to September 30, 2028 and will resolve based on the average interest rate amount paid on total interest-bearing debt recorded on (or closest to) September 30, 2028.&#x20;\n\nIf the resolution value is less than the left bound or greater than the right bound, it resolves as outside the respective bound rather than a specific number.&#x20;\n\nIf the resolution source moves or is removed, Metaculus may use a new resolution source, as long as its methodology is judged by Metaculus to be substantially similar to the current resolution source. It should include both marketable and non-marketable treasury securities and should report the percentage paid by the US government based on aggregate interest payments divided by total amount of debt.&#x20;",
+      "background_info": "As of the end of FY 2024, the US government had \\$35.46 trillion in debt. It made over \\$1.1 trillion in interest payments, one of the highest spending items for the year:&#x20;\n\n| Name                                                 | Obligated Amount        | Percent of Total |\n| ---------------------------------------------------- | ----------------------- | ---------------- |\n| Medicare                                             | \\$1,582,650,103,296     | 16.34%           |\n| Social Security                                      | \\$1,541,027,236,655     | 15.91%           |\n| National Defense                                     | \\$1,358,253,371,219     | 14.03%           |\n| **Net Interest on national debt**                    | **\\$1,149,557,674,231** | **11.87%**       |\n| Health                                               | \\$1,098,419,579,301     | 11.34%           |\n| Income Security                                      | \\$717,980,743,457       | 7.41%            |\n| General Government                                   | \\$477,396,451,071       | 4.93%            |\n| Veterans Benefits and Services                       | \\$368,773,705,656       | 3.81%            |\n| Education, Training, Employment, and Social Services | \\$270,345,605,294       | 2.79%            |\n| Transportation                                       | \\$176,918,553,558       | 1.83%            |\n\n([source](https://www.usaspending.gov/explorer/budget_function))\n\nNotably, The average interest rate on the US national debt at year-end was 3.32%. Thirty years ago, in 1995, the average interest paid on US government securities [was](https://www.federalreserve.gov/boarddocs/rptcongress/ann95.pdf) 6.34%. Should interest on US government debt rise back to that level, the government in 2024 numbers would be making about \\$2.25 trillion in interest payments, making it by far the largest spending item, larger than the current largest items of Social Security (\\$1.5 trillion), Medicare (\\$1.6 trillion), and national defense (\\$1.4 trillion). Should interest paid rise to 10%, which were levels reached [in 1982](https://www.cbpp.org/research/federal-budget/deficits-debt-and-interest), interest on the national debt would be \\$3.5 trillion, which would be 71% of the 4.92 trillion in revenue the government collected in 2024.\n\nIn the past decade, the history of the US government's debt, end-of-year interest rate, and interest obligation for the next year are as follows:\n\n| FY   | Debt (USD trillions) | Avg Interest Rate (EoY) | Next-Year Interest Obligation (USD trillions) |\n| ---- | -------------------- | ----------------------- | --------------------------------------------- |\n| 2015 | 24.07                | 2.35%                   | 0.57                                          |\n| 2016 | 25.59                | 2.23%                   | 0.57                                          |\n| 2017 | 25.89                | 2.28%                   | 0.59                                          |\n| 2018 | 26.90                | 2.49%                   | 0.67                                          |\n| 2019 | 27.93                | 2.49%                   | 0.70                                          |\n| 2020 | 32.67                | 1.77%                   | 0.58                                          |\n| 2021 | 32.71                | 1.61%                   | 0.53                                          |\n| 2022 | 32.89                | 2.07%                   | 0.68                                          |\n| 2023 | 34.13                | 2.97%                   | 1.01                                          |\n| 2024 | 35.46                | 3.32%                   | 1.18                                          |\n\nA notable forecast about the trajectory of the interest rate on the national debt is from the Congressional Budget Office [Budget and Economic Outlook: 2024 to 2034](https://www.cbo.gov/publication/59946#_idTextAnchor045), which says:\n\n> Average interest rates on federal debt rise in CBO’s projections as debt matures and is refinanced. In 2025, the average interest rate on debt held by the public is projected to be 3.4 percent, 0.1 percentage point higher than it was in 2024 and 0.7 percentage points higher than it was in 2023. That rate generally remains steady thereafter, declining slightly to 3.3 percent from 2027 through 2030 before increasing again to 3.5 percent in the final years of the projection period. Changes in the average interest rate stem from interest rates on Treasury securities, the rate of inflation applicable to Treasury inflation-protected securities, and the maturity structure of outstanding securities. (For a discussion of the factors responsible for changes in interest rates and inflation, see [Chapter 2](https://www.cbo.gov/publication/59946#_idTextAnchor070).)",
+      "lower_bound": 0.0,
+      "upper_bound": 10.0,
+      "state": "QuestionState.OPEN"
+    },
+    {
+      "id": "POST43324_Q43326",
+      "source": "Metaculus authorized API:bot-testing-area",
+      "type": "date",
+      "text": "When will martial law be lifted in at least 3/4 of Ukraine?",
+      "post_id": 43324,
+      "question_id": 43326,
+      "url": "https://www.metaculus.com/questions/43324",
+      "resolution_criteria": "This question will resolve as the earliest date after May 1, 2022 when at least 3/4 of Ukraine's Oblasts (top-level administrative districts as defined by the Ukrainian government; currently the 24 oblasts and Crimea) do not have martial law declared in the entire territory by the Ukrainian government.  Any regions of Ukraine partially or fully [occupied by another state](https://en.wikipedia.org/wiki/Occupied_territories_of_Ukraine) will be excluded.\n\nIf this does not occur by May 29, 2027, the question will resolve as **>May 28, 2027**. If the present-day Ukrainian government ceases to exist and/or no longer controls any territory recognized as Ukrainian as of January 1, 2022, this question will resolve as **Ambiguous**",
+      "fine_print": "",
+      "background_info": "[Martial law](https://en.m.wikipedia.org/wiki/Martial_law_in_Ukraine) was declared in Ukraine on February 24, 2022, in response to the Russian invasion.\n\nMartial law was originally declared for 30 days. It has since been prolonged three times: by 30, 30, and 90 days respectively. Therefore, it would end on August 25, 2022 if not prolonged again or canceled.\n\nThe decision to prolong martial law is made by the security council and the president and is subject to approval by the parliament.\n\nMartial law can be also declared in some of the regions as opposed to the whole country, like it was [in 2018](https://edition.cnn.com/2018/11/26/europe/ukraine-russia-kerch-strait-intl/index.html).",
+      "lower_bound": "2022-05-29T00:00:00+00:00",
+      "upper_bound": "2027-05-28T00:00:00+00:00",
+      "state": "QuestionState.OPEN"
+    },
+    {
+      "id": "POST43325_Q43329",
+      "source": "Metaculus authorized API:bot-testing-area",
+      "type": "binary",
+      "text": "Will the sitting U.S. president’s net worth reach ≥4x its value before they became president at any point in the following years? (2025-2026)",
+      "post_id": 43325,
+      "question_id": 43329,
+      "url": "https://www.metaculus.com/questions/43325",
+      "resolution_criteria": "Each subquestion will resolve as **Yes** if, at any point in the corresponding two-year period, the sitting president’s net worth equals or exceeds 4 times its earliest value in the year before they take office.",
+      "fine_print": "* Each subquestion will use the earliest archived estimate of the president's net worth from the year before they took office. If a president served for two, non-consecutive terms, the year before they assumed office for a second time will be used.\n* The primary source to resolve each subquestion will be Forbes. Net worth is calculated using Forbes’ real time net worth calculator.&nbsp;E.g, as reported by Forbes, Trump’s net worth was[ <u>\\$2.6 billion</u>](https://web.archive.org/web/20240112150444/https://www.forbes.com/profile/donald-trump/) on January 12, 2024. Since Forbes does not provide historical data, the Internet Archive’s[ <u>Wayback Machine</u>](https://web.archive.org/) will be used to determine if/when a president crosses or equals the corresponding threshold.\n* If data from Forbes are not available, we will instead use estimates from the Bloomberg Billionaires Index. If neither are available or lack an updated estimate for the relevant president, the subquestion will resolve according to required financial disclosures filed by candidates for and holders of federal office and other credible sources.",
+      "background_info": "[<u>For Donald Trump, Forbes estimated his net worth at \\$2.6 billion on January 12, 2024</u>](https://web.archive.org/web/20240112150444/https://www.forbes.com/profile/donald-trump/). [<u>The Forbes 400 estimates</u>](https://www.forbes.com/forbes-400/) of Trump’s net worth (released each fall) were \\$4.3 billion in 2024 and \\$7.3 billion in 2025. There is no credible record of a U.S. president’s personal wealth quadrupling during their presidency in history, but [Trump’s holdings in Trump Media & Technology Group](https://www.forbes.com/sites/danalexander/article/the-definitive-networth-of-donaldtrump/) (DJT) could provide a vehicle for unprecedented wealth accumulation.",
+      "lower_bound": null,
+      "upper_bound": null,
+      "state": "QuestionState.OPEN"
+    },
+    {
+      "id": "POST43325_Q43330",
+      "source": "Metaculus authorized API:bot-testing-area",
+      "type": "binary",
+      "text": "Will the sitting U.S. president’s net worth reach ≥4x its value before they became president at any point in the following years? (2027-2028)",
+      "post_id": 43325,
+      "question_id": 43330,
+      "url": "https://www.metaculus.com/questions/43325",
+      "resolution_criteria": "Each subquestion will resolve as **Yes** if, at any point in the corresponding two-year period, the sitting president’s net worth equals or exceeds 4 times its earliest value in the year before they take office.",
+      "fine_print": "* Each subquestion will use the earliest archived estimate of the president's net worth from the year before they took office. If a president served for two, non-consecutive terms, the year before they assumed office for a second time will be used.\n* The primary source to resolve each subquestion will be Forbes. Net worth is calculated using Forbes’ real time net worth calculator.&nbsp;E.g, as reported by Forbes, Trump’s net worth was[ <u>\\$2.6 billion</u>](https://web.archive.org/web/20240112150444/https://www.forbes.com/profile/donald-trump/) on January 12, 2024. Since Forbes does not provide historical data, the Internet Archive’s[ <u>Wayback Machine</u>](https://web.archive.org/) will be used to determine if/when a president crosses or equals the corresponding threshold.\n* If data from Forbes are not available, we will instead use estimates from the Bloomberg Billionaires Index. If neither are available or lack an updated estimate for the relevant president, the subquestion will resolve according to required financial disclosures filed by candidates for and holders of federal office and other credible sources.",
+      "background_info": "[<u>For Donald Trump, Forbes estimated his net worth at \\$2.6 billion on January 12, 2024</u>](https://web.archive.org/web/20240112150444/https://www.forbes.com/profile/donald-trump/). [<u>The Forbes 400 estimates</u>](https://www.forbes.com/forbes-400/) of Trump’s net worth (released each fall) were \\$4.3 billion in 2024 and \\$7.3 billion in 2025. There is no credible record of a U.S. president’s personal wealth quadrupling during their presidency in history, but [Trump’s holdings in Trump Media & Technology Group](https://www.forbes.com/sites/danalexander/article/the-definitive-networth-of-donaldtrump/) (DJT) could provide a vehicle for unprecedented wealth accumulation.",
+      "lower_bound": null,
+      "upper_bound": null,
+      "state": "QuestionState.OPEN"
+    },
+    {
+      "id": "POST43326_Q43331",
+      "source": "Metaculus authorized API:bot-testing-area",
+      "type": "multiple_choice",
+      "text": "Which party will hold the most seats in the US House of Representatives after the 2026 elections?",
+      "post_id": 43326,
+      "question_id": 43331,
+      "url": "https://www.metaculus.com/questions/43326",
+      "resolution_criteria": "This question will resolve as the party that holds more House of Representatives seats than any other party in the 120th Congress, which is the one scheduled to be elected November 3, 2026 and take office in January 3, 2027.\n\nIndependent representatives will be counted as part of the party they caucus with.\n\nThis question will resolve as **Other** if:\n\n* Republicans and Democrats hold an equal number of seats.\n* A third party holds more seats than both Republicans and Democrats.\n* Independents that do not caucus with either party hold more seats than both Republicans and Democrats.\n* More seats are vacant than the ones held by both Republicans and Democrats.",
+      "fine_print": "Metaculus will resolve this question based on the final result of the elections, including special elections, recounts, or run-offs.\n\nIf Democrats or Republicans change name, the options will be renamed accordingly.",
+      "background_info": "The 2026 midterm elections are scheduled for Tuesday, November 3. The US House of Representatives has 435 seats. [As of early 2025](https://ballotpedia.org/119th_United_States_Congress), 218 are held by members of the Republican Party, 215 are held by Democrats, and 2 are vacant.\n\nRepresentatives are elected for 2-year terms, and elections are held every two years; so all of the seats are up for contest in every election. The winners of the 2026 House elections will join the Senate to form the 120th Congress.",
+      "lower_bound": null,
+      "upper_bound": null,
+      "state": "QuestionState.OPEN",
+      "options": [
+        "Democrats",
+        "Republicans",
+        "Other"
+      ]
+    }
+  ],
+  "coverage": {
+    "target": {
+      "binary": 2,
+      "multiple_choice": 1,
+      "numeric": 1,
+      "date": 1
+    },
+    "selected": {
+      "binary": 2,
+      "multiple_choice": 1,
+      "numeric": 1,
+      "date": 1
+    },
+    "missing": {
+      "binary": 0,
+      "multiple_choice": 0,
+      "numeric": 0,
+      "date": 0
+    }
+  },
+  "source": "AUTHORIZED_TEST_AREA_READ_ONLY"
+}

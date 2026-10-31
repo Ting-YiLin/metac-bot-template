@@ -123,7 +123,7 @@ def compare_forecasts(question, a, b, gap=0.20):
             'gap_days':delta,'threshold_days':threshold}
 
 def aggregate(question,replies):
-    if len(replies)!=3: raise ValueError('require exactly 3 valid replies')
+    if len(replies) not in (2,3): raise ValueError('require 2 or 3 valid replies')
     kind=question['type'];p=[x['prediction'] for x in replies]
     if kind=='binary': return {'probability':float(median(x['probability'] for x in p))}
     if kind=='multiple_choice':
@@ -138,9 +138,9 @@ def aggregate(question,replies):
         agg[k]=dt.date.fromordinal(day).isoformat()
     return agg
 
-def complexity_summary(primary_a,primary_b,third):
+def complexity_summary(primary_a,primary_b,third=None):
     def detail(label,r):
         a=r.get('pre_complexity');b=r['post_complexity'];shift=None
         if a:shift=LEVELS.index(a['level'])-LEVELS.index(b['level'])
         return {'agent':label,'pre':a,'post':b,'pre_minus_post':shift}
-    return [detail('A',primary_a),detail('B',primary_b),detail('THIRD',third)]
+    return [detail('A',primary_a),detail('B',primary_b)] + ([detail('THIRD',third)] if third is not None else [])
