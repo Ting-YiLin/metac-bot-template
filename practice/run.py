@@ -6,6 +6,8 @@ import argparse
 import datetime as dt
 import json
 import os
+import time
+import math
 from pathlib import Path
 from practice import core,prompts,research
 from practice.fetch import fetch_authorized
@@ -206,15 +208,97 @@ def evaluate_question(q,gem,folder,*,research_only=False,fetcher=research.fetch_
     return result
 
 
+
+def _p90(values):
+    if not values:return None
+    a=sorted(values)
+    return round(a[math.ceil(.9*len(a))-1],3)
+
+
+def system_reliability_report(history,reports,diagnostic=None,router_probe=None):
+    """Operational gate, NOT evidence of forecast accuracy or durable availability."""
+    models={}
+    for name in ('gemini-3.8-flash','gemini-3.6-flash','gemini-3.5-flash-lite'):
+        calls=[x for x in history if x.get('provider')=='google' and x.get('model_requested')==name
+               and x.get('status') in ('SUCCESS','FAILED')]
+        successes=[x for x in calls if x['status']=='SUCCESS']
+        failures=[x for x in calls if x['status']=='FAILED']
+        forecast_successes=[x for x in successes if x.get('role') in ('A','B','C','check')]
+        first_attempts=[x for x in calls if x.get('attempt')==1]
+        model_data={
+            'sent':len(calls),'successes':len(successes),'failures':len(failures),
+            'forecast_successes':len(forecast_successes),
+            'first_attempt_success_rate':(round(sum(x['status']=='SUCCESS' for x in first_attempts)/len(first_attempts),4)
+                                          if first_attempts else None),
+            'failed_503':sum(x.get('error_code')=='GEMINI_HTTP_503' for x in failures),
+            'failed_timeout':sum('TimeoutError' in x.get('error_code','') for x in failures),
+            'p90_success_latency_seconds':_p90([x.get('latency_ms',0)/1000 for x in successes]),
+            'high_verified':all(x.get('thinking_level')=='high' for x in calls) if name!='gemini-3.5-flash-lite' else None,
+        }
+        if name!='gemini-3.5-flash-lite':
+            enough=len(forecast_successes)>= (5 if name=='gemini-3.8-flash' else 2)
+            model_data['decision']=('INSUFFICIENT_REAL_FORECAST_SAMPLES' if not enough else
+                'CANDIDATE_ONLY_NOT_PRODUCTION_PROOF' if
+                model_data['first_attempt_success_rate'] is not None and
+                model_data['first_attempt_success_rate']>=.8 and
+                model_data['p90_success_latency_seconds'] is not None and
+                model_data['p90_success_latency_seconds']<=300 and
+                model_data['failed_timeout']==0 and model_data['high_verified'] else
+                'EXCLUDE_AS_REQUIRED_DEPENDENCY')
+        models[name]=model_data
+    router=[x for x in history if x.get('provider')=='openrouter' and x.get('status') in ('SUCCESS','FAILED')]
+    completed=sum(x.get('aggregate_model_count')==3 for x in reports)
+    source_pass=sum(x.get('source_quality',{}).get('pass_for_bounded_research') is True for x in reports)
+    return {
+        'experiment':'SINGLE_5_QUESTIONS_FULL_SYSTEM_TEST','models':models,
+        'router_probe':router_probe,'openrouter_sent':len(router),
+        'openrouter_success':sum(x['status']=='SUCCESS' for x in router),
+        'completed_3_forecasts':completed,'total_questions_processed':len(reports),
+        'strong_evidence_quality_pass':source_pass,
+        'overall_competition_readiness':'NOT_APPROVED_FOR_AUTOMATED_SUBMISSION',
+        'google_role_decision':('GOOGLE_38_TEMPORARY_CANDIDATE' if
+            models['gemini-3.8-flash']['decision']=='CANDIDATE_ONLY_NOT_PRODUCTION_PROOF' else
+            'GOOGLE_38_NOT_APPROVED'),
+        'notes':['Short diagnostics are not equal to five-question forecasting quality.',
+                 '3.8 and 3.6 are evaluated separately.',
+                 'A green reliability gate is not proof of long-term availability.',
+                 'Same resolved free model for A/B is not independent sampling.',
+                 'No predictions are submitted.'],'submission_count':0}
+
+
+def run_diagnostic_tests(google,gem,ledger,out,*,router_probe=False):
+    trials=[]
+    for model,role in [('gemini-3.8-flash','DIAG_38'),('gemini-3.6-flash','DIAG_36')]:
+        try:
+            obj=google.call(model,'Return a JSON object with only {"status":"OK"}.',
+                            role=role,thinking_level='high',max_attempts=1)
+            trials.append({'model':model,'role':role,'status':'SUCCESS' if obj.get('status')=='OK' else 'UNEXPECTED_CONTENT'})
+        except (ModelFailure,BudgetExceeded) as e:
+            trials.append({'model':model,'role':role,'status':'FAILED','code':str(e)[:90]})
+        dump(out/'DIAGNOSTIC.json',{'trials':trials,'calls':google.history,
+                                  'quota_ledger':ledger.snapshot(),'submission_count':0})
+    probe={'status':'NOT_AUTHORIZED'}
+    if router_probe:
+        try:
+            obj=gem.free.call('Return a JSON object with only {"status":"OK"}.',role='FREE_ROUTER_PROBE')
+            probe={'status':'SUCCESS' if obj.get('status')=='OK' else 'UNEXPECTED_CONTENT',
+                   'model':gem.last_success('FREE_ROUTER_PROBE')}
+        except (ModelFailure,BudgetExceeded) as e:
+            probe={'status':'FAILED','code':str(e)[:90]}
+    dump(out/'DIAGNOSTIC.json',{'trials':trials,'router_probe':probe,'calls':gem.history,
+                              'quota_ledger':ledger.snapshot(),'submission_count':0})
+    return trials,probe
+
+
 def main(argv=None):
     p=argparse.ArgumentParser()
-    p.add_argument('--mode',required=True,choices=('offline-test','fetch-only','research-only','live-practice','diagnostic'))
+    p.add_argument('--mode',required=True,choices=('offline-test','fetch-only','research-only','live-practice','diagnostic','full-system'))
     p.add_argument('--dataset',choices=('previous-five','authorized-live','synthetic'),default='previous-five')
     p.add_argument('--max-questions',type=int,default=5)
     p.add_argument('--outdir',default=str(ROOT/'OUTPUT'))
     args=p.parse_args(argv)
     out=Path(args.outdir).resolve();out.mkdir(parents=True,exist_ok=True)
-    if not 1<=args.max_questions<=5:
+    if not 1<=args.max_questions<=5 or (args.mode=='full-system' and args.max_questions!=5):
         dump(out/'STATUS.json',{'status':'STOP_INVALID_QUESTION_COUNT'});return 4
     if args.mode=='offline-test':
         import unittest
@@ -233,7 +317,7 @@ def main(argv=None):
         if args.mode=='fetch-only':
             dump(out/'STATUS.json',{'mode':args.mode,'status':'PASS_FIVE_QUESTIONS' if len(q)==5 else 'PARTIAL_FEWER_THAN_FIVE',
                                     'selected':len(q)});return 0 if q else 4
-    if args.mode in ('research-only','live-practice','diagnostic'):
+    if args.mode in ('research-only','live-practice','diagnostic','full-system'):
         if os.getenv('GITHUB_ACTIONS')!='true' or os.getenv('GITHUB_RUN_ATTEMPT')!='1' or os.getenv('GITHUB_REPOSITORY')!='Ting-YiLin/metac-bot-template':
             dump(out/'STATUS.json',{'status':'STOP_NOT_APPROVED_FIRST_GITHUB_RUN'});return 5
         if os.getenv('V21_FREE_TIER_CONFIRMED')!='YES':
@@ -259,25 +343,24 @@ def main(argv=None):
     ledger=QuotaLedger(out/'usage_ledger.json',baseline=baseline)
     google=Gemini(ledger)
     gem=FreeFallbackLLM(google,allow_free_fallback=router_authorized)
-    if args.mode=='diagnostic':
-        # Diagnostic never searches, never submits, never retries, never uses OpenRouter.
-        trials=[]
-        for model,role in [('gemini-3.8-flash','DIAG_38'),('gemini-3.6-flash','DIAG_36')]:
-            try:
-                obj=google.call(model,'Return a JSON object with only {"status":"OK"}.',
-                                role=role,thinking_level='high',max_attempts=1)
-                trials.append({'model':model,'role':role,'status':'SUCCESS' if obj.get('status')=='OK' else 'UNEXPECTED_CONTENT'})
-            except (ModelFailure,BudgetExceeded) as e:
-                trials.append({'model':model,'role':role,'status':'FAILED','code':str(e)[:90]})
-            dump(out/'DIAGNOSTIC.json',{'trials':trials,'calls':google.history,
-                                        'quota_ledger':ledger.snapshot(),'submission_count':0})
-        ok=all(z['status']=='SUCCESS' for z in trials)
-        dump(out/'STATUS.json',{'mode':'diagnostic','status':'PASS' if ok else 'PARTIAL_DIAGNOSTIC',
-                                'submission_count':0})
-        return 0 if ok else 6
+    router_probe=None
+    if args.mode in ('diagnostic','full-system'):
+        trials,router_probe=run_diagnostic_tests(google,gem,ledger,out,
+                                                 router_probe=(args.mode=='full-system' and router_authorized))
+        if args.mode=='diagnostic':
+            ok=all(z['status']=='SUCCESS' for z in trials)
+            dump(out/'STATUS.json',{'mode':'diagnostic','status':'PASS' if ok else 'PARTIAL_DIAGNOSTIC',
+                                    'submission_count':0})
+            return 0 if ok else 6
     reports=[]
+    started=time.monotonic()
     for x in q[:args.max_questions]:
+        if args.mode=='full-system' and time.monotonic()-started>=4*3600:
+            break
         reports.append(evaluate_question(x,gem,out/'QUESTION_REPORTS',research_only=args.mode=='research-only'))
+        if args.mode=='full-system':
+            dump(out/'SYSTEM_RELIABILITY.json',system_reliability_report(gem.history,reports,
+                                                            diagnostic=trials,router_probe=router_probe))
         dump(out/'SUMMARY.json',{'mode':args.mode,'total':len(reports),
                                 'complete':sum(z['status'] in ('PASS_PRACTICE_NO_SUBMISSION','PASS_PRACTICE_WITH_FALLBACK') for z in reports),
                                 'two_model_aggregate':sum(z['status']=='PARTIAL_TWO_MODEL_AGGREGATE' for z in reports),
@@ -286,7 +369,7 @@ def main(argv=None):
                                 'results':[{k:z.get(k) for k in ('question_id','status','aggregate_class','source_quality')} for z in reports],
                                 'quota_ledger':ledger.snapshot(),'submission_count':0})
     statuses={r['status'] for r in reports}
-    code=0 if all(s in ('PASS_PRACTICE_NO_SUBMISSION','PASS_PRACTICE_WITH_FALLBACK','PASS_RESEARCH_ONLY') for s in statuses) else 6
+    code=0 if (len(reports)==len(q) and all(s in ('PASS_PRACTICE_NO_SUBMISSION','PASS_PRACTICE_WITH_FALLBACK','PASS_RESEARCH_ONLY') for s in statuses)) else 6
     dump(out/'STATUS.json',{'status':'PASS' if code==0 else 'PARTIAL_NEEDS_REVIEW',
                             'total':len(reports),'complete':sum(r['status'] in ('PASS_PRACTICE_NO_SUBMISSION','PASS_PRACTICE_WITH_FALLBACK') for r in reports),
                             'submission_count':0,'source':'TEST_ONLY'})
