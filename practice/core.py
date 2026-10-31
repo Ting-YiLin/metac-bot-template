@@ -14,8 +14,14 @@ def finite(x):
     return isinstance(x, (int,float)) and not isinstance(x,bool) and math.isfinite(x)
 
 def as_date(x):
-    if not isinstance(x, str): raise ValueError('ISO date string required')
-    return dt.date.fromisoformat(x[:10])
+    if not isinstance(x, str): raise ValueError('date string required')
+    value=x.strip()
+    try:return dt.date.fromisoformat(value[:10])
+    except ValueError:pass
+    for fmt in ('%m/%d/%Y %H:%M:%S','%m/%d/%Y'):
+        try:return dt.datetime.strptime(value,fmt).date()
+        except ValueError:pass
+    raise ValueError('unsupported date string format') from None
 
 def as_probability(x):
     if not finite(x) or not 0.001 <= x <= 0.999:

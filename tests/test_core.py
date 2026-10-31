@@ -48,6 +48,12 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(core.compare_forecasts(D,a,b)['route'],'C')
         c={'prediction':{'median_date':'2029-01-01','low_80_date':'2028-12-01','high_80_date':'2029-03-01'}}
         self.assertEqual(core.aggregate(D,[a,b,c])['median_date'],'2029-01-01')
+    def test_date_metaculus_bounds_format(self):
+        q={'type':'date','lower_bound':'05/29/2022 10:00:00','upper_bound':'05/28/2027 10:00:00'}
+        valid={'median_date':'2026-01-01','low_80_date':'2025-01-01','high_80_date':'2027-05-28'}
+        self.assertEqual(core.validate_prediction('date',valid,q),valid)
+        invalid={**valid,'high_80_date':'2027-05-29'}
+        with self.assertRaises(ValueError):core.validate_prediction('date',invalid,q)
     def test_complexity_metadata_only(self):
         a=primary(B,{'probability':.7},'RED','YELLOW_1');b=primary(B,{'probability':.8})
         third=core.validate_third({'prediction':{'probability':.6},'post_complexity':{'level':'RED','reason':'still unclear'},'reasoning':'x'},B)
