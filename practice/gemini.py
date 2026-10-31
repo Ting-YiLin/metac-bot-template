@@ -17,6 +17,7 @@ ROUTER_MODEL = 'openrouter/free'
 LIMITS = {**GOOGLE_LIMITS, ROUTER_MODEL:45}
 GOOGLE_KEY_ENV='GEMINI_API_KEY'
 MAX_OUTPUT_TOKENS=32768
+REQUEST_TIMEOUT_SECONDS=600
 PACIFIC=ZoneInfo('America/Los_Angeles')
 
 def google_day(now=None):
@@ -109,8 +110,7 @@ class Gemini:
     @staticmethod
     def retryable(code):
         return code in ('GEMINI_HTTP_408','GEMINI_HTTP_500','GEMINI_HTTP_502','GEMINI_HTTP_503',
-                        'GEMINI_HTTP_504','GEMINI_NETWORK_OR_PARSE_TimeoutError',
-                        'GEMINI_NETWORK_OR_PARSE_URLError')
+                        'GEMINI_HTTP_504')
     def call(self,model,prompt,*,role,temperature=None,max_attempts=None,thinking_level=None):
         if model not in GOOGLE_LIMITS:raise ValueError('GEMINI_MODEL_NOT_ALLOWED')
         attempts=max_attempts if max_attempts is not None else (3 if model!='gemini-3.5-flash-lite' else 2)
@@ -124,7 +124,7 @@ class Gemini:
             try:self.ledger.reserve(model)
             except BudgetExceeded as e:
                 self.history.append({'at_utc':stamp,'provider':'google','role':role,'attempt':attempt,
-                     'model_requested':model,'thinking_level':level,'status':'NOT_SENT_BUDGET',
+                     'model_requested':model,'thinking_level':level,'timeout_seconds':REQUEST_TIMEOUT_SECONDS,'status':'NOT_SENT_BUDGET',
                      'error_code':'BUDGET_STOP','latency_ms':0})
                 raise
             started=self.clock()
@@ -136,7 +136,7 @@ class Gemini:
                     obj,actual,usage,response_id,finish_reason=self._request(model,prompt,temperature,level,MAX_OUTPUT_TOKENS)
                 self.history.append({'at_utc':stamp,'provider':'google','role':role,'attempt':attempt,
                     'model_requested':model,'model_returned':actual,'model_version':actual,'thinking_level':level,
-                    'max_output_tokens':MAX_OUTPUT_TOKENS,'status':'SUCCESS','usage':usage,
+                    'max_output_tokens':MAX_OUTPUT_TOKENS,'timeout_seconds':REQUEST_TIMEOUT_SECONDS,'status':'SUCCESS','usage':usage,
                     'response_id':response_id,'finish_reason':finish_reason,
                     'latency_ms':round((self.clock()-started)*1000,3)})
                 return obj
@@ -144,7 +144,7 @@ class Gemini:
                 code=e.code if isinstance(e,ModelFailure) else 'GEMINI_NETWORK_OR_PARSE_'+type(e).__name__
                 row={'at_utc':stamp,'provider':'google','role':role,'attempt':attempt,
                     'model_requested':model,'thinking_level':level,'max_output_tokens':MAX_OUTPUT_TOKENS,
-                    'status':'FAILED','error_code':code,'latency_ms':round((self.clock()-started)*1000,3)}
+                    'status':'FAILED','timeout_seconds':REQUEST_TIMEOUT_SECONDS,'error_code':code,'latency_ms':round((self.clock()-started)*1000,3)}
                 if isinstance(e,ModelFailure):row.update(e.details)
                 self.history.append(row)
                 if attempt>=attempts or not self.retryable(code):raise ModelFailure(code) from None
@@ -162,7 +162,7 @@ class Gemini:
         req=urllib.request.Request(url,data=json.dumps(body).encode('utf-8'),method='POST',headers={
             'Content-Type':'application/json','x-goog-api-key':key,'User-Agent':'FutureEvalV22Practice/1.0'})
         try:
-            with urllib.request.urlopen(req,timeout=120) as resp:raw=json.load(resp)
+            with urllib.request.urlopen(req,timeout=REQUEST_TIMEOUT_SECONDS) as resp:raw=json.load(resp)
         except urllib.error.HTTPError as e:
             # Never persist response bodies, HTTP headers, credential strings or prompts.
             raise ModelFailure(f'GEMINI_HTTP_{e.code}',http_status=e.code) from None
