@@ -1,0 +1,28 @@
+name: L11 Export Official Question
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export_question_only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Read official question metadata
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+        run: python tools/l11_export_api.py
+      - name: Save question metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: l11-official-question-43325
+          path: QUESTION_EXPORT_43325.json
+          retention-days: 5
+          if-no-files-found: error
+
