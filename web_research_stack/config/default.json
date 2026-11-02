@@ -1,0 +1,21 @@
+{
+  "search_backend": "ddgs",
+  "searxng_base_url": "",
+  "queries_per_question": 5,
+  "results_per_query": 8,
+  "target_readable_sources": 12,
+  "max_fetch_attempts": 35,
+  "per_domain_delay_sec": 5.0,
+  "per_domain_preferred_limit": 3,
+  "per_domain_attempt_limit": 4,
+  "connect_timeout_sec": 10,
+  "read_timeout_sec": 25,
+  "max_response_bytes": 10485760,
+  "min_readable_chars": 800,
+  "http_retries": 2,
+  "playwright_fallback": false,
+  "chunk_chars": 1800,
+  "chunk_overlap_chars": 250,
+  "evidence_packet_chunks": 20,
+  "user_agent": "OpenResearchEvidenceBot/1.0 (respects robots.txt and rate limits)"
+}
