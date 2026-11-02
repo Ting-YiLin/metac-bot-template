@@ -1,0 +1,57 @@
+name: FutureEval Live Free Canary
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - live_free_runner.py
+      - tools/live_free_safety_gate.py
+      - .github/workflows/run_live_free_canary.yaml
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: futureeval-live-free-canary
+  cancel-in-progress: false
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out canary branch
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Static safety gate before dependency install
+        run: python tools/live_free_safety_gate.py
+      - name: Compile runner
+        run: python -m py_compile live_free_runner.py
+      - name: Install exactly locked official dependencies
+        run: uv sync --locked --no-dev
+      - name: Run one-question live free canary
+        env:
+          GITHUB_ACTIONS: 'true'
+          LIVE_FREE_MODE: '1'
+          LIVE_FREE_MODEL: 'openrouter/free'
+          GITHUB_TOKEN: ${{ github.token }}
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: uv run python live_free_runner.py
+      - name: Retain sanitized canary receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: futureeval-live-free-canary-receipt
+          path: live_free_receipt.json
+          if-no-files-found: warn
+          retention-days: 14
