@@ -1,0 +1,90 @@
+name: Web Research Stack Validation
+
+on:
+  push:
+    branches:
+      - web-research-stack-v1-20261103
+    paths:
+      - 'web_research_stack/**'
+      - '.github/workflows/validate_web_research_stack.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-research-stack-validation
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free dependencies
+        run: python -m pip install -r web_research_stack/requirements.txt
+      - name: Offline unit tests
+        working-directory: web_research_stack
+        run: python -m unittest discover -s tests -v
+      - name: DDGS free search smoke
+        working-directory: web_research_stack
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          import json
+          from search_backends import search
+          rows=search('Reserve Bank of Australia monetary policy cash rate site:rba.gov.au','ddgs',5)
+          print(json.dumps(rows,ensure_ascii=False,indent=2))
+          assert rows, 'DDGS returned no results'
+          open('DDGS_SMOKE.json','w',encoding='utf-8').write(json.dumps(rows,ensure_ascii=False,indent=2))
+          PY
+      - name: Real crawler smoke on official domains
+        working-directory: web_research_stack
+        run: PYTHONPATH=src python src/live_smoke.py
+      - name: Build compact end-to-end Evidence Packet demo
+        working-directory: web_research_stack
+        run: |
+          python - <<'PY'
+          import json
+          p='config/default.json'
+          c=json.load(open(p,encoding='utf-8'))
+          c.update({
+            'queries_per_question': 3,
+            'results_per_query': 5,
+            'target_readable_sources': 4,
+            'max_fetch_attempts': 10,
+            'per_domain_delay_sec': 2.0,
+            'per_domain_attempt_limit': 3,
+            'evidence_packet_chunks': 8
+          })
+          open('config/validation.json','w',encoding='utf-8').write(json.dumps(c,indent=2))
+          PY
+          PYTHONPATH=src python src/pipeline.py             --project validation_demo             --question "What is the Reserve Bank of Australia cash rate target and what official evidence states it?"             --preferred-domain rba.gov.au             --config config/validation.json > E2E_STDOUT.json
+          python - <<'PY'
+          import json
+          p=json.load(open('runs/validation_demo/evidence_packet.json',encoding='utf-8'))
+          print(json.dumps({
+            'candidate_count':p['candidate_count'],
+            'fetch_attempts':p['fetch_attempts'],
+            'readable_sources':p['readable_sources'],
+            'evidence_chunks':len(p['evidence_chunks'])
+          },indent=2))
+          assert p['candidate_count']>0, 'no search candidates'
+          assert p['readable_sources']>=1, 'no readable full source'
+          assert len(p['evidence_chunks'])>=1, 'no evidence chunks'
+          PY
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-research-stack-validation
+          path: |
+            web_research_stack/DDGS_SMOKE.json
+            web_research_stack/E2E_STDOUT.json
+            web_research_stack/runs/_smoke
+            web_research_stack/runs/validation_demo
+          if-no-files-found: warn
+          retention-days: 14
