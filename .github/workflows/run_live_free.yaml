@@ -1,0 +1,55 @@
+name: FutureEval Live Free Production
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 0-22/2 * * *'
+    - cron: '57 0-22/2 * * *'
+    - cron: '37 1-23/2 * * *'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: futureeval-live-free-production
+  cancel-in-progress: false
+
+jobs:
+  forecast_one:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Static safety gate before dependency install
+        run: python tools/live_free_safety_gate.py
+      - name: Compile runner
+        run: python -m py_compile live_free_runner.py
+      - name: Install exactly locked official dependencies
+        run: uv sync --locked --no-dev
+      - name: Forecast at most one new binary question with free route
+        env:
+          GITHUB_ACTIONS: 'true'
+          LIVE_FREE_MODE: '1'
+          LIVE_FREE_MODEL: 'openrouter/free'
+          GITHUB_TOKEN: ${{ github.token }}
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: uv run python live_free_runner.py
+      - name: Retain sanitized production receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: futureeval-live-free-receipt
+          path: live_free_receipt.json
+          if-no-files-found: warn
+          retention-days: 14
