@@ -36,8 +36,8 @@ def main():
             die("paid model token present: " + x)
     if "structure_output(" in s:
         die("parser call path present; would add model calls")
-    if "MAX_RUNS_PER_UTC_DAY = 24" not in s:
-        die("daily run cap is not 24")
+    if "MAX_RUNS_PER_UTC_DAY = 36" not in s:
+        die("daily run cap is not 36")
 
     workflow = WORKFLOW if WORKFLOW.exists() else CANARY
     if not workflow.exists():
