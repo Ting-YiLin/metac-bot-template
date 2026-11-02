@@ -195,10 +195,23 @@ async def submit_once(question, client):
 
     class OneCallBinaryBot(FallTemplateBot2026):
         async def run_research(self, question):
-            return (
-                "No external research was used in this zero-cost baseline. Base the forecast only on "
-                "the question text, background, resolution criteria, and general world knowledge."
-            )
+            # External research is a separate deterministic tool layer:
+            # search -> fetch -> extract/store -> local retrieval. The LLM only judges the evidence.
+            import sys
+            from pathlib import Path
+            stack_src = Path(__file__).resolve().parent / "web_research_stack" / "src"
+            if str(stack_src) not in sys.path:
+                sys.path.insert(0, str(stack_src))
+            try:
+                from forecast_adapter import research_for_question
+                return await asyncio.to_thread(research_for_question, question)
+            except Exception as e:
+                # Research outage must not prevent a forecast. Never fabricate missing web evidence.
+                return (
+                    "External research was unavailable (" + type(e).__name__ + "). "
+                    "Do not invent web evidence; forecast from the question text, background, "
+                    "resolution criteria, and general knowledge."
+                )
 
         async def _binary_prompt_to_forecast(self, question, prompt):
             reasoning = await self.get_llm("default", "llm").invoke(prompt)
