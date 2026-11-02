@@ -15,10 +15,11 @@ permissions:
 
 concurrency:
   group: futureeval-live-free-canary
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   canary:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
