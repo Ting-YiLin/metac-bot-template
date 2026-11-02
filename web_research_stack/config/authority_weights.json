@@ -1,0 +1,15 @@
+{
+  "preferred_official": 600,
+  "government_or_regulator": 590,
+  "official_rules_or_docs": 580,
+  "original_paper": 570,
+  "first_person_author": 560,
+  "original_record": 550,
+  "professional_media": 370,
+  "research_analysis": 320,
+  "forum_firsthand": 280,
+  "forum_general": 190,
+  "other": 100,
+  "unknown": 100,
+  "keyword_overlap_cap": 25
+}
