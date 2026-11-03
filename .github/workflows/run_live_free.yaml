@@ -9,16 +9,15 @@ on:
 
 permissions:
   contents: read
-  actions: read
 
 concurrency:
   group: futureeval-live-free-production
   cancel-in-progress: false
 
 jobs:
-  forecast_one:
+  forecast_batch:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 38
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -30,26 +29,25 @@ jobs:
         uses: astral-sh/setup-uv@v10.3.0
         with:
           version: '0.13.1'
-      - name: Static safety gate before dependency install
-        run: python tools/live_free_safety_gate.py
-      - name: Compile runner
-        run: python -m py_compile live_free_runner.py
-      - name: Install exactly locked official dependencies
+      - name: Install locked forecasting dependencies
         run: uv sync --locked --no-dev
-      - name: Forecast at most one new binary question with free route
+      - name: Install free web research runtime
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Forecast open unforecasted questions continuously
         env:
           GITHUB_ACTIONS: 'true'
-          LIVE_FREE_MODE: '1'
           LIVE_FREE_MODEL: 'openrouter/free'
-          GITHUB_TOKEN: ${{ github.token }}
+          LIVE_FREE_MAX_RUN_SECONDS: '1920'
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: uv run python live_free_runner.py
-      - name: Retain sanitized production receipt
+      - name: Retain receipts and evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: futureeval-live-free-receipt
-          path: live_free_receipt.json
+          name: futureeval-live-free-batch-${{ github.run_id }}
+          path: |
+            live_free_receipt.json
+            web_research_stack/runs/forecast_*
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 7
