@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q018",
+  "round": 3,
+  "question": "Will the RMT London Underground strikes scheduled for June 16–19, 2026 be called off or suspended?",
+  "t0_utc": "2026-05-14T00:44:07.746214+00:00",
+  "queries": [
+    "RMT union London Underground June 16 19 strike announced official May 2026 industrial action",
+    "Transport for London Tube RMT June 2026 dates negotiations May 13 official notice"
+  ]
+}
