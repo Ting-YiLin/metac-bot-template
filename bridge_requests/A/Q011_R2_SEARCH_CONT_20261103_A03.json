@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q011",
+  "round": 2,
+  "question": "Will any platform currently under Ofcom Online Safety Act investigation or enforcement action announce withdrawal from or geoblocking of the UK market by July 1, 2026?",
+  "t0_utc": "2026-05-16T12:49:16.924130+00:00",
+  "queries": [
+    "Ofcom Online Safety Act 2026 investigations platforms UK site access restriction announced April May",
+    "May 2026 Ofcom 4chan geoblocking UK withdrawal enforcement action platforms"
+  ]
+}
