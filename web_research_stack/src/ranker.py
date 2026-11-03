@@ -41,12 +41,15 @@ def rank_rows(rows,question,preferred_domains=None,weights_path=None,domain_limi
         overlap=min(len(qt&toks),int(w.get('keyword_overlap_cap',25)))
         authority=int(w.get(typ,w.get('unknown',100)))+overlap
         rq=route_specificity(x,question);rel=candidate_relevance(x,question)
-        rank_score=authority+rq['score']+rel['score']
+        seed_bonus=0
+        if str(x.get('t0_route_status',''))=='PRE_T0_INDEXED': seed_bonus+=140
+        if str(x.get('route_origin','')).endswith('URL_PRET0_EXACT'): seed_bonus+=25
+        rank_score=authority+rq['score']+rel['score']+seed_bonus
         x.update(source_type=typ,source_family=fam,authority_score=authority,
                  route_specificity_score=rq['score'],route_specificity_reasons=rq['reasons'],
                  relevance_score=rel['score'],relevance_overlap_terms=rel['overlap_terms'],
                  relevance_excluded_hits=rel['excluded_hits'],relevance_reasons=rel['reasons'],
-                 rank_score=rank_score)
+                 pre_t0_seed_bonus=seed_bonus,rank_score=rank_score)
         ranked.append(x)
     ranked.sort(key=lambda x:(-x['rank_score'],-x['relevance_score'],-x['authority_score'],x.get('url','')))
     out=[];families=Counter();domains=Counter();remaining=list(ranked)

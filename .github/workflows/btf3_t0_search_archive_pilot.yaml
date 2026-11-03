@@ -9,10 +9,13 @@ on:
       - 'web_research_stack/src/ranker.py'
       - 'web_research_stack/src/crawler.py'
       - 'web_research_stack/src/wayback.py'
+      - 'web_research_stack/src/evidence_quality.py'
       - 'web_research_stack/src/btf3_t0_search_pilot.py'
       - 'web_research_stack/data/btf3_pilot10_cases.json'
+      - 'web_research_stack/data/btf3_pilot10_routes.csv'
       - 'web_research_stack/tests/test_route_quality.py'
       - 'web_research_stack/tests/test_wayback.py'
+      - 'web_research_stack/tests/test_evidence_quality.py'
       - '.github/workflows/btf3_t0_search_archive_pilot.yaml'
   workflow_dispatch:
 
@@ -34,13 +37,13 @@ jobs:
           python-version: '3.11'
       - name: Install free research dependencies
         run: python -m pip install -r web_research_stack/requirements-runtime.txt
-      - name: Route-quality and T0 archive unit tests
+      - name: Route, T0, crawler and semantic-gate unit tests
         run: |
-          PYTHONPATH=web_research_stack/src python -m unittest -v             web_research_stack.tests.test_stack             web_research_stack.tests.test_btf3_adaptation             web_research_stack.tests.test_route_quality             web_research_stack.tests.test_wayback
+          PYTHONPATH=web_research_stack/src python -m unittest -v             web_research_stack.tests.test_stack             web_research_stack.tests.test_btf3_adaptation             web_research_stack.tests.test_route_quality             web_research_stack.tests.test_wayback             web_research_stack.tests.test_evidence_quality
       - name: Run same 10-question T0-safe search/archive pilot
         working-directory: web_research_stack
         run: |
-          PYTHONPATH=src python src/btf3_t0_search_pilot.py             --cases data/btf3_pilot10_cases.json             --out-dir runs/btf3_t0_pilot10             --archive-candidates 4             --target-archives 2
+          PYTHONPATH=src python src/btf3_t0_search_pilot.py             --cases data/btf3_pilot10_cases.json             --seed-routes data/btf3_pilot10_routes.csv             --out-dir runs/btf3_t0_pilot10             --archive-candidates 6             --target-archives 2
       - name: Upload T0-safe pilot evidence
         if: always()
         uses: actions/upload-artifact@v4
