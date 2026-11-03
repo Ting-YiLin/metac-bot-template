@@ -1,0 +1,44 @@
+name: Ting-Yi001 Unscored Bot Testing Area
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: tingyi001-unscored-bot-testing
+  cancel-in-progress: false
+jobs:
+  test_forecast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 27
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Install locked forecasting dependencies
+        run: uv sync --locked --no-dev
+      - name: Install free web research dependencies
+        run: uv pip install -r web_research_stack/requirements-runtime.txt
+      - name: Run unscored testing-area predictions
+        env:
+          BOT_TEST_MODE: '1'
+          BOT_TEST_MAX_QUESTIONS: '2'
+          LIVE_FREE_MAX_RUN_SECONDS: '1200'
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: uv run python live_free_runner.py
+      - name: Save receipts and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bot-testing-area-${{ github.run_id }}
+          path: |
+            live_free_receipt.json
+            web_research_stack/runs/forecast_*
+          if-no-files-found: warn
+          retention-days: 14
