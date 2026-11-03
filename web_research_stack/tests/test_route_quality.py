@@ -18,6 +18,9 @@ class TestRouteQuality(unittest.TestCase):
     def test_post_t0_explicit_date_is_detected(self):
         r=url_date_relation('https://x.test/story-2026-05-22/','2026-05-03T10:00:00Z')
         self.assertEqual(r['status'],'POST_T0_EXPLICIT_URL_DATE')
+    def test_compact_yyyymmdd_post_t0_is_detected(self):
+        r=url_date_relation('https://federalreserve.gov/newsevents/pressreleases/other20260522a.htm','2026-05-03T10:00:00Z')
+        self.assertEqual(r['status'],'POST_T0_EXPLICIT_URL_DATE')
     def test_excluded_entity_is_penalized(self):
         q='Will any country (excluding China, Indonesia, and the DRC) announce a critical mineral export restriction?'
         bad=candidate_relevance({'url':'https://x.test/indonesia-critical-mineral-export','title':'Indonesia critical mineral export','snippet':''},q)

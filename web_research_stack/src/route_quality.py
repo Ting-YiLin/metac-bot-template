@@ -50,6 +50,12 @@ def explicit_url_date(url):
         y,mo,d=map(int,m.groups())
         try:return datetime(y,mo,d,tzinfo=timezone.utc)
         except ValueError:return None
+    # compact YYYYMMDD embedded in official/news URLs, e.g. other20260522a.htm
+    m=re.search(r'(?<!\\d)(20\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])(?!\\d)',s)
+    if m:
+        y,mo,d=map(int,m.groups())
+        try:return datetime(y,mo,d,tzinfo=timezone.utc)
+        except ValueError:return None
     # MM-DD-YYYY
     m=re.search(r'(?<!\d)(0?[1-9]|1[0-2])-(0?[1-9]|[12]\d|3[01])-(20\d{2})(?!\d)',s)
     if m:
