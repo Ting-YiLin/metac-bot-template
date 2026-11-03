@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q027",
+  "round": 1,
+  "question": "Will SpaceX successfully catch the Super Heavy booster with the launch tower arms during Starship Flight 12 (the 12th integrated flight test of the Starship/Super Heavy system)?",
+  "t0_utc": "2026-05-03T11:10:27.737711+00:00",
+  "queries": [
+    "SpaceX Starship Flight 12 Super Heavy booster tower catch mission plan May 2026",
+    "Starship integrated flight test 12 launch tower arms booster recovery schedule April 2026"
+  ]
+}
