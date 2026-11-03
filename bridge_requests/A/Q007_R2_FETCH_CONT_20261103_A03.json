@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q007",
+  "round": 2,
+  "question": "Will TJX raise its full-year FY2027 comparable store sales growth guidance on its Q1 FY2027 earnings call (May 20, 2026)?",
+  "t0_utc": "2026-05-12T16:08:21.839158+00:00",
+  "urls": [
+    "https://www.tjx.com/docs/default-source/investor-docs/quarterly-results/tjx-fourth-quarter-fiscal-year-2026-earnings-press-release.pdf",
+    "https://marketchameleon.com/articles/b/2026/2/25/tjx-above-plan-growth-dividend-buyback-fy27"
+  ],
+  "search_candidate_urls": [
+    "https://www.tjx.com/docs/default-source/investor-docs/quarterly-results/tjx-fourth-quarter-fiscal-year-2026-earnings-press-release.pdf",
+    "https://marketchameleon.com/articles/b/2026/2/25/tjx-above-plan-growth-dividend-buyback-fy27"
+  ],
+  "search_run_id": 41601534989,
+  "search_candidate_set_in_prior_artifact": true
+}
