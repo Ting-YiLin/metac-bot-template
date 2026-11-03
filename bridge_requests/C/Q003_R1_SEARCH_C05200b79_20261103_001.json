@@ -1,0 +1,13 @@
+{
+  "arm": "C",
+  "task": "search",
+  "round": 1,
+  "case_id": "Q003",
+  "question": "Will Chipotle's first restaurant in South Korea (Republic of Korea) be open to the public by June 1, 2026?",
+  "t0_utc": "2026-05-02T14:12:47.480217+00:00",
+  "queries": [
+    "Chipotle first South Korea restaurant opening May 2026 location date",
+    "Chipotle 멕시칸 그릴 한국 1호점 오픈 2026 5월 위치"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
