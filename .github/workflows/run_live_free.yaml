@@ -1,11 +1,6 @@
 name: FutureEval Live Free Production
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/run_live_free.yaml'
   workflow_dispatch:
   schedule:
     - cron: '17 0-22/2 * * *'
