@@ -11,6 +11,7 @@ from crawler import Crawler
 from evidence_db import EvidenceDB
 from evidence_quality import evidence_relevance
 from wayback import latest_pre_t0
+from archive_integrity import verify_archive_response
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -97,12 +98,14 @@ def run(cases_path,out_dir,archive_candidates=6,target_archives=2,seed_routes_pa
             item={'rank':row.get('rank'),'candidate':row,'wayback':wb}
             if wb.get('status')=='PRE_T0_CAPTURE_FOUND':
                 snap=wb['snapshot'];rec=archive_crawler.fetch(snap['snapshot_url'],source_id=f"{cid}_A{row.get('rank')}")
+                archive_proof=verify_archive_response(snap['snapshot_url'],rec.get('final_url'),t0)
                 rec.update(title=row.get('title',''),source_type=row.get('source_type','unknown'),
                            authority_score=row.get('authority_score',0),rank_score=row.get('rank_score',0),
                            original_url=row['url'],archive_timestamp=snap['timestamp'],
-                           archive_digest=snap.get('digest'),t0=t0,t0_safe=True)
+                           archive_digest=snap.get('digest'),t0=t0,t0_safe=archive_proof['ok'],
+                           archive_verification=archive_proof)
                 item['fetch']=rec
-                if rec.get('fetch_status')=='READABLE_FULL':
+                if rec.get('fetch_status')=='READABLE_FULL' and rec['t0_safe']:
                     txt=Path(rec['text_path']).read_text(encoding='utf-8',errors='replace')
                     qual=evidence_relevance(q,txt);rec['evidence_relevance']=qual
                     readable_sources.append(rec)
@@ -116,11 +119,12 @@ def run(cases_path,out_dir,archive_candidates=6,target_archives=2,seed_routes_pa
             archive_checks.append(item)
         hits=db.search(q,min(10,int(cfg['evidence_packet_chunks'])));db.db.close()
         packet={
-            'case_id':cid,'question':q,'t0':t0,'resolution':case.get('resolution'),'created_at':now_iso(),
+            'case_id':cid,'question':q,'t0':t0,'created_at':now_iso(),
+            'discovery_mode':'LIVE_SEARCH_RETROSPECTIVE_DIAGNOSTIC',
             'queries':queries,'candidate_count':len(ranked),'archive_checks':archive_checks,
             't0_safe_readable_sources':readable_sources,'accepted_evidence_sources':accepted_sources,
             'rejected_readable_sources':rejected_readable,'evidence_chunks':hits,
-            'limitations':['Search results are route discovery only. Only pre-T0 archived bytes that pass the deterministic semantic gate are admitted as evidence.']
+            'limitations':['Search results are route discovery only. The deterministic semantic gate admits related candidates, not decisive evidence. Live search-based discovery is retrospective only. Only archive-verified pre-T0 bytes are admitted.']
         }
         save_json(cdir/'T0_EVIDENCE_PACKET.json',packet)
         all_summary.append({

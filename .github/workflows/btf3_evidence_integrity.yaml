@@ -1,0 +1,28 @@
+name: BTF3 Evidence Integrity Regression
+
+on:
+  push:
+    branches:
+      - btf3-evidence-integrity-audit-20261103
+    paths:
+      - 'web_research_stack/**'
+      - '.github/workflows/btf3_evidence_integrity.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free dependencies
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Core and evidence-integrity regression tests
+        run: |
+          PYTHONPATH=web_research_stack/src python -m unittest -v             web_research_stack.tests.test_stack             web_research_stack.tests.test_btf3_adaptation             web_research_stack.tests.test_evidence_quality             web_research_stack.tests.test_route_quality             web_research_stack.tests.test_wayback             web_research_stack.tests.test_evidence_integrity

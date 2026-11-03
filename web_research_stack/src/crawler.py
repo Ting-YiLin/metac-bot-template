@@ -5,6 +5,7 @@ from urllib.robotparser import RobotFileParser
 import requests
 from common import ensure_public_url,host,normalize_url,sha256_bytes,sha256_text,now_iso,DomainLimiter
 from extractors import extract
+from text_integrity import inspect_text
 
 TEMP_CODES={429,500,502,503,504}
 SHELL_RE=re.compile(r'(enable javascript|sign in to continue|are you a robot|access denied|verify you are human|captcha)',re.I)
@@ -127,10 +128,13 @@ class Crawler:
                 except Exception:
                     pass
             raw_dir=self.root/'raw';text_dir=self.root/'text';raw_dir.mkdir(parents=True,exist_ok=True);text_dir.mkdir(parents=True,exist_ok=True)
+            integrity=inspect_text(text)
+            if not integrity['ok'] and state=='READABLE_FULL':
+                state='CORRUPTED_TEXT'
             raw_sha=sha256_bytes(raw);text_sha=sha256_text(text)
             raw_path=raw_dir/(source_id+ext);raw_path.write_bytes(raw)
             text_path=text_dir/(source_id+'.txt');text_path.write_text(text,encoding='utf-8')
-            record.update(final_url=normalize_url(final),content_type=ctype,fetch_status=state,raw_bytes=len(raw),text_chars=len(text),raw_sha256=raw_sha,text_sha256=text_sha,raw_path=str(raw_path),text_path=str(text_path),extraction_method=method,content_mode=mode,robots=robots_state,http_attempts=attempts,error='')
+            record.update(final_url=normalize_url(final),content_type=ctype,fetch_status=state,raw_bytes=len(raw),text_chars=len(text),text_integrity=integrity,raw_sha256=raw_sha,text_sha256=text_sha,raw_path=str(raw_path),text_path=str(text_path),extraction_method=method,content_mode=mode,robots=robots_state,http_attempts=attempts,error='')
         except Exception as e:
             record.update(fetch_status='BLOCKED' if isinstance(e,CrawlBlocked) else 'ERROR',raw_bytes=0,text_chars=0,error=type(e).__name__+':'+str(e),raw_sha256=None,text_sha256=None)
         record['duration_seconds']=round(time.monotonic()-started,3)
