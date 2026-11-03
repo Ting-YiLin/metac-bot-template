@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q007",
+  "round": 1,
+  "question": "Will TJX raise its full-year FY2027 comparable store sales growth guidance on its Q1 FY2027 earnings call (May 20, 2026)?",
+  "t0_utc": "2026-05-12T16:08:21.839158+00:00",
+  "urls": [
+    "https://www.tjx.com/docs/default-source/investor-docs/quarterly-results/tjx-first-quarter-fiscal-year-2026-earnings-press-release.pdf",
+    "https://www.tjx.com/"
+  ],
+  "search_candidate_urls": [
+    "https://www.tjx.com/docs/default-source/investor-docs/quarterly-results/tjx-first-quarter-fiscal-year-2026-earnings-press-release.pdf",
+    "https://www.tjx.com/"
+  ],
+  "search_run_id": 41597303548,
+  "search_candidate_set_in_prior_artifact": true
+}
