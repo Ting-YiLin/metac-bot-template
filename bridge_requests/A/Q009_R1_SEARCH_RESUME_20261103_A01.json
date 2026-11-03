@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q009",
+  "round": 1,
+  "question": "Will NASA begin stacking the Artemis III SLS core stage onto the Mobile Launcher in the Vehicle Assembly Building by June 1, 2026?",
+  "t0_utc": "2026-05-02T23:36:57.525447+00:00",
+  "queries": [
+    "NASA Artemis III SLS core stage stacking Vehicle Assembly Building mobile launcher May 2026 schedule",
+    "Artemis III rocket core stage Kennedy Space Center VAB stacking 2026 NASA update"
+  ]
+}
