@@ -1,0 +1,26 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q003",
+  "round": 3,
+  "question": "Will Chipotle's first restaurant in South Korea (Republic of Korea) be open to the public by June 1, 2026?",
+  "t0_utc": "2026-05-02T14:12:47.480217+00:00",
+  "urls": [
+    "https://biz.chosun.com/en/en-retail/2026/03/19/L7MPIZ7QLZHLZMIEOQHR55C6KE/",
+    "https://newsroom.chipotle.com/2025-09-10-CHIPOTLE-TO-EXPAND-TO-ASIA-FOR-THE-FIRST-TIME-THROUGH-A-JOINT-VENTURE-WITH-SPC-GROUP"
+  ],
+  "search_candidate_urls": [
+    "https://newsroom.chipotle.com/2026-09-02-CHIPOTLE-ARRIVES-IN-ASIA-WITH-FIRST-RESTAURANT-IN-SEOUL",
+    "https://newsroom.chipotle.com/2026-09-02-CHIPOTLE-ARRIVES-IN-ASIA-WITH-FIRST-RESTAURANT-IN-SEOUL?asPDF=1",
+    "https://theticker.org/19659/business/chipotle-opens-first-restaurant-in-south-korea/",
+    "https://biz.chosun.com/en/en-retail/2026/03/19/L7MPIZ7QLZHLZMIEOQHR55C6KE/",
+    "https://www.chosun.com/english/industry-en/2026/09/02/ZJHBXMQR25AJNFVH5LGQKLXULE/",
+    "https://lexpress-franchise.com/en-us/news/chipotle-opens-first-asia-restaurant-in-seoul-south-korea/",
+    "https://www.nasdaq.com/press-release/chipotle-arrives-asia-first-restaurant-seoul-2026-09-02",
+    "https://www.restauranttimes.com/news/restaurants-news/chipotle-asia-debut-seoul-south-korea/",
+    "https://finance.yahoo.com/small-business/articles/chipotle-arrives-asia-first-restaurant-115300661.html?fr=sycsrp_catchall",
+    "https://newsroom.chipotle.com/2025-09-10-CHIPOTLE-TO-EXPAND-TO-ASIA-FOR-THE-FIRST-TIME-THROUGH-A-JOINT-VENTURE-WITH-SPC-GROUP",
+    "https://www.cnbc.com/2026/09/09/chipotles-new-seoul-restaurant-tests-its-asian-expansion-strategy-.html",
+    "https://vffranchiseconsulting.com/chipotle-first-asia-restaurant-seoul-sangmidang-joint-venture/"
+  ]
+}
