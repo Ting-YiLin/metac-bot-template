@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q019",
+  "round": 1,
+  "question": "Will the RBI Monetary Policy Committee's June 3–5, 2026 meeting resolution include at least one dissenting vote on the policy repo rate decision?",
+  "t0_utc": "2026-05-14T01:29:18.130602+00:00",
+  "urls": [
+    "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=62599",
+    "https://amc.ppfas.com/knowledge-center/market-insights/minutes-of-rbi-monetary-policy/2026/minutes-of-rbi-monetary-policy-april-2026.pdf?08042026="
+  ],
+  "search_candidate_urls": [
+    "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=62599",
+    "https://amc.ppfas.com/knowledge-center/market-insights/minutes-of-rbi-monetary-policy/2026/minutes-of-rbi-monetary-policy-april-2026.pdf?08042026="
+  ],
+  "raw_search_run_id": 41597495681,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
