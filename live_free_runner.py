@@ -1,7 +1,7 @@
 """FutureEval free-production runner for Ting-Yi001.
 
 Operational policy:
-- Target Fall 2026 FutureEval and current MiniBench.
+- Target only the unscored Metaculus Bot Testing Area (project 32977).
 - Eligibility filter is intentionally minimal: OPEN and not already forecasted.
 - No question-type filter: let forecasting-tools dispatch supported types.
 - Free OpenRouter route only. Each LLM invocation may retry up to 3 attempts.
@@ -19,11 +19,12 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-ALLOWED_TOURNAMENTS = ("fall-futureeval-2026", "minibench")
+ALLOWED_TOURNAMENTS = ("bot-testing-area",)
 ALLOWED_MODEL = "openrouter/free"
 SDK_MODEL_NAME = "openrouter/openrouter/free"
 OUTPUT = Path("live_free_receipt.json")
-MAX_RUN_SECONDS = int(os.getenv("LIVE_FREE_MAX_RUN_SECONDS", "1920"))  # 32 minutes
+MAX_RUN_SECONDS = int(os.getenv("LIVE_FREE_MAX_RUN_SECONDS", "1200"))
+MAX_TEST_QUESTIONS = max(1, min(4, int(os.getenv("BOT_TEST_MAX_QUESTIONS", "2"))))
 MODEL_ALLOWED_TRIES = 3
 
 
@@ -262,7 +263,9 @@ async def run_batch():
     bot = build_bot(client)
 
     summary = {
-        "stage": "LIVE_FREE_V2_WEB_RESEARCH",
+        "stage": "BOT_TESTING_AREA_V1_WEB_RESEARCH",
+        "competition_submission_enabled": False,
+        "max_questions_this_run": MAX_TEST_QUESTIONS,
         "timestamp_utc": iso_now(),
         "model_routing_id": ALLOWED_MODEL,
         "model_allowed_tries_per_invocation": MODEL_ALLOWED_TRIES,
@@ -280,6 +283,9 @@ async def run_batch():
     }
 
     for tournament, q in candidates:
+        if len(summary["processed"]) >= MAX_TEST_QUESTIONS:
+            summary["stop_reason"] = "TEST_BATCH_QUESTION_LIMIT"
+            break
         if time.monotonic() - started >= MAX_RUN_SECONDS:
             summary["stop_reason"] = "RUN_TIME_BUDGET"
             break
@@ -315,8 +321,8 @@ async def run_batch():
 def main() -> int:
     # No extra quota/key/safety preflight. Missing credentials or exhausted free
     # quota fail naturally at the API call, as requested.
-    if os.getenv("GITHUB_ACTIONS") != "true":
-        print("This production runner is intended for GitHub Actions.")
+    if os.getenv("GITHUB_ACTIONS") != "true" or os.getenv("BOT_TEST_MODE") != "1":
+        print("Bot testing area mode requires GitHub Actions and BOT_TEST_MODE=1.")
         return 2
 
     summary = asyncio.run(run_batch())
