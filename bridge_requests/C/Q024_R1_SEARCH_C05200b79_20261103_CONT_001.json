@@ -1,0 +1,13 @@
+{
+  "arm": "C",
+  "task": "search",
+  "case_id": "Q024",
+  "round": 1,
+  "question": "Will the WHO World Health Assembly (WHA79) formally adopt the Pathogen Access and Benefit-Sharing (PABS) annex to the Pandemic Agreement by May 23, 2026?",
+  "t0_utc": "2026-05-04T08:30:22.429266+00:00",
+  "queries": [
+    "WHA79 PABS annex pandemic agreement negotiation adoption May 2026 IGWG",
+    "site:who.int pathogen access and benefit sharing annex World Health Assembly 2026 May draft"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
