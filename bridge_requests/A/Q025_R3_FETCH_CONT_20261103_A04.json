@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q025",
+  "round": 3,
+  "question": "Will Canada's annual Consumer Price Index (CPI) inflation rate for April 2026 be at or above 3.0% when released on May 19, 2026 (12:30 UTC)?",
+  "t0_utc": "2026-05-02T12:08:03.996800+00:00",
+  "urls": [
+    "https://www.rbcis.com/en/insights/2026/04/monthly-forecast-update-apr26",
+    "https://www.bankofcanada.ca/wp-content/uploads/2026/04/mpr-2026-04-29.pdf"
+  ],
+  "search_candidate_urls": [
+    "https://www.rbcis.com/en/insights/2026/04/monthly-forecast-update-apr26",
+    "https://www.bankofcanada.ca/wp-content/uploads/2026/04/mpr-2026-04-29.pdf"
+  ],
+  "search_run_id": 41602711223,
+  "search_candidate_set_in_prior_artifact": true
+}
