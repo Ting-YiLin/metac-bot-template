@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q023",
+  "round": 1,
+  "question": "Will Space Exploration Technologies Corp (SpaceX) file a public S-1 registration statement with the SEC on or after April 30, 2026, and before June 1, 2026?",
+  "t0_utc": "2026-04-30T14:48:36.759962+00:00",
+  "queries": [
+    "SpaceX IPO SEC S-1 public registration statement April 2026 filing plans",
+    "Space Exploration Technologies Corp initial public offering S-1 SEC April 2026 reported timeline"
+  ]
+}
