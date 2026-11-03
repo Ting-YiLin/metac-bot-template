@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q019",
+  "round": 2,
+  "question": "Will the RBI Monetary Policy Committee's June 3–5, 2026 meeting resolution include at least one dissenting vote on the policy repo rate decision?",
+  "t0_utc": "2026-05-14T01:29:18.130602+00:00",
+  "queries": [
+    "Reserve Bank of India MPC April 2026 minutes votes unanimity May 2026 June policy expectations",
+    "RBI April 2026 monetary policy committee minutes repo rate member voting records 2026"
+  ]
+}
