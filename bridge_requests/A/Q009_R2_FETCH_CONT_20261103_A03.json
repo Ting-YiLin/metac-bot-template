@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q009",
+  "round": 2,
+  "question": "Will NASA begin stacking the Artemis III SLS core stage onto the Mobile Launcher in the Vehicle Assembly Building by June 1, 2026?",
+  "t0_utc": "2026-05-02T23:36:57.525447+00:00",
+  "urls": [
+    "https://www.nasa.gov/missions/artemis/artemis-3/nasa-outlines-preliminary-artemis-iii-mission-plans/",
+    "https://www.boeing.com/features/2026/04/boeings-moon-rocket-core-stage-delivered-to-florida"
+  ],
+  "search_candidate_urls": [
+    "https://www.nasa.gov/missions/artemis/artemis-3/nasa-outlines-preliminary-artemis-iii-mission-plans/",
+    "https://www.boeing.com/features/2026/04/boeings-moon-rocket-core-stage-delivered-to-florida"
+  ],
+  "search_run_id": 41601580234,
+  "search_candidate_set_in_prior_artifact": true
+}
