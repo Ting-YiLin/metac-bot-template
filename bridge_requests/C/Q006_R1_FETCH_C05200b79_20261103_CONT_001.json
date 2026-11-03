@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q006",
+  "round": 1,
+  "question": "Will a U.S. federal court order blocking the termination of Yemen's TPS designation remain in effect on May 20, 2026?",
+  "t0_utc": "2026-05-02T12:33:45.918391+00:00",
+  "urls": [
+    "https://ccrjustice.org/home/press-center/press-releases/victory-yemeni-immigrants-court-blocks-trump-termination-temporary",
+    "https://www.hunton.com/business-immigration-insights/federal-judge-blocks-end-of-yemen-tps"
+  ],
+  "search_candidate_urls": [
+    "https://ccrjustice.org/home/press-center/press-releases/victory-yemeni-immigrants-court-blocks-trump-termination-temporary",
+    "https://www.hunton.com/business-immigration-insights/federal-judge-blocks-end-of-yemen-tps"
+  ],
+  "raw_search_run_id": 41597332943,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
