@@ -1,0 +1,22 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q004",
+  "round": 1,
+  "question": "Will Kanye West (Ye) perform at the Jawaharlal Nehru Stadium in New Delhi on May 23, 2026?",
+  "t0_utc": "2026-05-01T11:01:58.819582+00:00",
+  "urls": [
+    "https://www.bandsintown.com/e/1038670164-ye-at-jawaharlal-nehru-stadium-delhi",
+    "https://www.outlookindia.com/art-entertainment/hollywood/kanye-west-india-concert-2026-ye-confirms-first-ever-delhi-show-at-jln-stadium-on-may-23"
+  ],
+  "search_candidate_urls": [
+    "https://www.bandsintown.com/e/1038670164-ye-at-jawaharlal-nehru-stadium-delhi",
+    "https://www.timesnownews.com/entertainment-news/hollywood/kanye-west-delhi-concert-date-venue-ticket-prices-how-to-book-article-154127028",
+    "https://www.moneycontrol.com/entertainment/kanye-west-delhi-concert-set-for-may-23-venue-ticket-prices-and-how-to-book-article-13896577.html",
+    "https://www.cnbctv18.com/entertainment/ye-lanye-west-india-concert-cancelled-full-ticket-refunds-ws-l-19907071.htm",
+    "https://www.outlookindia.com/art-entertainment/hollywood/kanye-west-india-concert-2026-ye-confirms-first-ever-delhi-show-at-jln-stadium-on-may-23",
+    "https://www.moneycontrol.com/entertainment/kanye-west-india-tour-know-date-venue-and-how-to-book-tickets-for-his-first-ever-concert-in-india-article-13895279.html",
+    "https://www.latestly.com/entertainment/hollywood/kanye-west-delhi-concert-may-2026-official-date-venue-and-ticket-details-for-yes-india-debut-7407844.html",
+    "https://allevents.in/new-delhi/kanye-west-in-new-delhi/3300029960334106"
+  ]
+}
