@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q026",
+  "round": 1,
+  "question": "Will the Supreme Court's majority opinion in Trump v. Barbara (No. 25-365) resolve the case primarily on statutory grounds rather than constitutional grounds?",
+  "t0_utc": "2026-05-14T03:10:35.490726+00:00",
+  "urls": [
+    "https://www.supremecourt.gov/docket/docketfiles/html/public/25-365.html",
+    "https://www.law.cornell.edu/supct/cert/25-365"
+  ],
+  "search_candidate_urls": [
+    "https://www.supremecourt.gov/docket/docketfiles/html/public/25-365.html",
+    "https://www.law.cornell.edu/supct/cert/25-365"
+  ],
+  "search_run_id": 41597572133,
+  "search_candidate_set_in_prior_artifact": true
+}
