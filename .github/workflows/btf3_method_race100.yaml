@@ -1,0 +1,81 @@
+name: BTF3 100Q Paired Route Method Race
+
+on:
+  push:
+    branches:
+      - btf3-method-race-100q-20261103
+    paths:
+      - '.github/workflows/btf3_method_race100.yaml'
+      - 'web_research_stack/data/btf3_official_preT0_index100.csv'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: btf3-100q-paired
+  cancel-in-progress: true
+
+jobs:
+  paired:
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - {shard: 1, part: 30, offset: 0}
+          - {shard: 2, part: 30, offset: 10}
+          - {shard: 3, part: 30, offset: 20}
+          - {shard: 4, part: 70, offset: 0}
+          - {shard: 5, part: 70, offset: 10}
+          - {shard: 6, part: 70, offset: 20}
+          - {shard: 7, part: 70, offset: 30}
+          - {shard: 8, part: 70, offset: 40}
+          - {shard: 9, part: 70, offset: 50}
+          - {shard: 10, part: 70, offset: 60}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free research dependencies
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Prepare question-only ten-case shard, excluding all final answers
+        working-directory: web_research_stack
+        env:
+          PART: ${{ matrix.part }}
+          OFFSET: ${{ matrix.offset }}
+        run: |
+          python - <<'PY'
+          import gzip,json,os
+          part=os.environ['PART'];offset=int(os.environ['OFFSET'])
+          fn='data/btf3_expand'+part+'_cases.json.gz'
+          xs=json.load(gzip.open(fn,'rt',encoding='utf-8'))
+          subset=[]
+          for x in xs[offset:offset+10]:
+              subset.append({k:x[k] for k in ('case_id','question','t0_utc','preferred_domains') if k in x})
+          assert len(subset)==10,(part,offset,len(subset))
+          assert all('case_id' in x and 'question' in x and 't0_utc' in x for x in subset)
+          json.dump(subset,open('/tmp/btf3_shard_cases.json','w',encoding='utf-8'),ensure_ascii=False)
+          print('SHARD_CASES',len(subset),[x['case_id'] for x in subset],flush=True)
+          PY
+      - name: Run paired official-index first versus natural-search first
+        working-directory: web_research_stack
+        run: |
+          PYTHONPATH=src python src/btf3_route_order_race.py \
+            --cases /tmp/btf3_shard_cases.json \
+            --official-routes data/btf3_official_preT0_index100.csv \
+            --out-dir runs/btf3_method_race100_shard${{ matrix.shard }} \
+            --case-limit 10 \
+            --primary-cap 3 \
+            --fallback-cap 3
+      - name: Upload complete per-case route evidence and comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btf3-method-race100-shard-${{ matrix.shard }}
+          path: web_research_stack/runs/btf3_method_race100_shard${{ matrix.shard }}
+          if-no-files-found: warn
+          retention-days: 14
