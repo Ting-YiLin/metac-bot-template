@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q010",
+  "round": 1,
+  "question": "Will Iran's IRGC cease all attacks, seizures, and interdictions of commercial shipping in the Strait of Hormuz for at least 7 consecutive days before June 1, 2026?",
+  "t0_utc": "2026-05-03T02:08:57.349236+00:00",
+  "queries": [
+    "IRGC Strait of Hormuz commercial vessel seizures attacks maritime security April 2026 incidents",
+    "Hormuz commercial shipping interdictions Iran IRGC May 2026 Lloyds UKMTO alerts"
+  ]
+}
