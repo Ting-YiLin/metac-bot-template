@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q028",
+  "round": 1,
+  "question": "Will a Hezbollah rocket or drone attack cause at least one civilian casualty in Israeli territory between April 30 and June 1, 2026?",
+  "t0_utc": "2026-04-30T18:28:43.603372+00:00",
+  "urls": [
+    "https://understandingwar.org/research/middle-east/how-hezbollah-is-preventing-its-disarmament-again/",
+    "https://www.timesofisrael.com/"
+  ],
+  "search_candidate_urls": [
+    "https://understandingwar.org/research/middle-east/how-hezbollah-is-preventing-its-disarmament-again/",
+    "https://www.timesofisrael.com/"
+  ],
+  "raw_search_run_id": 41597580148,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
