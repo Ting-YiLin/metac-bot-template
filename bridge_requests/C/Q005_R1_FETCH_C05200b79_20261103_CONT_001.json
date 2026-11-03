@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q005",
+  "round": 1,
+  "question": "Will Vanda Pharmaceuticals withdraw its marketing authorisation application for iloperidone from the EMA before a final re-examination opinion is issued, by July 1, 2026?",
+  "t0_utc": "2026-05-14T06:03:38.728589+00:00",
+  "urls": [
+    "https://www.ema.europa.eu/en/medicines/human/EPAR/iloperidone-vanda-pharmaceuticals",
+    "https://medicalupdateonline.com/2026/03/chmp-adopts-negative-opinion-for-iloperidone-in-schizophrenia-and-bipolar-i-disorder-vanda-pharmaceuticals/"
+  ],
+  "search_candidate_urls": [
+    "https://www.ema.europa.eu/en/medicines/human/EPAR/iloperidone-vanda-pharmaceuticals",
+    "https://medicalupdateonline.com/2026/03/chmp-adopts-negative-opinion-for-iloperidone-in-schizophrenia-and-bipolar-i-disorder-vanda-pharmaceuticals/"
+  ],
+  "raw_search_run_id": 41597327688,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
