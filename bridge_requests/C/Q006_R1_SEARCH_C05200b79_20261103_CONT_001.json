@@ -1,0 +1,13 @@
+{
+  "arm": "C",
+  "task": "search",
+  "case_id": "Q006",
+  "round": 1,
+  "question": "Will a U.S. federal court order blocking the termination of Yemen's TPS designation remain in effect on May 20, 2026?",
+  "t0_utc": "2026-05-02T12:33:45.918391+00:00",
+  "queries": [
+    "Yemen TPS termination federal court preliminary injunction April 2026 judge order DHS",
+    "Yemen temporary protected status 2026 lawsuit stay injunction May 20 federal district court"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
