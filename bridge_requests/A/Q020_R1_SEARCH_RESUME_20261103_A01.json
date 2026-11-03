@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q020",
+  "round": 1,
+  "question": "Will the 79th World Health Assembly adopt a resolution explicitly addressing the United States' withdrawal from WHO or its unpaid dues?",
+  "t0_utc": "2026-05-02T19:35:07.641420+00:00",
+  "queries": [
+    "79th World Health Assembly 2026 agenda United States WHO withdrawal unpaid assessed contributions resolution",
+    "WHA79 2026 World Health Organization financing US arrears withdrawal resolution draft agenda"
+  ]
+}
