@@ -1,0 +1,17 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q030",
+  "round": 2,
+  "question": "Will the team that wins the Stage 3 Team Time Trial also have a rider finish on the final GC podium (top 3) of the 2026 Tour Auvergne-Rhône-Alpes?",
+  "t0_utc": "2026-05-12T15:03:03.816366+00:00",
+  "urls": [
+    "https://cyclingarchives.com/fr/criterium-du-dauphine-2026-tour-auvergne-rhone-alpes-changement-parcours-favoris-analyse/",
+    "https://www.cyclingnews.com/pro-cycling/races/criterium-du-dauphine-auvergne-rhone-alpes-2026/"
+  ],
+  "search_candidate_urls": [
+    "https://cyclingarchives.com/fr/criterium-du-dauphine-2026-tour-auvergne-rhone-alpes-changement-parcours-favoris-analyse/",
+    "https://www.cyclingnews.com/pro-cycling/races/criterium-du-dauphine-auvergne-rhone-alpes-2026/"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
