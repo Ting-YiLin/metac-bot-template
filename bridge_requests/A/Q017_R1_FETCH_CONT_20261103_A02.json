@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q017",
+  "round": 1,
+  "question": "Will the U.S. Supreme Court rule in favor of the FCC (reversing the Fifth Circuit) in FCC v. AT&T, Inc. (No. 25-406) by June 30, 2026?",
+  "t0_utc": "2026-05-16T19:25:38.361614+00:00",
+  "urls": [
+    "https://www.supremecourt.gov/docket/docketfiles/html/public/25-406.html",
+    "https://www.scotusblog.com/2026/04/court-appears-skeptical-of-right-to-jury-trial-in-fcc-proceedings/"
+  ],
+  "search_candidate_urls": [
+    "https://www.supremecourt.gov/docket/docketfiles/html/public/25-406.html",
+    "https://www.scotusblog.com/2026/04/court-appears-skeptical-of-right-to-jury-trial-in-fcc-proceedings/"
+  ],
+  "search_run_id": 41597455169,
+  "search_candidate_set_in_prior_artifact": true
+}
