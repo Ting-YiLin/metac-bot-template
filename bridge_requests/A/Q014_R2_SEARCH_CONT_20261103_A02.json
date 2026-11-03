@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q014",
+  "round": 2,
+  "question": "Will the Colorado General Assembly pass legislation repealing or replacing the Colorado AI Act (SB 24-205) before the 2026 session adjourns sine die?",
+  "t0_utc": "2026-05-02T13:47:02.843221+00:00",
+  "queries": [
+    "Colorado SB 26-189 April 2026 committee status text AI Act replace",
+    "Colorado General Assembly April 2026 session AI act SB24-205 modification substitute bill status"
+  ]
+}
