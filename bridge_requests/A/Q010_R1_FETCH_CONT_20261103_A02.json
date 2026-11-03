@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q010",
+  "round": 1,
+  "question": "Will Iran's IRGC cease all attacks, seizures, and interdictions of commercial shipping in the Strait of Hormuz for at least 7 consecutive days before June 1, 2026?",
+  "t0_utc": "2026-05-03T02:08:57.349236+00:00",
+  "urls": [
+    "https://www.aljazeera.com/news/2026/4/22/iranian-gunboat-fires-on-container-ship-off-oman-coast",
+    "https://windward.ai/blog/april-19-2026-iran-war-maritime-intelligence-daily/"
+  ],
+  "search_candidate_urls": [
+    "https://www.aljazeera.com/news/2026/4/22/iranian-gunboat-fires-on-container-ship-off-oman-coast",
+    "https://windward.ai/blog/april-19-2026-iran-war-maritime-intelligence-daily/"
+  ],
+  "search_run_id": 41597357678,
+  "search_candidate_set_in_prior_artifact": true
+}
