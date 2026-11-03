@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q004",
+  "round": 1,
+  "question": "Will Kanye West (Ye) perform at the Jawaharlal Nehru Stadium in New Delhi on May 23, 2026?",
+  "t0_utc": "2026-05-01T11:01:58.819582+00:00",
+  "queries": [
+    "Ye Kanye West New Delhi Jawaharlal Nehru Stadium May 23 2026 concert promoter tickets",
+    "Kanye West India May 2026 concert venue Jawaharlal Nehru stadium official announcement"
+  ]
+}
