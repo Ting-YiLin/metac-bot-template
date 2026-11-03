@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q022",
+  "round": 2,
+  "question": "Will any AUSSOM troop-contributing country officially announce a reduction in their troop commitment to Somalia between May 12 and July 1, 2026?",
+  "t0_utc": "2026-05-29T06:29:01.118148+00:00",
+  "urls": [
+    "https://au.int/en/speeches/20250424/statement-ext-summit-troop-contributing-countries-aussom-somalia",
+    "https://au-ssom.org/aupsc-communiques/"
+  ],
+  "search_candidate_urls": [
+    "https://au.int/en/speeches/20250424/statement-ext-summit-troop-contributing-countries-aussom-somalia",
+    "https://au-ssom.org/aupsc-communiques/"
+  ],
+  "search_run_id": 41601706412,
+  "search_candidate_set_in_prior_artifact": true
+}
