@@ -1,0 +1,13 @@
+{
+  "arm": "C",
+  "task": "search",
+  "case_id": "Q030",
+  "round": 3,
+  "question": "Will the team that wins the Stage 3 Team Time Trial also have a rider finish on the final GC podium (top 3) of the 2026 Tour Auvergne-Rhône-Alpes?",
+  "t0_utc": "2026-05-12T15:03:03.816366+00:00",
+  "queries": [
+    "May 2026 Tour Auvergne-Rhône-Alpes stage 3 team time trial 28.4 km favorites GC",
+    "May 2026 Critérium du Dauphiné 2026 stage 3 team time trial team contenders stage route"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
