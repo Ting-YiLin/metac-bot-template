@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q001",
+  "round": 1,
+  "question": "Will a federal lawsuit challenging the CFPB's 2026 Section 1071 final rule be filed between May 12, 2026, and July 1, 2026?",
+  "t0_utc": "2026-05-14T05:42:46.558738+00:00",
+  "queries": [
+    "CFPB Section 1071 2026 final rule lawsuit filed May 12 May 13 2026",
+    "CFPB small business lending 1071 final rule legal challenge trade groups May 2026"
+  ]
+}
