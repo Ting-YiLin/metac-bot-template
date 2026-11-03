@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q026",
+  "round": 2,
+  "question": "Will the Supreme Court's majority opinion in Trump v. Barbara (No. 25-365) resolve the case primarily on statutory grounds rather than constitutional grounds?",
+  "t0_utc": "2026-05-14T03:10:35.490726+00:00",
+  "urls": [
+    "https://www.scotusblog.com/2026/04/birthright-citizenship-oral-argument-highlights/",
+    "https://www.scotusblog.com/cases/trump-v-barbara/"
+  ],
+  "search_candidate_urls": [
+    "https://www.scotusblog.com/2026/04/birthright-citizenship-oral-argument-highlights/",
+    "https://www.scotusblog.com/cases/trump-v-barbara/"
+  ],
+  "search_run_id": 41601758357,
+  "search_candidate_set_in_prior_artifact": true
+}
