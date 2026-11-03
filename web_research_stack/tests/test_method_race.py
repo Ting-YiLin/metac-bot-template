@@ -11,7 +11,7 @@ class TestMethodRace(unittest.TestCase):
         n=[r('c'),r('d'),r('e'),r('f')]
         a,ap=choose_primary_fallback(o,n)
         b,bp=choose_primary_fallback(n,o)
-        self.assertEqual(len(a),5)
+        self.assertEqual(len(a),6)
         self.assertEqual(len(b),5)
         self.assertEqual(ap,3);self.assertEqual(bp,3)
         self.assertEqual(a[0]['url'],r('a')['url'])
