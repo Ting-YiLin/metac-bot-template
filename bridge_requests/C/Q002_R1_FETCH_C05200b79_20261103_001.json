@@ -1,0 +1,21 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "round": 1,
+  "case_id": "Q002",
+  "question": "Will the TBMM publish a 'separate and temporary' reintegration law for PKK militants who lay down arms in the Official Gazette by July 1, 2026?",
+  "t0_utc": "2026-05-16T12:11:41.064378+00:00",
+  "urls": [
+    "https://middleeasttransparent.com/turkish-parliamentary-commission-proposes-temporary-law-for-pkk-disarmament-process/"
+  ],
+  "search_candidate_urls": [
+    "https://middleeasttransparent.com/turkish-parliamentary-commission-proposes-temporary-law-for-pkk-disarmament-process/",
+    "https://www.reuters.com/world/middle-east/turkish-parliament-passes-landmark-law-advance-pkk-peace-process-2026-08-10/",
+    "https://middle-east-online.com/en/turkey-clears-legal-path-pkk-disarmament-reintegration",
+    "https://www.france24.com/en/middle-east/20260810-turkey-parliament-passes-limited-amnesty-law-for-kurdish-pkk-militants",
+    "https://www.globaltimes.cn/page/202608/1367940.shtml",
+    "https://www.usnews.com/news/world/articles/2026-08-10/turkish-parliament-passes-landmark-law-to-advance-pkk-peace-process",
+    "https://www.kurdistan24.net/en/story/936269"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
