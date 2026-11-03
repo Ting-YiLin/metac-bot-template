@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q025",
+  "round": 3,
+  "question": "Will Canada's annual Consumer Price Index (CPI) inflation rate for April 2026 be at or above 3.0% when released on May 19, 2026 (12:30 UTC)?",
+  "t0_utc": "2026-05-02T12:08:03.996800+00:00",
+  "queries": [
+    "Canada April 2026 inflation CPI forecast 3 percent gasoline April 30 analyst estimates",
+    "April 2026 Canada CPI before release 19 May economist forecast inflation March statistics"
+  ]
+}
