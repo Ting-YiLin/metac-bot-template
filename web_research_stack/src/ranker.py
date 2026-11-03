@@ -1,6 +1,7 @@
 import hashlib,re
 from collections import Counter
 from common import host,load_json
+from route_quality import route_specificity
 
 GOV_HINTS=('.gov','.gov.au','.gc.ca','.europa.eu')
 ACADEMIC_HOSTS=('doi.org','pubmed.ncbi.nlm.nih.gov','science.org','nature.com','arxiv.org','osf.io')
@@ -38,9 +39,11 @@ def rank_rows(rows,question,preferred_domains=None,weights_path=None,domain_limi
         x=dict(row); typ=classify(x,preferred_domains); fam=source_family(x)
         toks=set(re.findall(r'[a-z0-9]{3,}|[\u4e00-\u9fff]{2,}',((x.get('title') or '')+' '+(x.get('snippet') or '')).lower()))
         overlap=min(len(qt&toks),int(w.get('keyword_overlap_cap',25)))
-        x.update(source_type=typ,source_family=fam,authority_score=int(w.get(typ,w.get('unknown',100)))+overlap)
+        authority=int(w.get(typ,w.get('unknown',100)))+overlap
+        rq=route_specificity(x,question)
+        x.update(source_type=typ,source_family=fam,authority_score=authority,route_specificity_score=rq['score'],route_specificity_reasons=rq['reasons'],rank_score=authority+rq['score'])
         ranked.append(x)
-    ranked.sort(key=lambda x:(-x['authority_score'],x.get('url','')))
+    ranked.sort(key=lambda x:(-x['rank_score'],-x['authority_score'],x.get('url','')))
     out=[];families=Counter();domains=Counter();remaining=list(ranked)
     while remaining:
         opts=[x for x in remaining if families[x['source_family']]<1 and domains[host(x['url'])]<domain_limit]

@@ -1,0 +1,108 @@
+[
+  {
+    "case_id": "Q031",
+    "resolution": 0,
+    "t0_utc": "2026-04-30T12:04:25.967388Z",
+    "question": "Will a model from an organization other than OpenAI hold the #1 position on the Epoch AI GDPval leaderboard on June 1, 2026?",
+    "preferred_domains": [
+      "epoch.ai"
+    ]
+  },
+  {
+    "case_id": "Q033",
+    "resolution": 1,
+    "t0_utc": "2026-05-01T17:30:14.949440Z",
+    "question": "Will the US and Iran resume active military strikes by June 1, 2026?",
+    "preferred_domains": [
+      "reuters.com",
+      "apnews.com",
+      "bbc.com"
+    ]
+  },
+  {
+    "case_id": "Q034",
+    "resolution": 1,
+    "t0_utc": "2026-05-03T10:10:43.114511Z",
+    "question": "Will SpaceX's Starship Flight 12 launch by 23:59 UTC on May 31, 2026?",
+    "preferred_domains": [
+      "spacex.com",
+      "nextspaceflight.com",
+      "space.com"
+    ]
+  },
+  {
+    "case_id": "Q041",
+    "resolution": 0,
+    "t0_utc": "2026-05-02T14:44:24.542254Z",
+    "question": "Will the FDA approve CTx-1301 (Cingulate's ADHD treatment) by June 1, 2026?",
+    "preferred_domains": [
+      "accessdata.fda.gov",
+      "fda.gov",
+      "cingulate.com"
+    ]
+  },
+  {
+    "case_id": "Q056",
+    "resolution": 1,
+    "t0_utc": "2026-05-03T13:18:39.218273Z",
+    "question": "Will Kevin Warsh be confirmed by the U.S. Senate as Federal Reserve Chair by June 1, 2026?",
+    "preferred_domains": [
+      "congress.gov",
+      "senate.gov"
+    ]
+  },
+  {
+    "case_id": "Q067",
+    "resolution": 0,
+    "t0_utc": "2026-05-01T15:08:40.869927Z",
+    "question": "Will any country (excluding China, Indonesia, and the DRC) announce or implement a major new export restriction on a critical mineral between April 30, 2026, and June 1, 2026 (UTC)?",
+    "preferred_domains": [
+      "reuters.com",
+      "apnews.com",
+      "bloomberg.com"
+    ]
+  },
+  {
+    "case_id": "Q073",
+    "resolution": 1,
+    "t0_utc": "2026-05-16T16:30:23.263849Z",
+    "question": "Will the Supreme Court of India reserve judgment in the 9-judge Sabarimala reference case by July 1, 2026?",
+    "preferred_domains": [
+      "scobserver.in",
+      "barandbench.com",
+      "livelaw.in"
+    ]
+  },
+  {
+    "case_id": "Q084",
+    "resolution": 1,
+    "t0_utc": "2026-05-02T20:07:30.668567Z",
+    "question": "Will Bulgaria have a regular (non-caretaker) government in office by June 1, 2026?",
+    "preferred_domains": [
+      "parliament.bg",
+      "government.bg",
+      "reuters.com"
+    ]
+  },
+  {
+    "case_id": "Q096",
+    "resolution": 1,
+    "t0_utc": "2026-05-01T14:34:43.372574Z",
+    "question": "Will the Musk v. Altman trial (Case No. 3:24-cv-04722, N.D. Cal.) result in a jury verdict or settlement on or after April 30, 2026, and before June 1, 2026?",
+    "preferred_domains": [
+      "courtlistener.com",
+      "cand.uscourts.gov",
+      "uscourts.gov"
+    ]
+  },
+  {
+    "case_id": "Q098",
+    "resolution": 0,
+    "t0_utc": "2026-05-01T12:42:03.444020Z",
+    "question": "Will Trump Media & Technology Group complete its digital token distribution to eligible shareholders by June 1, 2026?",
+    "preferred_domains": [
+      "sec.gov",
+      "ir.tmtgcorp.com"
+    ]
+  }
+]
