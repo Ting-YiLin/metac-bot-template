@@ -1,0 +1,17 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q027",
+  "round": 2,
+  "question": "Will SpaceX successfully catch the Super Heavy booster with the launch tower arms during Starship Flight 12 (the 12th integrated flight test of the Starship/Super Heavy system)?",
+  "t0_utc": "2026-05-03T11:10:27.737711+00:00",
+  "urls": [
+    "https://newspacetracker.com/articles/starship-v3-flight-12-guide/",
+    "https://ilovetesla.com/starship-v3s-epic-debut-flight-12-locked-for-early-april-2026-elon-musks-bold-timeline-and-what-it-means-for-spacexs-mars-ambitions/"
+  ],
+  "search_candidate_urls": [
+    "https://newspacetracker.com/articles/starship-v3-flight-12-guide/",
+    "https://ilovetesla.com/starship-v3s-epic-debut-flight-12-locked-for-early-april-2026-elon-musks-bold-timeline-and-what-it-means-for-spacexs-mars-ambitions/"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
