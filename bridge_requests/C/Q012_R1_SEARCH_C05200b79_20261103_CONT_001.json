@@ -1,0 +1,13 @@
+{
+  "arm": "C",
+  "task": "search",
+  "case_id": "Q012",
+  "round": 1,
+  "question": "Will the U.S. Supreme Court rule that 18 U.S.C. § 922(g)(3) is unconstitutional as applied to the respondent in United States v. Hemani?",
+  "t0_utc": "2026-05-12T18:49:22.157407+00:00",
+  "queries": [
+    "Supreme Court United States v Hemani 922(g)(3) oral arguments briefs as applied May 2026",
+    "United States v Hemani Supreme Court docket respondent drug user gun constitutional Fifth Circuit 2026"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
