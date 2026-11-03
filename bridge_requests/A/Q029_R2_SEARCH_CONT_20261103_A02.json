@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q029",
+  "round": 2,
+  "question": "Will the FDA approve oral tebipenem HBr for complicated urinary tract infections by June 18, 2026?",
+  "t0_utc": "2026-05-14T01:15:46.624052+00:00",
+  "queries": [
+    "GSK Spero oral tebipenem FDA PDUFA June 18 2026 approval application April 2026",
+    "tebipenem pivoxil hydrobromide NDA FDA advisory committee priority review 2026 March press release"
+  ]
+}
