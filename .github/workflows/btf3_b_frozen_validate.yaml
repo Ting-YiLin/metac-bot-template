@@ -1,0 +1,39 @@
+name: BTF3 B Frozen Candidates Independent T0 Validation
+on:
+  push:
+    branches:
+      - btf3-3arm-b-external-validation-20261103
+    paths:
+      - 'audit_input/B_FROZEN_CANDIDATE_URLS.csv'
+permissions:
+  contents: read
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install approved no-cost research dependencies
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Verify frozen B candidate URLs without new search or language models
+        working-directory: web_research_stack
+        run: |
+          PYTHONPATH=src python src/btf3_b_blind_validate.py \
+            --input ../audit_input/B_FROZEN_CANDIDATE_URLS.csv \
+            --shard ${{ matrix.shard }} \
+            --out runs/B_postsearch_validation/shard${{ matrix.shard }}
+      - name: Save full historical page bytes and concise audit ledger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b-frozen-historical-validation-shard${{ matrix.shard }}
+          path: web_research_stack/runs/B_postsearch_validation/shard${{ matrix.shard }}
+          if-no-files-found: warn
+          retention-days: 14
