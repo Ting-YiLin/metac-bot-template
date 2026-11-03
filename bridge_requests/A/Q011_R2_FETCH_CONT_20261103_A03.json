@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q011",
+  "round": 2,
+  "question": "Will any platform currently under Ofcom Online Safety Act investigation or enforcement action announce withdrawal from or geoblocking of the UK market by July 1, 2026?",
+  "t0_utc": "2026-05-16T12:49:16.924130+00:00",
+  "urls": [
+    "https://www.helpnetsecurity.com/2026/03/19/uk-ofcom-4chan-age-checks-fine/",
+    "https://www.dlapiper.com/en/insights/publications/2026/04/online-safety-act"
+  ],
+  "search_candidate_urls": [
+    "https://www.helpnetsecurity.com/2026/03/19/uk-ofcom-4chan-age-checks-fine/",
+    "https://www.dlapiper.com/en/insights/publications/2026/04/online-safety-act"
+  ],
+  "search_run_id": 41601601904,
+  "search_candidate_set_in_prior_artifact": true
+}
