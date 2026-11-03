@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q022",
+  "round": 2,
+  "question": "Will any AUSSOM troop-contributing country officially announce a reduction in their troop commitment to Somalia between May 12 and July 1, 2026?",
+  "t0_utc": "2026-05-29T06:29:01.118148+00:00",
+  "queries": [
+    "May 2026 Uganda Burundi Ethiopia AUSSOM Somalia funding troop withdrawal threat announcement",
+    "African Union Somalia AUSSOM troop contributing countries reductions May 2026 official communique"
+  ]
+}
