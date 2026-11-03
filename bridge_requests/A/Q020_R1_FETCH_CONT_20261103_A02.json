@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q020",
+  "round": 1,
+  "question": "Will the 79th World Health Assembly adopt a resolution explicitly addressing the United States' withdrawal from WHO or its unpaid dues?",
+  "t0_utc": "2026-05-02T19:35:07.641420+00:00",
+  "urls": [
+    "https://apps.who.int/gb/e/e_WHA79.html",
+    "https://www.who.int/news/item/24-01-2026-who-statement-on-notification-of-withdrawal-of-the-united-states"
+  ],
+  "search_candidate_urls": [
+    "https://apps.who.int/gb/e/e_WHA79.html",
+    "https://www.who.int/news/item/24-01-2026-who-statement-on-notification-of-withdrawal-of-the-united-states"
+  ],
+  "search_run_id": 41597473792,
+  "search_candidate_set_in_prior_artifact": true
+}
