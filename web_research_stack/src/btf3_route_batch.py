@@ -26,9 +26,9 @@ def run(input_csv,out_dir,config=None,max_per_question=5,case_limit=None,t0_by_c
     results=[]
     for i,r in enumerate(chosen,1):
         rec=crawler.fetch(r['route_url'],source_id=f"{r.get('case_id','Q')}_R{r.get('rank',i)}")
-        t0=(t0_by_case or {}).get(r.get('case_id',''))
+        t0=(t0_by_case or {}).get(r.get('case_id','')) or r.get('t0_utc')
         temp=classify_t0(t0=t0,official_scraped_at=(r.get('scraped_at') or r.get('date_scraped')),retrieved_at=rec.get('retrieved_at'))
-        rec.update({k:r.get(k,'') for k in ('case_id','question','rank','domain','route_origin','source_family','route_role_pre_fetch','route_confidence_pre_fetch','scraped_at','date_scraped','t0_route_status')})
+        rec.update({k:r.get(k,'') for k in ('case_id','question','rank','domain','route_origin','source_family','route_role_pre_fetch','route_confidence_pre_fetch','scraped_at','date_scraped','t0_route_status','t0_utc','resolution')})
         rec.update(temp);results.append(rec)
     fields=sorted({k for r in results for k in r}) if results else []
     with open(out/'btf3_fetch_results.csv','w',encoding='utf-8-sig',newline='') as f:

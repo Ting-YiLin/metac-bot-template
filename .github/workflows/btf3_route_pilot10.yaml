@@ -1,0 +1,61 @@
+name: BTF3 10Q Route Crawl Pilot
+
+on:
+  push:
+    branches:
+      - btf3-crawler-smoke-20261103
+    paths:
+      - 'web_research_stack/data/btf3_pilot10_routes.csv'
+      - 'web_research_stack/src/btf3_route_batch.py'
+      - '.github/workflows/btf3_route_pilot10.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: btf3-route-pilot10
+  cancel-in-progress: true
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free crawler dependencies
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Run 10-question x 3-route crawl pilot
+        working-directory: web_research_stack
+        run: |
+          PYTHONPATH=src python src/btf3_route_batch.py             --input-csv data/btf3_pilot10_routes.csv             --out-dir runs/btf3_pilot10             --max-per-question 3             --case-limit 10
+      - name: Summarize pilot
+        working-directory: web_research_stack
+        run: |
+          python - <<'PY'
+          import csv, json, collections
+          p='runs/btf3_pilot10/btf3_fetch_results.csv'
+          rows=list(csv.DictReader(open(p,encoding='utf-8-sig')))
+          s={
+            'attempted':len(rows),
+            'questions':len(set(r['case_id'] for r in rows)),
+            'fetch_status':dict(collections.Counter(r['fetch_status'] for r in rows)),
+            't0_status':dict(collections.Counter(r['t0_status'] for r in rows)),
+            'readable_by_origin':dict(collections.Counter(r['route_origin'] for r in rows if r['fetch_status']=='READABLE_FULL')),
+            'blocked_domains':sorted(set(r['domain'] for r in rows if r['fetch_status']=='BLOCKED')),
+            'error_domains':sorted(set(r['domain'] for r in rows if r['fetch_status']=='ERROR')),
+          }
+          print(json.dumps(s,ensure_ascii=False,indent=2))
+          open('runs/btf3_pilot10/PILOT_SUMMARY.json','w',encoding='utf-8').write(json.dumps(s,ensure_ascii=False,indent=2))
+          PY
+      - name: Upload pilot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btf3-route-pilot10
+          path: web_research_stack/runs/btf3_pilot10
+          if-no-files-found: warn
+          retention-days: 14
