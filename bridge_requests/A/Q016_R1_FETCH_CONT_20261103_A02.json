@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q016",
+  "round": 1,
+  "question": "Will President Trump publicly oppose or withdraw support for the Sanctioning Russia Act (S.1241) between May 10, 2026, and July 1, 2026?",
+  "t0_utc": "2026-05-12T21:16:18.740865+00:00",
+  "urls": [
+    "https://www.congress.gov/119/bills/s1241/BILLS-119s1241is.pdf",
+    "https://www.squirepattonboggs.com/insights/publications/sanctions-by-statute-the-graham-act-and-tariffs-on-russia-s-energy-buyers/"
+  ],
+  "search_candidate_urls": [
+    "https://www.congress.gov/119/bills/s1241/BILLS-119s1241is.pdf",
+    "https://www.squirepattonboggs.com/insights/publications/sanctions-by-statute-the-graham-act-and-tariffs-on-russia-s-energy-buyers/"
+  ],
+  "search_run_id": 41597450735,
+  "search_candidate_set_in_prior_artifact": true
+}
