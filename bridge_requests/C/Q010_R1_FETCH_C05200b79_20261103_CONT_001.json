@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q010",
+  "round": 1,
+  "question": "Will Iran's IRGC cease all attacks, seizures, and interdictions of commercial shipping in the Strait of Hormuz for at least 7 consecutive days before June 1, 2026?",
+  "t0_utc": "2026-05-03T02:08:57.349236+00:00",
+  "urls": [
+    "https://apnews.com/article/us-iran-war-israel-hormuz-18-april-2026-ab475cb979825b956a10d60103026b37",
+    "https://www.cnbc.com/2026/04/22/strait-of-hormuz-ships-attacked-iran-war.html"
+  ],
+  "search_candidate_urls": [
+    "https://apnews.com/article/us-iran-war-israel-hormuz-18-april-2026-ab475cb979825b956a10d60103026b37",
+    "https://www.cnbc.com/2026/04/22/strait-of-hormuz-ships-attacked-iran-war.html"
+  ],
+  "raw_search_run_id": 41597355609,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
