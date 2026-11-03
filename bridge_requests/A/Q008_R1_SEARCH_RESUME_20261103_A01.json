@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q008",
+  "round": 1,
+  "question": "Will the Janata Dal (Secular) win a seat in the 2026 Karnataka Rajya Sabha biennial elections?",
+  "t0_utc": "2026-05-16T01:50:17.991261+00:00",
+  "queries": [
+    "Karnataka Rajya Sabha 2026 biennial election JD(S) seat strength candidates May 2026",
+    "Karnataka legislature 2026 Rajya Sabha election seats JD(S) BJP Congress alliances numbers"
+  ]
+}
