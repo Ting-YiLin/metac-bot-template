@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q022",
+  "round": 1,
+  "question": "Will any AUSSOM troop-contributing country officially announce a reduction in their troop commitment to Somalia between May 12 and July 1, 2026?",
+  "t0_utc": "2026-05-29T06:29:01.118148+00:00",
+  "queries": [
+    "AUSSOM troop contributing countries force reduction Somalia May 2026 government statement",
+    "African Union Support and Stabilization Mission in Somalia May 2026 troop contributions Uganda Ethiopia Burundi Kenya reductions"
+  ]
+}
