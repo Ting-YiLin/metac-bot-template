@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q026",
+  "round": 2,
+  "question": "Will the Supreme Court's majority opinion in Trump v. Barbara (No. 25-365) resolve the case primarily on statutory grounds rather than constitutional grounds?",
+  "t0_utc": "2026-05-14T03:10:35.490726+00:00",
+  "queries": [
+    "Trump v Barbara Supreme Court oral arguments April 1 2026 statutory 8 USC 1401 constitutional Fourteenth Amendment analysis",
+    "Trump v Barbara birthright citizenship Supreme Court 2026 April justices statutory basis consensus"
+  ]
+}
