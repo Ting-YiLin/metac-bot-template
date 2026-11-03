@@ -1,0 +1,45 @@
+name: BTF3 10Q Paired Route-Order Race
+
+on:
+  push:
+    branches:
+      - btf3-method-race-20261103
+    paths:
+      - '.github/workflows/btf3_method_race10.yaml'
+      - 'web_research_stack/src/btf3_route_order_race.py'
+      - 'web_research_stack/tests/test_method_race.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: btf3-route-race10
+  cancel-in-progress: true
+
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free dependencies
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Run offline tests, including T0 and matched-budget protocol
+        run: |
+          PYTHONPATH=web_research_stack/src python -m unittest -v             web_research_stack.tests.test_stack             web_research_stack.tests.test_btf3_adaptation             web_research_stack.tests.test_wayback             web_research_stack.tests.test_route_quality             web_research_stack.tests.test_evidence_quality             web_research_stack.tests.test_evidence_integrity             web_research_stack.tests.test_method_race
+      - name: Compare two priority orders on same 10 cases with shared verified archive bytes
+        working-directory: web_research_stack
+        run: |
+          PYTHONPATH=src python src/btf3_route_order_race.py             --cases data/btf3_pilot10_cases.json             --official-routes data/btf3_pilot10_routes.csv             --out-dir runs/btf3_method_race10             --case-limit 10             --primary-cap 3             --fallback-cap 3
+      - name: Upload full comparison records and archived originals
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btf3-10q-paired-route-race
+          path: web_research_stack/runs/btf3_method_race10
+          if-no-files-found: warn
+          retention-days: 14
