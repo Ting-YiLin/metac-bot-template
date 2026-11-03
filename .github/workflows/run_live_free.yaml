@@ -1,6 +1,11 @@
 name: FutureEval Live Free Production
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/run_live_free.yaml'
   workflow_dispatch:
   schedule:
     - cron: '17 0-22/2 * * *'
@@ -33,6 +38,8 @@ jobs:
         run: uv sync --locked --no-dev
       - name: Install free web research runtime
         run: uv pip install -r web_research_stack/requirements-runtime.txt
+      - name: One-time verify free research runtime import
+        run: uv run python -c "import ddgs, trafilatura; print('FREE_RESEARCH_RUNTIME_OK')"
       - name: Forecast open unforecasted questions continuously
         env:
           GITHUB_ACTIONS: 'true'
