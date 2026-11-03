@@ -1,0 +1,17 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q008",
+  "round": 2,
+  "question": "Will the Janata Dal (Secular) win a seat in the 2026 Karnataka Rajya Sabha biennial elections?",
+  "t0_utc": "2026-05-16T01:50:17.991261+00:00",
+  "urls": [
+    "https://kla.kar.nic.in/assembly/member/rsmembers.htm",
+    "https://en.wikipedia.org/wiki/2026_Rajya_Sabha_elections"
+  ],
+  "search_candidate_urls": [
+    "https://kla.kar.nic.in/assembly/member/rsmembers.htm",
+    "https://en.wikipedia.org/wiki/2026_Rajya_Sabha_elections"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
