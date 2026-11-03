@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q028",
+  "round": 1,
+  "question": "Will a Hezbollah rocket or drone attack cause at least one civilian casualty in Israeli territory between April 30 and June 1, 2026?",
+  "t0_utc": "2026-04-30T18:28:43.603372+00:00",
+  "urls": [
+    "https://www.fenixinsight.com/blog/situation-reports/israel–hezbollah-conflict-update-march–april-2026",
+    "https://www.jpost.com/defense-and-tech/article-894593"
+  ],
+  "search_candidate_urls": [
+    "https://www.fenixinsight.com/blog/situation-reports/israel–hezbollah-conflict-update-march–april-2026",
+    "https://www.jpost.com/defense-and-tech/article-894593"
+  ],
+  "search_run_id": 41597648509,
+  "search_candidate_set_in_prior_artifact": true
+}
