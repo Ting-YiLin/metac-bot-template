@@ -1,0 +1,5 @@
+{
+  "arm": "A",
+  "task": "ping",
+  "note": "A/C bridge smoke: test GitHub-trigger, dependency install, offline checks; no query/fetch/no LLM."
+}
