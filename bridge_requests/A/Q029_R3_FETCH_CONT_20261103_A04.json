@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q029",
+  "round": 3,
+  "question": "Will the FDA approve oral tebipenem HBr for complicated urinary tract infections by June 18, 2026?",
+  "t0_utc": "2026-05-14T01:15:46.624052+00:00",
+  "urls": [
+    "https://www.biospace.com/press-releases/spero-therapeutics-announces-fourth-quarter-and-full-year-2025-operating-results-and-provides-a-business-update",
+    "https://s3.amazonaws.com/b2icontent.irpass.cc/2748/rl163572.pdf"
+  ],
+  "search_candidate_urls": [
+    "https://www.biospace.com/press-releases/spero-therapeutics-announces-fourth-quarter-and-full-year-2025-operating-results-and-provides-a-business-update",
+    "https://s3.amazonaws.com/b2icontent.irpass.cc/2748/rl163572.pdf"
+  ],
+  "search_run_id": 41602716697,
+  "search_candidate_set_in_prior_artifact": true
+}
