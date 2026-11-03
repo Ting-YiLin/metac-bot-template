@@ -1,0 +1,60 @@
+name: BTF3 Expand30 T0-Safe Exploration
+
+on:
+  push:
+    branches:
+      - btf3-crawler-smoke-20261103
+    paths:
+      - 'web_research_stack/data/btf3_expand30_cases.json.gz'
+      - '.github/workflows/btf3_expand30_t0_safe.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  explore:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: 1
+            offset: 0
+          - shard: 2
+            offset: 10
+          - shard: 3
+            offset: 20
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free research dependencies
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Prepare 10-question shard
+        working-directory: web_research_stack
+        env:
+          OFFSET: ${{ matrix.offset }}
+        run: |
+          gzip -dc data/btf3_expand30_cases.json.gz > /tmp/cases30.json
+          python - <<'PY'
+          import json, os
+          xs=json.load(open('/tmp/cases30.json',encoding='utf-8'))
+          o=int(os.environ['OFFSET'])
+          json.dump(xs[o:o+10],open('/tmp/cases_shard.json','w',encoding='utf-8'),ensure_ascii=False,indent=2)
+          print([x['case_id'] for x in xs[o:o+10]])
+          PY
+      - name: Run T0-safe exploration shard
+        working-directory: web_research_stack
+        run: |
+          PYTHONPATH=src python src/btf3_t0_search_pilot.py             --cases /tmp/cases_shard.json             --out-dir runs/btf3_expand30_shard${{ matrix.shard }}             --archive-candidates 5             --target-archives 1
+      - name: Upload exploration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btf3-expand30-shard-${{ matrix.shard }}
+          path: web_research_stack/runs/btf3_expand30_shard${{ matrix.shard }}
+          if-no-files-found: warn
+          retention-days: 14
