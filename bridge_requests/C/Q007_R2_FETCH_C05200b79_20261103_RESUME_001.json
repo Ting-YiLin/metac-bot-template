@@ -1,0 +1,17 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q007",
+  "round": 2,
+  "question": "Will TJX raise its full-year FY2027 comparable store sales growth guidance on its Q1 FY2027 earnings call (May 20, 2026)?",
+  "t0_utc": "2026-05-12T16:08:21.839158+00:00",
+  "urls": [
+    "https://investor.tjx.com/news-releases/news-release-details/tjx-companies-inc-reports-q4-and-full-year-fy26-results-q4-comp",
+    "https://www.businesswire.com/news/home/20260224493328/en/The-TJX-Companies-Inc.-Reports-Q4-and-Full-Year-FY26-Results-Q4-Comp-Sales-Growth-Pretax-Profit-Margin-and-Diluted-EPS-All-Well-Above-Plan-Expects-to-Increase-Dividend-by-13-and-Buy-Back-$2.50-to-$2.75-Billion-of-Stock-in-FY27"
+  ],
+  "search_candidate_urls": [
+    "https://investor.tjx.com/news-releases/news-release-details/tjx-companies-inc-reports-q4-and-full-year-fy26-results-q4-comp",
+    "https://www.businesswire.com/news/home/20260224493328/en/The-TJX-Companies-Inc.-Reports-Q4-and-Full-Year-FY26-Results-Q4-Comp-Sales-Growth-Pretax-Profit-Margin-and-Diluted-EPS-All-Well-Above-Plan-Expects-to-Increase-Dividend-by-13-and-Buy-Back-$2.50-to-$2.75-Billion-of-Stock-in-FY27"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
