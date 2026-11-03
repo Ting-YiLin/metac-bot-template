@@ -1,0 +1,56 @@
+name: BTF3 LLM A-C Free Crawler Bridge
+on:
+  push:
+    branches:
+      - btf3-llm-crawler-bridge-v1-20261103
+    paths:
+      - 'bridge_requests/A/*.json'
+      - 'bridge_requests/C/*.json'
+permissions:
+  contents: read
+concurrency:
+  group: btf3-bridge-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free search and crawler libraries
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Offline bridge and integrity regression tests
+        run: |
+          PYTHONPATH=web_research_stack/src python -m unittest -v \
+            web_research_stack.tests.test_llm_ac_bridge \
+            web_research_stack.tests.test_evidence_integrity
+      - name: Find the newly submitted one-command request
+        id: request
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff-tree --no-commit-id --name-only -r HEAD -- 'bridge_requests/A/*.json' 'bridge_requests/C/*.json' > /tmp/bridge_requests.txt
+          count=$(grep -c . /tmp/bridge_requests.txt || true)
+          test "$count" -eq 1 || { echo "Exactly one new request JSON per commit required, got $count"; cat /tmp/bridge_requests.txt; exit 1; }
+          request=$(cat /tmp/bridge_requests.txt)
+          [[ "$request" =~ ^bridge_requests/(A|C)/[A-Za-z0-9_-]+[.]json$ ]] || exit 1
+          echo "path=$request" >> "$GITHUB_OUTPUT"
+      - name: Perform requested search or historical archive fetch
+        working-directory: web_research_stack
+        run: |
+          PYTHONPATH=src python src/llm_ac_bridge.py \
+            --request "../${{ steps.request.outputs.path }}" \
+            --out "runs/llm_ac_bridge/${{ github.run_id }}"
+      - name: Preserve evidence and execution status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btf3-llm-bridge-${{ github.run_id }}
+          path: web_research_stack/runs/llm_ac_bridge/${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 14
