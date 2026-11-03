@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q016",
+  "round": 1,
+  "question": "Will President Trump publicly oppose or withdraw support for the Sanctioning Russia Act (S.1241) between May 10, 2026, and July 1, 2026?",
+  "t0_utc": "2026-05-12T21:16:18.740865+00:00",
+  "urls": [
+    "https://thehill.com/policy/international/5968385-senate-russia-sanctions-bill-graham-trump-putin/",
+    "https://en.wikipedia.org/wiki/Lindsey_O._Graham_Sanctioning_Russia_and_Iran_Act_of_2026"
+  ],
+  "search_candidate_urls": [
+    "https://thehill.com/policy/international/5968385-senate-russia-sanctions-bill-graham-trump-putin/",
+    "https://en.wikipedia.org/wiki/Lindsey_O._Graham_Sanctioning_Russia_and_Iran_Act_of_2026"
+  ],
+  "raw_search_run_id": 41597427964,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
