@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q029",
+  "round": 1,
+  "question": "Will the FDA approve oral tebipenem HBr for complicated urinary tract infections by June 18, 2026?",
+  "t0_utc": "2026-05-14T01:15:46.624052+00:00",
+  "urls": [
+    "https://app.dealroom.co/news/feed/spero-resubmits-tebipenem-hbr-nda-to-fda-pdufa-date-set-for-june-18-2026",
+    "https://biotechreporter.news/spero-therapeutics-nasdaqspro-announces-fda-review-of-tebipenem-hbr-and-provides-business-update/"
+  ],
+  "search_candidate_urls": [
+    "https://app.dealroom.co/news/feed/spero-resubmits-tebipenem-hbr-nda-to-fda-pdufa-date-set-for-june-18-2026",
+    "https://biotechreporter.news/spero-therapeutics-nasdaqspro-announces-fda-review-of-tebipenem-hbr-and-provides-business-update/"
+  ],
+  "raw_search_run_id": 41597584603,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
