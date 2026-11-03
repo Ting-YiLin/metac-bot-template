@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q011",
+  "round": 1,
+  "question": "Will any platform currently under Ofcom Online Safety Act investigation or enforcement action announce withdrawal from or geoblocking of the UK market by July 1, 2026?",
+  "t0_utc": "2026-05-16T12:49:16.924130+00:00",
+  "urls": [
+    "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/ofcom-issues-update-on-online-safety-act-investigations",
+    "https://www.dlapiper.com/en-us/insights/publications/2025/10/online-safety-act"
+  ],
+  "search_candidate_urls": [
+    "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/ofcom-issues-update-on-online-safety-act-investigations",
+    "https://www.dlapiper.com/en-us/insights/publications/2025/10/online-safety-act"
+  ],
+  "search_run_id": 41597362694,
+  "search_candidate_set_in_prior_artifact": true
+}
