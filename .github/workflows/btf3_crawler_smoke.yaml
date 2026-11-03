@@ -1,0 +1,42 @@
+name: BTF3 Crawler 5-Domain Smoke
+
+on:
+  push:
+    branches:
+      - btf3-crawler-smoke-20261103
+    paths:
+      - 'web_research_stack/**'
+      - '.github/workflows/btf3_crawler_smoke.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: btf3-crawler-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free crawler dependencies
+        run: python -m pip install -r web_research_stack/requirements-runtime.txt
+      - name: Run offline tests including BTF3 T0/robots checks
+        run: PYTHONPATH=web_research_stack/src python -m unittest discover -s web_research_stack/tests -v
+      - name: Run 5-domain official-source crawler smoke
+        working-directory: web_research_stack
+        run: PYTHONPATH=src python src/live_smoke_btf3.py
+      - name: Upload crawler evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btf3-crawler-5domain-smoke
+          path: web_research_stack/runs/_btf3_smoke
+          if-no-files-found: warn
+          retention-days: 14

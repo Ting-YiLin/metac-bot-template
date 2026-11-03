@@ -34,7 +34,11 @@ class Crawler:
                     r.raise_for_status();rp.parse(r.text.splitlines());delay=rp.crawl_delay(self.cfg['user_agent']) or rp.crawl_delay('*') or 0.0
                     cached={'mode':'PARSER','parser':rp,'delay':float(delay or 0.0),'status':'CHECKED'}
             except Exception as e:
-                cached={'mode':'ALLOW_ALL','parser':None,'delay':0.0,'status':'ROBOTS_UNAVAILABLE_'+type(e).__name__}
+                policy=str(self.cfg.get('robots_unavailable_policy','deny')).lower()
+                if policy=='allow':
+                    cached={'mode':'ALLOW_ALL','parser':None,'delay':0.0,'status':'ROBOTS_UNAVAILABLE_ALLOW_'+type(e).__name__}
+                else:
+                    cached={'mode':'DENY_ALL','parser':None,'delay':0.0,'status':'ROBOTS_UNAVAILABLE_DENY_'+type(e).__name__}
             self.robots[h]=cached
         if cached['mode']=='DENY_ALL': allowed=False
         elif cached['mode']=='ALLOW_ALL': allowed=True

@@ -5,7 +5,7 @@
   "results_per_query": 8,
   "target_readable_sources": 12,
   "max_fetch_attempts": 35,
-  "per_domain_delay_sec": 5.0,
+  "per_domain_delay_sec": 5,
   "per_domain_preferred_limit": 3,
   "per_domain_attempt_limit": 4,
   "connect_timeout_sec": 10,
@@ -17,5 +17,6 @@
   "chunk_chars": 1800,
   "chunk_overlap_chars": 250,
   "evidence_packet_chunks": 20,
-  "user_agent": "OpenResearchEvidenceBot/1.0 (respects robots.txt and rate limits)"
+  "user_agent": "OpenResearchEvidenceBot/1.0 (respects robots.txt and rate limits)",
+  "robots_unavailable_policy": "deny"
 }
