@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q012",
+  "round": 1,
+  "question": "Will the U.S. Supreme Court rule that 18 U.S.C. § 922(g)(3) is unconstitutional as applied to the respondent in United States v. Hemani?",
+  "t0_utc": "2026-05-12T18:49:22.157407+00:00",
+  "queries": [
+    "United States v Hemani Supreme Court No 24 1234 922(g)(3) oral argument 2026 analysis",
+    "SCOTUS United States v Hemani marijuana users firearms statute as applied respondent merits 2026"
+  ]
+}
