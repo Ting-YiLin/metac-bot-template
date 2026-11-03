@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q018",
+  "round": 2,
+  "question": "Will the RMT London Underground strikes scheduled for June 16–19, 2026 be called off or suspended?",
+  "t0_utc": "2026-05-14T00:44:07.746214+00:00",
+  "urls": [
+    "https://www.independent.co.uk/travel/news-and-advice/tfl-tube-strikes-london-april-2026-b2958233.html",
+    "https://www.mirror.co.uk/news/uk-news/london-underground-strike-dates-2026-37169375"
+  ],
+  "search_candidate_urls": [
+    "https://www.independent.co.uk/travel/news-and-advice/tfl-tube-strikes-london-april-2026-b2958233.html",
+    "https://www.mirror.co.uk/news/uk-news/london-underground-strike-dates-2026-37169375"
+  ],
+  "search_run_id": 41601680430,
+  "search_candidate_set_in_prior_artifact": true
+}
