@@ -1,10 +1,5 @@
 name: Ting-Yi001 Unscored Bot Testing Area
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/run_bot_testing_area.yaml'
   workflow_dispatch:
   schedule:
     - cron: '23 */6 * * *'
