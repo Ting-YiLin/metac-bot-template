@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q002",
+  "round": 3,
+  "question": "Will the TBMM publish a 'separate and temporary' reintegration law for PKK militants who lay down arms in the Official Gazette by July 1, 2026?",
+  "t0_utc": "2026-05-16T12:11:41.064378+00:00",
+  "queries": [
+    "Turkey PKK peace process May 2026 separate temporary law reintegration parliamentary commission plan",
+    "Turkey May 2026 PKK disarmament proposed legal framework returning fighters parliamentary committee"
+  ]
+}
