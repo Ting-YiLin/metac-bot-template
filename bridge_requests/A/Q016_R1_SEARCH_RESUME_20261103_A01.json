@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q016",
+  "round": 1,
+  "question": "Will President Trump publicly oppose or withdraw support for the Sanctioning Russia Act (S.1241) between May 10, 2026, and July 1, 2026?",
+  "t0_utc": "2026-05-12T21:16:18.740865+00:00",
+  "queries": [
+    "Trump Sanctioning Russia Act S.1241 May 2026 support stance sanctions bill",
+    "Graham Blumenthal Russia sanctions S 1241 Trump statement May 2026 Senate"
+  ]
+}
