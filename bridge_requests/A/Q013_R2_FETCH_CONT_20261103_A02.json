@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q013",
+  "round": 2,
+  "question": "Will the U.S. Senate Banking Committee complete its markup of the CLARITY Act (H.R. 3633) by May 15, 2026?",
+  "t0_utc": "2026-05-02T11:38:12.600644+00:00",
+  "urls": [
+    "https://greyjournal.net/news/clarity-act-senate-deadline-2026/",
+    "https://www.banking.senate.gov/newsroom/majority/chairman-scott-announces-digital-asset-market-structure-markup"
+  ],
+  "search_candidate_urls": [
+    "https://greyjournal.net/news/clarity-act-senate-deadline-2026/",
+    "https://www.banking.senate.gov/newsroom/majority/chairman-scott-announces-digital-asset-market-structure-markup"
+  ],
+  "search_run_id": 41601009237,
+  "search_candidate_set_in_prior_artifact": true
+}
