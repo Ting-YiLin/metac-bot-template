@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q015",
+  "round": 2,
+  "question": "Will the federal court grant final approval to the Bartz v. Anthropic $1.5 billion copyright settlement by June 1, 2026?",
+  "t0_utc": "2026-05-03T10:10:43.034473+00:00",
+  "queries": [
+    "Bartz Anthropic final approval hearing scheduling order March April 2026 class settlement",
+    "Bartz v Anthropic $1.5 billion settlement May 2026 final approval timeline court filings"
+  ]
+}
