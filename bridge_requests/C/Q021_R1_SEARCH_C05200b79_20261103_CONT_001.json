@@ -1,0 +1,13 @@
+{
+  "arm": "C",
+  "task": "search",
+  "case_id": "Q021",
+  "round": 1,
+  "question": "Will Nissan activate consumer-usable Vehicle-to-Grid (V2G) bidirectional charging functionality on a production EV in the UK by June 1, 2026?",
+  "t0_utc": "2026-05-02T09:16:12.010158+00:00",
+  "queries": [
+    "Nissan UK V2G vehicle to grid launch consumer production electric car 2026 timeline",
+    "Nissan energy bidirectional charging UK LEAF vehicle to grid commercially available May 2026"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
