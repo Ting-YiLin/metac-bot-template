@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q021",
+  "round": 1,
+  "question": "Will Nissan activate consumer-usable Vehicle-to-Grid (V2G) bidirectional charging functionality on a production EV in the UK by June 1, 2026?",
+  "t0_utc": "2026-05-02T09:16:12.010158+00:00",
+  "urls": [
+    "https://uk.nissannews.com/en-GB/releases/nissan-to-launch-affordable-vehicle-to-grid-technology-from-2026",
+    "https://europe.nissanstories.com/en/releases/driving-the-future-of-energy-welcome-to-the-world-of-v2g"
+  ],
+  "search_candidate_urls": [
+    "https://uk.nissannews.com/en-GB/releases/nissan-to-launch-affordable-vehicle-to-grid-technology-from-2026",
+    "https://europe.nissanstories.com/en/releases/driving-the-future-of-energy-welcome-to-the-world-of-v2g"
+  ],
+  "raw_search_run_id": 41597512076,
+  "full_candidates_in_search_artifact": true,
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
