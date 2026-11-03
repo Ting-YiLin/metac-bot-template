@@ -1,0 +1,26 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q002",
+  "round": 1,
+  "question": "Will the TBMM publish a 'separate and temporary' reintegration law for PKK militants who lay down arms in the Official Gazette by July 1, 2026?",
+  "t0_utc": "2026-05-16T12:11:41.064378+00:00",
+  "urls": [
+    "https://www.kurdistan24.net/en/story/913447"
+  ],
+  "search_candidate_urls": [
+    "https://www.reuters.com/world/middle-east/turkish-parliament-passes-landmark-law-advance-pkk-peace-process-2026-08-10/",
+    "https://www.france24.com/en/middle-east/20260810-turkey-parliament-passes-limited-amnesty-law-for-kurdish-pkk-militants",
+    "https://middle-east-online.com/en/turkey-clears-legal-path-pkk-disarmament-reintegration",
+    "https://www.dw.com/en/turkey-pkk-kurdish-law-amnesty-abdullah-ocalan-erdogan/a-78313397",
+    "https://www.usnews.com/news/world/articles/2026-08-10/turkish-parliament-passes-landmark-law-to-advance-pkk-peace-process",
+    "https://www.globaltimes.cn/page/202608/1367940.shtml",
+    "https://www.nytimes.com/2026/08/10/world/europe/turkey-law-pkk-peace-framework.html",
+    "https://www.reuters.com/business/media-telecom/turkey-unveil-draft-law-that-would-bring-pkk-peace-2026-08-05/",
+    "https://www.straitstimes.com/world/europe/turkey-to-unveil-draft-law-that-would-bring-pkk-peace",
+    "https://stockholmcf.org/turkeys-ruling-alliance-submits-draft-pkk-peace-law-suspending-prosecutions-sentences/",
+    "https://www.reutersconnect.com/item/turkey-unveils-draft-law-to-reintegrate-pkk-militants-achieve-peace/dGFnOnJldXRlcnMuY29tLDIwMjY6bmV3c21sX1ZBMzQzNjA1MDgyMDI2UlAx",
+    "https://bianet.org/haber/turkey-unveils-draft-law-on-kurdish-peace-process-pkk-reintegration-322258",
+    "https://www.kurdistan24.net/en/story/913447"
+  ]
+}
