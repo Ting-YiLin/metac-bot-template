@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q017",
+  "round": 1,
+  "question": "Will the U.S. Supreme Court rule in favor of the FCC (reversing the Fifth Circuit) in FCC v. AT&T, Inc. (No. 25-406) by June 30, 2026?",
+  "t0_utc": "2026-05-16T19:25:38.361614+00:00",
+  "queries": [
+    "FCC v AT&T Inc Supreme Court 25-406 2026 oral argument merits Fifth Circuit",
+    "FCC AT&T 25-406 Supreme Court privacy data penalty 2026 briefing decision timeline"
+  ]
+}
