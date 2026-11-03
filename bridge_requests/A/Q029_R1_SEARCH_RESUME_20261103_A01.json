@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q029",
+  "round": 1,
+  "question": "Will the FDA approve oral tebipenem HBr for complicated urinary tract infections by June 18, 2026?",
+  "t0_utc": "2026-05-14T01:15:46.624052+00:00",
+  "queries": [
+    "FDA oral tebipenem HBr complicated urinary tract infections PDUFA June 2026 review",
+    "Spero Therapeutics oral tebipenem NDA FDA decision June 18 2026 status May"
+  ]
+}
