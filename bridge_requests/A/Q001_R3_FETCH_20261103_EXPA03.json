@@ -1,0 +1,21 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q001",
+  "round": 3,
+  "question": "Will a federal lawsuit challenging the CFPB's 2026 Section 1071 final rule be filed between May 12, 2026, and July 1, 2026?",
+  "t0_utc": "2026-05-14T05:42:46.558738+00:00",
+  "urls": [
+    "https://www.consumerfinancemonitor.com/section-1071/",
+    "https://www.consumerfinance.gov/1071-rule/"
+  ],
+  "search_candidate_urls": [
+    "https://www.ncontracts.com/nsight-blog/1071-update",
+    "https://www.consumerfinancemonitor.com/section-1071/",
+    "https://www.consumerfinance.gov/1071-rule/",
+    "https://debanked.com/2026/10/cfpb-reaffirms-excluding-merchant-cash-advances-from-section-1071/",
+    "https://www.mayerbrown.com/en/pdf/insights/publications/2026/05/cfpb-issues-final-section-1071-rule-on-small-business-lending-data-collection",
+    "https://www.jdsupra.com/topics/consumer-financial-protection-bureau-cfpb/final-rules/section-1071/",
+    "https://www.govinfo.gov/content/pkg/FR-2026-05-01/pdf/2026-08494.pdf"
+  ]
+}
