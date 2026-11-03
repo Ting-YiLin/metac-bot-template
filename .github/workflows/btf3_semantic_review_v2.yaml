@@ -1,0 +1,25 @@
+name: BTF3 Semantic Evidence Gate V2
+on:
+  push:
+    branches:
+      - btf3-semantic-review-v2-20261103
+    paths:
+      - 'web_research_stack/src/semantic_review_gate_v2.py'
+      - 'web_research_stack/tests/test_semantic_review_gate_v2.py'
+      - '.github/workflows/btf3_semantic_review_v2.yaml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run v2 source/quote/independent-review protocol tests
+        run: PYTHONPATH=web_research_stack/src python -m unittest -v web_research_stack.tests.test_semantic_review_gate_v2
+      - name: Run previous provenance checks
+        run: PYTHONPATH=web_research_stack/src python -m unittest -v web_research_stack.tests.test_evidence_integrity
