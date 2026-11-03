@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q006",
+  "round": 1,
+  "question": "Will a U.S. federal court order blocking the termination of Yemen's TPS designation remain in effect on May 20, 2026?",
+  "t0_utc": "2026-05-02T12:33:45.918391+00:00",
+  "urls": [
+    "https://www.federalregister.gov/documents/2026/03/03/2026-04179/termination-of-the-designation-of-yemen-for-temporary-protected-status",
+    "https://www.uscis.gov/newsroom/news-releases/dhs-terminates-temporary-protected-status-for-yemen-0"
+  ],
+  "search_candidate_urls": [
+    "https://www.federalregister.gov/documents/2026/03/03/2026-04179/termination-of-the-designation-of-yemen-for-temporary-protected-status",
+    "https://www.uscis.gov/newsroom/news-releases/dhs-terminates-temporary-protected-status-for-yemen-0"
+  ],
+  "search_run_id": 41597291428,
+  "search_candidate_set_in_prior_artifact": true
+}
