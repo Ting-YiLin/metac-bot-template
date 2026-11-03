@@ -26,7 +26,7 @@ def _tokens(s):
     return re.findall(r"[A-Za-z0-9][A-Za-z0-9._+-]*",(s or ''))
 
 def _norm(t):
-    return t.lower().strip('.,;:()[]{}!?"'')
+    return re.sub(r"^[^a-z0-9]+|[^a-z0-9._+-]+$", "", t.lower())
 
 def excluded_terms(question):
     m=re.search(r'excluding\s+([^)]*)',question or '',re.I)
