@@ -1,0 +1,18 @@
+{
+  "arm": "A",
+  "task": "fetch",
+  "case_id": "Q008",
+  "round": 2,
+  "question": "Will the Janata Dal (Secular) win a seat in the 2026 Karnataka Rajya Sabha biennial elections?",
+  "t0_utc": "2026-05-16T01:50:17.991261+00:00",
+  "urls": [
+    "https://www.thehindu.com/news/national/karnataka/political-activity-set-to-pick-up-in-karnataka-with-notification-of-elections-to-four-rajya-sabha-seats/article",
+    "https://timesofindia.indiatimes.com/city/bengaluru/rs-polls-congress-weighs-caste-gender-balance-bjp-faces-coalition-test-in-karnataka/articleshow"
+  ],
+  "search_candidate_urls": [
+    "https://www.thehindu.com/news/national/karnataka/political-activity-set-to-pick-up-in-karnataka-with-notification-of-elections-to-four-rajya-sabha-seats/article",
+    "https://timesofindia.indiatimes.com/city/bengaluru/rs-polls-congress-weighs-caste-gender-balance-bjp-faces-coalition-test-in-karnataka/articleshow"
+  ],
+  "search_run_id": 41601548237,
+  "search_candidate_set_in_prior_artifact": true
+}
