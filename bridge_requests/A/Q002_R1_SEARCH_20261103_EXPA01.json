@@ -1,0 +1,12 @@
+{
+  "arm": "A",
+  "task": "search",
+  "case_id": "Q002",
+  "round": 1,
+  "question": "Will the TBMM publish a 'separate and temporary' reintegration law for PKK militants who lay down arms in the Official Gazette by July 1, 2026?",
+  "t0_utc": "2026-05-16T12:11:41.064378+00:00",
+  "queries": [
+    "TBMM separate temporary reintegration law PKK disarmament May 2026 Turkish parliament",
+    "Turkey official gazette PKK lay down arms reintegration law May 2026 draft"
+  ]
+}
