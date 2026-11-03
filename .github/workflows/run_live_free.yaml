@@ -1,11 +1,7 @@
-name: FutureEval Live Free Production
+name: FutureEval Production PAUSED
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 0-22/2 * * *'
-    - cron: '57 0-22/2 * * *'
-    - cron: '37 1-23/2 * * *'
 
 permissions:
   contents: read
@@ -16,6 +12,7 @@ concurrency:
 
 jobs:
   forecast_batch:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 38
     steps:
