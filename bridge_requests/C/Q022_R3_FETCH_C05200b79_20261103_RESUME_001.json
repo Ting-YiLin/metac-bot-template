@@ -1,0 +1,15 @@
+{
+  "arm": "C",
+  "task": "fetch",
+  "case_id": "Q022",
+  "round": 3,
+  "question": "Will any AUSSOM troop-contributing country officially announce a reduction in their troop commitment to Somalia between May 12 and July 1, 2026?",
+  "t0_utc": "2026-05-29T06:29:01.118148+00:00",
+  "urls": [
+    "https://issafrica.org/iss-today/au-s-somalia-peace-mission-cannot-deliver-on-funding-pledges-alone"
+  ],
+  "search_candidate_urls": [
+    "https://issafrica.org/iss-today/au-s-somalia-peace-mission-cannot-deliver-on-funding-pledges-alone"
+  ],
+  "rules_sha256": "05200b79fe1a286b44587cea77832ca0733e418f0cafdd50201f383dc257e340"
+}
