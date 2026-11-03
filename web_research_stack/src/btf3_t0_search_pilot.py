@@ -5,20 +5,24 @@ from common import load_json,normalize_url,save_json,now_iso
 from query_plan import default_queries,dedup_queries
 from search_backends import search
 from ranker import rank_rows
+from route_quality import url_date_relation
 from crawler import Crawler
 from evidence_db import EvidenceDB
 from wayback import latest_pre_t0
 
 ROOT=Path(__file__).resolve().parents[1]
 
-def run(cases_path,out_dir,archive_candidates=4,target_archives=2):
+def run(cases_path,out_dir,archive_candidates=6,target_archives=2):
     cfg=load_json(ROOT/'config/default.json')
     cases=json.loads(Path(cases_path).read_text(encoding='utf-8'))
     out=Path(out_dir);out.mkdir(parents=True,exist_ok=True)
     all_summary=[]
+    # One shared archive crawler means one robots.txt decision/cache for web.archive.org,
+    # while transient robots failures still retry and remain fail-closed after retries.
+    archive_crawler=Crawler(cfg,out/'archive_crawl')
 
     for case in cases:
-        cid=case['case_id']; q=case['question']; t0=case['t0_utc']; prefs=case.get('preferred_domains') or []
+        cid=case['case_id'];q=case['question'];t0=case['t0_utc'];prefs=case.get('preferred_domains') or []
         cdir=out/cid;cdir.mkdir(parents=True,exist_ok=True)
         queries=dedup_queries(default_queries(q,prefs))[:3]
         candidates=[];search_log=[]
@@ -33,15 +37,25 @@ def run(cases_path,out_dir,archive_candidates=4,target_archives=2):
             try:ded.setdefault(normalize_url(x['url']),x)
             except Exception:pass
         ranked=rank_rows(list(ded.values()),q,prefs,ROOT/'config/authority_weights.json',int(cfg['per_domain_preferred_limit']))
+        for r in ranked:r['url_date_relation']=url_date_relation(r['url'],t0)
         save_json(cdir/'search_log.json',search_log);save_json(cdir/'ranked_candidates.json',ranked)
 
         archive_checks=[];safe_sources=[];db=EvidenceDB(cdir/'evidence.sqlite')
-        crawler=Crawler(cfg,cdir/'archive_crawl')
-        for i,row in enumerate(ranked[:int(archive_candidates)],1):
+        queried=0;temporal_skipped=0
+        for row in ranked:
+            if queried>=int(archive_candidates):break
+            date_rel=row.get('url_date_relation') or {}
+            if date_rel.get('status')=='POST_T0_EXPLICIT_URL_DATE':
+                temporal_skipped+=1
+                archive_checks.append({'rank':row.get('rank'),'candidate':row,'wayback':{
+                    'status':'SKIPPED_POST_T0_URL_DATE','method':'URL_DATE_GATE','snapshot':None,
+                    'url':row['url'],'t0':t0,'error':None,'url_date':date_rel.get('url_date')}})
+                continue
+            queried+=1
             wb=latest_pre_t0(row['url'],t0)
-            item={'rank':i,'candidate':row,'wayback':wb}
+            item={'rank':row.get('rank'),'candidate':row,'wayback':wb}
             if wb.get('status')=='PRE_T0_CAPTURE_FOUND':
-                snap=wb['snapshot']; rec=crawler.fetch(snap['snapshot_url'],source_id=f'{cid}_A{i}')
+                snap=wb['snapshot'];rec=archive_crawler.fetch(snap['snapshot_url'],source_id=f"{cid}_A{row.get('rank')}")
                 rec.update(title=row.get('title',''),source_type=row.get('source_type','unknown'),
                            authority_score=row.get('authority_score',0),rank_score=row.get('rank_score',0),
                            original_url=row['url'],archive_timestamp=snap['timestamp'],
@@ -54,8 +68,7 @@ def run(cases_path,out_dir,archive_candidates=4,target_archives=2):
                     if len(safe_sources)>=int(target_archives):
                         archive_checks.append(item);break
             archive_checks.append(item)
-        hits=db.search(q,min(10,int(cfg['evidence_packet_chunks'])))
-        db.db.close()
+        hits=db.search(q,min(10,int(cfg['evidence_packet_chunks'])));db.db.close()
         packet={
             'case_id':cid,'question':q,'t0':t0,'resolution':case.get('resolution'),
             'created_at':now_iso(),'queries':queries,'candidate_count':len(ranked),
@@ -65,11 +78,12 @@ def run(cases_path,out_dir,archive_candidates=4,target_archives=2):
         }
         save_json(cdir/'T0_EVIDENCE_PACKET.json',packet)
         all_summary.append({
-            'case_id':cid,'candidate_count':len(ranked),'archive_checked':len(archive_checks),
+            'case_id':cid,'candidate_count':len(ranked),'archive_queried':queried,'temporal_skipped':temporal_skipped,
             'pre_t0_capture_found':sum(1 for x in archive_checks if x['wayback'].get('status')=='PRE_T0_CAPTURE_FOUND'),
             'pre_t0_readable':len(safe_sources),'evidence_chunks':len(hits),
-            'top_url':ranked[0]['url'] if ranked else None,
-            'top_rank_score':ranked[0].get('rank_score') if ranked else None
+            'top_url':ranked[0]['url'] if ranked else None,'top_rank_score':ranked[0].get('rank_score') if ranked else None,
+            'top_relevance_score':ranked[0].get('relevance_score') if ranked else None,
+            'top_excluded_hits':ranked[0].get('relevance_excluded_hits') if ranked else None
         })
 
     summary={
@@ -77,12 +91,12 @@ def run(cases_path,out_dir,archive_candidates=4,target_archives=2):
         'questions_with_pre_t0_capture':sum(1 for x in all_summary if x['pre_t0_capture_found']>0),
         'questions_with_readable_pre_t0_evidence':sum(1 for x in all_summary if x['pre_t0_readable']>0),
         'total_pre_t0_readable_sources':sum(x['pre_t0_readable'] for x in all_summary),
+        'total_temporal_skips':sum(x['temporal_skipped'] for x in all_summary),
         'cases':all_summary
     }
-    save_json(out/'SUMMARY.json',summary);print(json.dumps(summary,ensure_ascii=False,indent=2))
-    return summary
+    save_json(out/'SUMMARY.json',summary);print(json.dumps(summary,ensure_ascii=False,indent=2));return summary
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--cases',required=True);p.add_argument('--out-dir',required=True)
-    p.add_argument('--archive-candidates',type=int,default=4);p.add_argument('--target-archives',type=int,default=2)
+    p.add_argument('--archive-candidates',type=int,default=6);p.add_argument('--target-archives',type=int,default=2)
     a=p.parse_args();run(a.cases,a.out_dir,a.archive_candidates,a.target_archives)

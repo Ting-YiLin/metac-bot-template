@@ -23,17 +23,25 @@ class Crawler:
         if cached is None:
             u=urlsplit(url); robots_url=f'{u.scheme}://{u.netloc}/robots.txt'
             rp=RobotFileParser(); delay=0.0; status='UNKNOWN'; mode='PARSER'
-            try:
-                ensure_public_url(robots_url)
-                r=self.session.get(robots_url,timeout=(self.cfg['connect_timeout_sec'],self.cfg['read_timeout_sec']))
-                if r.status_code==404:
-                    cached={'mode':'ALLOW_ALL','parser':None,'delay':0.0,'status':'ROBOTS_404_ALLOW'}
-                elif r.status_code in (401,403):
-                    cached={'mode':'DENY_ALL','parser':None,'delay':0.0,'status':'ROBOTS_DENIED_'+str(r.status_code)}
-                else:
-                    r.raise_for_status();rp.parse(r.text.splitlines());delay=rp.crawl_delay(self.cfg['user_agent']) or rp.crawl_delay('*') or 0.0
-                    cached={'mode':'PARSER','parser':rp,'delay':float(delay or 0.0),'status':'CHECKED'}
-            except Exception as e:
+            last_error=None
+            for robots_attempt in range(int(self.cfg.get('http_retries',2))+1):
+                try:
+                    ensure_public_url(robots_url)
+                    r=self.session.get(robots_url,timeout=(self.cfg['connect_timeout_sec'],self.cfg['read_timeout_sec']))
+                    if r.status_code==404:
+                        cached={'mode':'ALLOW_ALL','parser':None,'delay':0.0,'status':'ROBOTS_404_ALLOW'}
+                    elif r.status_code in (401,403):
+                        cached={'mode':'DENY_ALL','parser':None,'delay':0.0,'status':'ROBOTS_DENIED_'+str(r.status_code)}
+                    else:
+                        r.raise_for_status();rp.parse(r.text.splitlines());delay=rp.crawl_delay(self.cfg['user_agent']) or rp.crawl_delay('*') or 0.0
+                        cached={'mode':'PARSER','parser':rp,'delay':float(delay or 0.0),'status':'CHECKED'}
+                    break
+                except Exception as e:
+                    last_error=e
+                    if robots_attempt<int(self.cfg.get('http_retries',2)):
+                        time.sleep(min(3,0.75*(robots_attempt+1)));continue
+            if cached is None:
+                e=last_error or RuntimeError('ROBOTS_UNKNOWN')
                 policy=str(self.cfg.get('robots_unavailable_policy','deny')).lower()
                 if policy=='allow':
                     cached={'mode':'ALLOW_ALL','parser':None,'delay':0.0,'status':'ROBOTS_UNAVAILABLE_ALLOW_'+type(e).__name__}

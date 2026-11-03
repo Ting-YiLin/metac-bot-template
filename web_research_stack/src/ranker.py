@@ -1,7 +1,7 @@
 import hashlib,re
 from collections import Counter
 from common import host,load_json
-from route_quality import route_specificity
+from route_quality import route_specificity,candidate_relevance
 
 GOV_HINTS=('.gov','.gov.au','.gc.ca','.europa.eu')
 ACADEMIC_HOSTS=('doi.org','pubmed.ncbi.nlm.nih.gov','science.org','nature.com','arxiv.org','osf.io')
@@ -36,19 +36,24 @@ def rank_rows(rows,question,preferred_domains=None,weights_path=None,domain_limi
     qt=set(re.findall(r'[a-z0-9]{3,}|[\u4e00-\u9fff]{2,}',question.lower()))
     ranked=[]
     for row in rows:
-        x=dict(row); typ=classify(x,preferred_domains); fam=source_family(x)
+        x=dict(row);typ=classify(x,preferred_domains);fam=source_family(x)
         toks=set(re.findall(r'[a-z0-9]{3,}|[\u4e00-\u9fff]{2,}',((x.get('title') or '')+' '+(x.get('snippet') or '')).lower()))
         overlap=min(len(qt&toks),int(w.get('keyword_overlap_cap',25)))
         authority=int(w.get(typ,w.get('unknown',100)))+overlap
-        rq=route_specificity(x,question)
-        x.update(source_type=typ,source_family=fam,authority_score=authority,route_specificity_score=rq['score'],route_specificity_reasons=rq['reasons'],rank_score=authority+rq['score'])
+        rq=route_specificity(x,question);rel=candidate_relevance(x,question)
+        rank_score=authority+rq['score']+rel['score']
+        x.update(source_type=typ,source_family=fam,authority_score=authority,
+                 route_specificity_score=rq['score'],route_specificity_reasons=rq['reasons'],
+                 relevance_score=rel['score'],relevance_overlap_terms=rel['overlap_terms'],
+                 relevance_excluded_hits=rel['excluded_hits'],relevance_reasons=rel['reasons'],
+                 rank_score=rank_score)
         ranked.append(x)
-    ranked.sort(key=lambda x:(-x['rank_score'],-x['authority_score'],x.get('url','')))
+    ranked.sort(key=lambda x:(-x['rank_score'],-x['relevance_score'],-x['authority_score'],x.get('url','')))
     out=[];families=Counter();domains=Counter();remaining=list(ranked)
     while remaining:
         opts=[x for x in remaining if families[x['source_family']]<1 and domains[host(x['url'])]<domain_limit]
         if not opts: opts=[x for x in remaining if domains[host(x['url'])]<domain_limit]
         if not opts: opts=remaining
         pick=opts[0];remaining.remove(pick);out.append(pick);families[pick['source_family']]+=1;domains[host(pick['url'])]+=1
-    for i,x in enumerate(out,1): x['rank']=i
+    for i,x in enumerate(out,1):x['rank']=i
     return out

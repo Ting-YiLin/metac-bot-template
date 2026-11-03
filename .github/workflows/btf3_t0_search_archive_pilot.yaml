@@ -7,6 +7,7 @@ on:
     paths:
       - 'web_research_stack/src/route_quality.py'
       - 'web_research_stack/src/ranker.py'
+      - 'web_research_stack/src/crawler.py'
       - 'web_research_stack/src/wayback.py'
       - 'web_research_stack/src/btf3_t0_search_pilot.py'
       - 'web_research_stack/data/btf3_pilot10_cases.json'
