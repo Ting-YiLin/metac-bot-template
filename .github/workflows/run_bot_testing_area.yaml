@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '37 */6 * * *'
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: tingyi001-unscored-bot-testing
   cancel-in-progress: false
@@ -27,8 +27,8 @@ jobs:
       - name: Run unscored testing-area predictions
         env:
           BOT_TEST_MODE: '1'
-          BOT_TEST_MAX_QUESTIONS: '2'
           LIVE_FREE_MAX_RUN_SECONDS: '1200'
+          GITHUB_TOKEN: ${{ github.token }}
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: uv run python live_free_runner.py
