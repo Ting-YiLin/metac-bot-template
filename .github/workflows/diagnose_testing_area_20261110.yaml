@@ -1,0 +1,44 @@
+name: Ting-Yi001 Read-Only Schedule Diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose_testing_area_20261110.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: tingyi001-diagnostic-20261110
+  cancel-in-progress: true
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Install existing locked dependencies
+        run: uv sync --locked --no-dev
+      - name: Read-only workflow and question diagnostics
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+        run: uv run python tools/diagnose_testing_area_20261110.py
+      - name: Retain read-only diagnostic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tingyi001-read-only-diagnostic
+          path: testing_area_diagnostic_20261110.json
+          if-no-files-found: warn
+          retention-days: 7
