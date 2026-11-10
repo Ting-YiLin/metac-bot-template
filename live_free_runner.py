@@ -24,7 +24,6 @@ ALLOWED_MODEL = "openrouter/free"
 SDK_MODEL_NAME = "openrouter/openrouter/free"
 OUTPUT = Path("live_free_receipt.json")
 MAX_RUN_SECONDS = int(os.getenv("LIVE_FREE_MAX_RUN_SECONDS", "1200"))
-MAX_TEST_QUESTIONS = max(1, min(4, int(os.getenv("BOT_TEST_MAX_QUESTIONS", "2"))))
 MODEL_ALLOWED_TRIES = 3
 
 
@@ -240,8 +239,11 @@ async def process_question(bot, client, tournament, q):
 
 async def run_batch():
     from forecasting_tools import MetaculusClient
+    from tools.testing_failure_ledger import TestingFailureLedger
 
     started = time.monotonic()
+    ledger = TestingFailureLedger()
+    ledger.load()
     client = MetaculusClient()
     candidates = []
     fetch_errors = []
@@ -265,7 +267,11 @@ async def run_batch():
     summary = {
         "stage": "BOT_TESTING_AREA_V1_WEB_RESEARCH",
         "competition_submission_enabled": False,
-        "max_questions_this_run": MAX_TEST_QUESTIONS,
+        "question_limit": "NO_COUNT_LIMIT_TIME_BUDGET_ONLY",
+        "max_full_forecast_failures_per_question": 2,
+        "failure_ledger_available": ledger.available,
+        "failure_ledger_error": ledger.error,
+        "skipped_twice_failed": [],
         "timestamp_utc": iso_now(),
         "model_routing_id": ALLOWED_MODEL,
         "model_allowed_tries_per_invocation": MODEL_ALLOWED_TRIES,
@@ -283,15 +289,32 @@ async def run_batch():
     }
 
     for tournament, q in candidates:
-        if len(summary["processed"]) >= MAX_TEST_QUESTIONS:
-            summary["stop_reason"] = "TEST_BATCH_QUESTION_LIMIT"
-            break
         if time.monotonic() - started >= MAX_RUN_SECONDS:
             summary["stop_reason"] = "RUN_TIME_BUDGET"
             break
 
+        if ledger.should_skip(q):
+            summary["skipped_twice_failed"].append({
+                "question_post_id": getattr(q, "id_of_post", None),
+                "question_id": getattr(q, "id_of_question", None),
+                "previous_failed_attempts": ledger.failures_for(q),
+            })
+            save_receipt(summary)
+            continue
+
         item, quota_stop = await process_question(bot, client, tournament, q)
+        if item["status"] == "FAILED_QUESTION_CONTINUE" and not quota_stop:
+            count = ledger.record_failure(
+                q,
+                run_id=os.getenv("GITHUB_RUN_ID", ""),
+                error_type=item.get("error_type", ""),
+            )
+            item["persistent_failed_attempts"] = count
+            if count is not None and count >= 2:
+                item["future_policy"] = "SKIP_AFTER_TWO_FAILURES"
         summary["processed"].append(item)
+        summary["failure_ledger_available"] = ledger.available
+        summary["failure_ledger_error"] = ledger.error
         save_receipt(summary)
 
         if quota_stop:
@@ -332,6 +355,8 @@ def main() -> int:
         "processed_count": len(summary["processed"]),
         "success_count": summary["success_count"],
         "failure_count": summary["failure_count"],
+        "skipped_twice_failed_count": len(summary["skipped_twice_failed"]),
+        "failure_ledger_available": summary["failure_ledger_available"],
         "stop_reason": summary["stop_reason"],
     }, ensure_ascii=False))
     return 0
