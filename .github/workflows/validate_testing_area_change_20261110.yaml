@@ -1,0 +1,33 @@
+name: Ting-Yi001 Failure Ledger Offline Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'live_free_runner.py'
+      - 'tools/testing_failure_ledger.py'
+      - 'tests/test_testing_failure_ledger.py'
+      - '.github/workflows/validate_testing_area_change_20261110.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ledger_tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Install locked dependencies
+        run: uv sync --locked --no-dev
+      - name: Test failure-ledger and unbounded batch selection offline
+        run: uv run python -m unittest discover -s tests -p 'test_testing_failure_ledger.py' -v
+      - name: Compile forecast runner
+        run: uv run python -m py_compile live_free_runner.py tools/testing_failure_ledger.py
