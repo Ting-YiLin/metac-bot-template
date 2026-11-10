@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "max_failed_attempts": 2,
+  "questions": {
+    "46451": {
+      "post_id": 46224,
+      "failed_attempts": 1,
+      "last_failed_at_utc": "2026-11-10T05:39:35Z",
+      "last_run_id": "42763035389",
+      "last_error_type": "ExceptionGroup"
+    }
+  },
+  "note": "One prior observed failed full-question forecast is seeded from run 42763035389; this file only stores per-question failure counts, not model reasoning."
+}
