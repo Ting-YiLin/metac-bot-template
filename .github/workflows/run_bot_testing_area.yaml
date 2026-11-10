@@ -2,7 +2,7 @@ name: Ting-Yi001 Unscored Bot Testing Area
 on:
   workflow_dispatch:
   schedule:
-    - cron: '23 */6 * * *'
+    - cron: '37 */6 * * *'
 permissions:
   contents: read
 concurrency:
