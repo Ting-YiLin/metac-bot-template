@@ -10,6 +10,7 @@ import json
 import math
 import os
 import re
+import subprocess
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -123,6 +124,22 @@ def paths_from_event(event_file):
     return sorted(paths)
 
 
+def paths_from_git_head():
+    """GitHub Actions push event omits per-commit changed-file arrays."""
+    if os.getenv("GITHUB_EVENT_NAME") != "push":
+        return []
+    completed = subprocess.run(
+        ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"],
+        capture_output=True, text=True, check=True, timeout=15,
+    )
+    paths = []
+    for name in completed.stdout.splitlines():
+        p = Path(name.strip())
+        if p.parent == QUEUE_DIR and p.suffix == ".json":
+            paths.append(name.strip())
+    return sorted(set(paths))
+
+
 def select_testing_question(client, data):
     from forecasting_tools.data_models.questions import QuestionState
 
@@ -211,6 +228,8 @@ def main():
 
     event_path = os.getenv("GITHUB_EVENT_PATH")
     paths = paths_from_event(event_path)
+    if not paths:
+        paths = paths_from_git_head()
     if not paths and os.getenv("GPT_QUEUE_ALLOW_ALL") == "1":
         paths = [str(p) for p in sorted(QUEUE_DIR.glob("q-*.json"))]
     live_enabled = os.getenv("GPT_QUEUE_LIVE_SUBMIT") == "1"
@@ -228,6 +247,8 @@ def main():
     }
     for path in paths[:10]:
         result["processed"].append(process_one(path, client, ledger, live_enabled))
+    if os.getenv("GITHUB_EVENT_NAME") == "push" and not paths:
+        result["processed"].append({"status": "ERROR_PUSH_FILE_DETECTION_EMPTY"})
     OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({
         "queue_candidates": result["queue_candidates"],
@@ -236,7 +257,7 @@ def main():
         "ledger_available": ledger.available,
     }))
     # Invalid queue submissions are visible in receipt, without causing an unsafe retry.
-    return 0
+    return 1 if os.getenv("GITHUB_EVENT_NAME") == "push" and not paths else 0
 
 
 if __name__ == "__main__":
