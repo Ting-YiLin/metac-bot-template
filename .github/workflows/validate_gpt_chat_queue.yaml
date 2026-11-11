@@ -5,6 +5,9 @@ on:
     paths:
       - 'integrations/gpt_chat_queue/queue_runner.py'
       - 'tests/test_gpt_chat_queue.py'
+      - 'integrations/gpt_chat_queue/refresh_protocol.py'
+      - 'integrations/gpt_chat_queue/export_candidates.py'
+      - 'tests/test_gpt_refresh_protocol.py'
       - '.github/workflows/validate_gpt_chat_queue.yaml'
   workflow_dispatch:
 permissions:
@@ -24,6 +27,6 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --locked --no-dev
       - name: Compile new queue runner
-        run: uv run python -m py_compile integrations/gpt_chat_queue/queue_runner.py
+        run: uv run python -m py_compile integrations/gpt_chat_queue/queue_runner.py integrations/gpt_chat_queue/refresh_protocol.py integrations/gpt_chat_queue/export_candidates.py
       - name: Offline safety test, no Metaculus submissions
-        run: uv run python -m unittest discover -s tests -p 'test_gpt_chat_queue.py' -v
+        run: |\n          uv run python -m unittest discover -s tests -p 'test_gpt_chat_queue.py' -v\n          uv run python -m unittest discover -s tests -p 'test_gpt_refresh_protocol.py' -v
