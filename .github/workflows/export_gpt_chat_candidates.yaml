@@ -1,0 +1,40 @@
+name: Ting-Yi001 GPT Read-Only Candidate Feed
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/export_gpt_chat_candidates.yaml'
+  workflow_dispatch:
+  schedule:
+    - cron: '07 * * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  export_questions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Install locked Metaculus dependencies
+        run: uv sync --locked --no-dev
+      - name: Read open testing questions and publish GPT-safe feed
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run python integrations/gpt_chat_queue/export_candidates.py
+      - name: Save feed export status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gpt-candidate-feed-${{ github.run_id }}
+          path: gpt_chat_candidate_feed_receipt.json
+          if-no-files-found: warn
+          retention-days: 7
