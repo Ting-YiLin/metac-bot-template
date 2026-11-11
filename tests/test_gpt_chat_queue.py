@@ -92,7 +92,7 @@ class QueueOfflineTests(unittest.TestCase):
             self.assertEqual(paths_from_event(str(fp)), [self.PATH])
 
     def test_git_head_fallback_on_push(self):
-        output = self.PATH + "\\nmain.py\\n"
+        output = self.PATH + "\nmain.py\n"
         with patch.dict("os.environ", {"GITHUB_EVENT_NAME": "push"}), patch(
             "integrations.gpt_chat_queue.queue_runner.subprocess.run"
         ) as run:
