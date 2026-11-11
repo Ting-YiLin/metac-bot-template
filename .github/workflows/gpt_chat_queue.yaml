@@ -1,0 +1,43 @@
+name: Ting-Yi001 GPT Chat Queue - Unscored Test Only
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'integrations/gpt_chat_queue/pending/q-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tingyi001-unscored-bot-testing
+  cancel-in-progress: false
+
+jobs:
+  validate_queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Install locked dependencies
+        run: uv sync --locked --no-dev
+      - name: Validate GPT queue and inspect testing-area eligibility
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GPT_QUEUE_LIVE_SUBMIT: '0' # safety gate: do not enable before E2E dry-run review
+        run: uv run python integrations/gpt_chat_queue/queue_runner.py
+      - name: Save outcome receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gpt-queue-receipt-${{ github.run_id }}
+          path: gpt_queue_receipt.json
+          if-no-files-found: warn
+          retention-days: 14
