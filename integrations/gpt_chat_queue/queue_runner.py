@@ -52,7 +52,7 @@ def validate_payload(data, path, now=None):
     post_id, question_id = data.get("post_id"), data.get("question_id")
     if type(post_id) is not int or type(question_id) is not int or min(post_id, question_id) <= 0:
         raise ValueError("INVALID_QUESTION_IDS")
-    if not re.fullmatch(r"q-\\d+-\\d+-[a-zA-Z0-9_-]{4,48}\\.json", Path(path).name):
+    if not re.fullmatch(r"q-\d+-\d+-[a-zA-Z0-9_-]{4,48}\.json", Path(path).name):
         raise ValueError("INVALID_QUEUE_FILENAME")
     if not Path(path).name.startswith(f"q-{post_id}-{question_id}-"):
         raise ValueError("FILENAME_QUESTION_ID_MISMATCH")
