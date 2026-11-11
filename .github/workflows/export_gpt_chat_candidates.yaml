@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/export_gpt_chat_candidates.yaml'
+      - 'integrations/gpt_chat_queue/refresh_requests/req-*.json'
   workflow_dispatch:
   schedule:
     - cron: '07 * * * *'
@@ -11,12 +12,18 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: tingyi001-candidate-feed-writer
+  cancel-in-progress: false
+
 jobs:
   export_questions:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
