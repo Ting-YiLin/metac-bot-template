@@ -29,4 +29,6 @@ jobs:
       - name: Compile new queue runner
         run: uv run python -m py_compile integrations/gpt_chat_queue/queue_runner.py integrations/gpt_chat_queue/refresh_protocol.py integrations/gpt_chat_queue/export_candidates.py
       - name: Offline safety test, no Metaculus submissions
-        run: |\n          uv run python -m unittest discover -s tests -p 'test_gpt_chat_queue.py' -v\n          uv run python -m unittest discover -s tests -p 'test_gpt_refresh_protocol.py' -v
+        run: |
+          uv run python -m unittest discover -s tests -p 'test_gpt_chat_queue.py' -v
+          uv run python -m unittest discover -s tests -p 'test_gpt_refresh_protocol.py' -v
