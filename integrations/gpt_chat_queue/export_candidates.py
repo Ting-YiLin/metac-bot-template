@@ -13,6 +13,8 @@ from pathlib import Path
 
 import requests
 
+from refresh_protocol import request_id_from_push
+
 REPO = "Ting-YiLin/metac-bot-template"
 BRANCH = "tingyi001-test-state"
 PATH = "state/gpt_chat_candidate_feed.json"
@@ -96,7 +98,14 @@ def main():
     from forecasting_tools import MetaculusClient
     result = {"status": "STARTED", "checked_at_utc": datetime.now(timezone.utc).isoformat()}
     try:
+        request_id = request_id_from_push(os.getenv("GITHUB_EVENT_NAME", ""))
+        result["refresh_request_id"] = request_id
         feed = collect_feed(MetaculusClient())
+        feed["refresh_request_id"] = request_id
+        feed["refresh_trigger"] = "GPT_REQUEST" if request_id else os.getenv("GITHUB_EVENT_NAME", "unknown")
+        feed["refresh_run_id"] = os.getenv("GITHUB_RUN_ID")
+        feed["refresh_trigger_commit"] = os.getenv("GITHUB_SHA")
+        feed["refresh_completed_at_utc"] = datetime.now(timezone.utc).isoformat()
         result.update({
             "status": "FETCHED",
             "eligible_unforecasted": feed["eligible_unforecasted"],
