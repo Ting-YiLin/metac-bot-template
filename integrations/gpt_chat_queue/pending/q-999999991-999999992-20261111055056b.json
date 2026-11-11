@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "source": "chatgpt_scheduled_research",
+  "tournament": "bot-testing-area",
+  "question_type": "BinaryQuestion",
+  "post_id": 999999991,
+  "question_id": 999999992,
+  "p_yes": 0.5,
+  "reasoning": "SYNTHETIC TEST ONLY. No live candidate, no actual research, no forecast submission.",
+  "forecast_created_at_utc": "2026-11-11T05:50:56.651Z",
+  "evidence_cutoff_utc": "2026-11-11T05:49:56.651Z",
+  "research_rounds": {
+    "broad": {
+      "status": "DONE",
+      "queries": [
+        "synthetic payload no real queries"
+      ],
+      "sources": [
+        {
+          "url": "https://example.org/"
+        }
+      ]
+    },
+    "deep": {
+      "status": "BLOCKED",
+      "queries": [
+        "synthetic payload no research"
+      ],
+      "sources": []
+    },
+    "local_language": {
+      "status": "BLOCKED",
+      "language": "en",
+      "queries": [
+        "synthetic local-language placeholder"
+      ],
+      "sources": []
+    }
+  },
+  "market_checks": {
+    "polymarket": {
+      "status": "NOT_FOUND",
+      "url": null,
+      "p_yes": null
+    },
+    "kalshi": {
+      "status": "NOT_FOUND",
+      "url": null,
+      "p_yes": null
+    },
+    "manifold": {
+      "status": "NOT_FOUND",
+      "url": null,
+      "p_yes": null
+    },
+    "metaculus": {
+      "status": "NOT_FOUND",
+      "url": null,
+      "p_yes": null
+    },
+    "hypermind": {
+      "status": "NOT_FOUND",
+      "url": null,
+      "p_yes": null
+    },
+    "betfair": {
+      "status": "NOT_FOUND",
+      "url": null,
+      "p_yes": null
+    }
+  },
+  "mode": "DRY_RUN"
+}
