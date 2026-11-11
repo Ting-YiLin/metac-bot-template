@@ -4,9 +4,9 @@ import tempfile
 import unittest
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
-from integrations.gpt_chat_queue.queue_runner import validate_payload, process_one, paths_from_event
+from integrations.gpt_chat_queue.queue_runner import validate_payload, process_one, paths_from_event, paths_from_git_head
 
 
 MARKETS = ("polymarket", "kalshi", "manifold", "metaculus", "hypermind", "betfair")
@@ -90,6 +90,14 @@ class QueueOfflineTests(unittest.TestCase):
             fp = Path(td) / "event.json"
             fp.write_text(json.dumps(event), encoding="utf-8")
             self.assertEqual(paths_from_event(str(fp)), [self.PATH])
+
+    def test_git_head_fallback_on_push(self):
+        output = self.PATH + "\\nmain.py\\n"
+        with patch.dict("os.environ", {"GITHUB_EVENT_NAME": "push"}), patch(
+            "integrations.gpt_chat_queue.queue_runner.subprocess.run"
+        ) as run:
+            run.return_value = MagicMock(stdout=output)
+            self.assertEqual(paths_from_git_head(), [self.PATH])
 
     def test_live_disabled_never_submits(self):
         p = fixture()
