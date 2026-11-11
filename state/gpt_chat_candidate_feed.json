@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-11T05:50:33.730582+00:00",
+  "tournament": "bot-testing-area",
+  "open_questions_seen": 10,
+  "eligible_unforecasted": 0,
+  "excluded_or_forecasted": 10,
+  "items": [],
+  "scope": "READ_ONLY_QUESTION_FEED_NO_FORECAST_NO_SUBMISSION"
+}
