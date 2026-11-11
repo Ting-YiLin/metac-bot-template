@@ -1,0 +1,29 @@
+name: Ting-Yi001 GPT Queue Offline Validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'integrations/gpt_chat_queue/queue_runner.py'
+      - 'tests/test_gpt_chat_queue.py'
+      - '.github/workflows/validate_gpt_chat_queue.yaml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Install locked dependencies
+        run: uv sync --locked --no-dev
+      - name: Compile new queue runner
+        run: uv run python -m py_compile integrations/gpt_chat_queue/queue_runner.py
+      - name: Offline safety test, no Metaculus submissions
+        run: uv run python -m unittest discover -s tests -p 'test_gpt_chat_queue.py' -v
