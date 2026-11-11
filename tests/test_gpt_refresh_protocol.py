@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from integrations.gpt_chat_queue.refresh_protocol import (
     validate_request,
@@ -40,16 +40,12 @@ class RefreshRequestTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         request_id, data = valid_request(now)
         td, root, path = self.with_request(data, request_id)
+        prior = os.getcwd()
         try:
-            with patch("os.getcwd", return_value=str(root)), patch("pathlib.Path.cwd", return_value=root):
-                with patch.dict(os.environ, {"GITHUB_EVENT_NAME": "push"}):
-                    prior = os.getcwd()
-                    os.chdir(root)
-                    try:
-                        self.assertEqual(validate_request(path.relative_to(root), now), request_id)
-                    finally:
-                        os.chdir(prior)
+            os.chdir(root)
+            self.assertEqual(validate_request(path.relative_to(root), now), request_id)
         finally:
+            os.chdir(prior)
             td.cleanup()
 
     def test_reject_outdated_request(self):
