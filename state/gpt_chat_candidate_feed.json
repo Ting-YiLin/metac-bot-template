@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at_utc": "2026-11-11T21:52:46.437960+00:00",
+  "checked_at_utc": "2026-11-12T02:54:21.566773+00:00",
   "tournament": "bot-testing-area",
   "open_questions_seen": 10,
   "eligible_unforecasted": 0,
@@ -9,7 +9,7 @@
   "scope": "READ_ONLY_QUESTION_FEED_NO_FORECAST_NO_SUBMISSION",
   "refresh_request_id": null,
   "refresh_trigger": "schedule",
-  "refresh_run_id": "43106848221",
+  "refresh_run_id": "43144539728",
   "refresh_trigger_commit": "187679de6b8eb2d11b229fbf25decc242e61481e",
-  "refresh_completed_at_utc": "2026-11-11T21:52:50.914482+00:00"
+  "refresh_completed_at_utc": "2026-11-12T02:54:25.724786+00:00"
 }
