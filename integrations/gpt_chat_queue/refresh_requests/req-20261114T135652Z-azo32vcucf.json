@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "request_id": "req-20261114T135652Z-azo32vcucf",
+  "source": "chatgpt_scheduled_research",
+  "tournament": "bot-testing-area",
+  "intent": "READ_ONLY_REFRESH",
+  "created_at_utc": "2026-11-14T13:56:52.284Z"
+}
