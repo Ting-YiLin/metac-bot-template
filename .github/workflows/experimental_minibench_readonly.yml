@@ -7,11 +7,13 @@ on:
     paths:
       - '.github/workflows/experimental_minibench_readonly.yml'
       - 'experimental_minibench_work/minibench_readonly_probe.py'
+      - 'experimental_minibench_work/publish_snapshot.py'
       - 'experimental_minibench_work/tests/test_minibench_readonly_probe.py'
+      - 'experimental_minibench_work/tests/test_publish_snapshot.py'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write # isolated state branch snapshot only; no Metaculus writes
 
 concurrency:
   group: minibench-readonly-probe-experimental
@@ -29,14 +31,20 @@ jobs:
       - uses: astral-sh/setup-uv@v10.3.0
         with:
           version: '0.13.1'
-      - name: Offline read-only probe tests (no credentials)
-        run: python -m unittest discover -s experimental_minibench_work/tests -p 'test_minibench_readonly_probe.py' -v
+      - name: Offline probe and publisher tests (no credentials)
+        run: |
+          python -m unittest discover -s experimental_minibench_work/tests -p 'test_minibench_readonly_probe.py' -v
+          python -m unittest discover -s experimental_minibench_work/tests -p 'test_publish_snapshot.py' -v
       - name: Install locked Metaculus dependency
         run: uv sync --locked --no-dev
       - name: Authenticated MiniBench read-only scan (no posting)
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
         run: uv run python experimental_minibench_work/minibench_readonly_probe.py
+      - name: Publish sanitized fresh feed to isolated state branch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run python experimental_minibench_work/publish_snapshot.py
       - name: Store evidence from this run only
         if: always()
         uses: actions/upload-artifact@v4
@@ -45,5 +53,6 @@ jobs:
           path: |
             minibench_readonly_probe_receipt.json
             minibench_readonly_candidate_feed.json
+            minibench_feed_publish_receipt.json
           if-no-files-found: warn
           retention-days: 7
