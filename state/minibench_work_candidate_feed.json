@@ -2,40 +2,23 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-17T10:57:38.716523+00:00",
+  "checked_at_utc": "2026-11-17T11:36:55.796376+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
   "api_open_rows": 2,
-  "eligible_after_status_and_deadline_check": 1,
-  "supported_binary": 1,
-  "supported_all_formats": 1,
+  "eligible_after_status_and_deadline_check": 0,
+  "supported_binary": 0,
+  "supported_all_formats": 0,
   "counts": {
     "api_rows": 2,
-    "eligible_BinaryQuestion": 1,
-    "already_forecasted": 1
+    "already_forecasted": 2
   },
-  "items": [
-    {
-      "post_id": 46611,
-      "question_id": 46871,
-      "question_type": "BinaryQuestion",
-      "format_context": {
-        "question_type": "BinaryQuestion"
-      },
-      "close_time_utc": "2026-11-17T12:56:53+00:00",
-      "question_text": "Will Ituri province report at least 10 more new confirmed Ebola cases than Nord-Kivu province for 26 November 2026?",
-      "background_info": "The Democratic Republic of the Congo is experiencing its 17th Ebola outbreak, caused by Bundibugyo virus (BDBV) and declared by the Ministry of Health on 15 May 2026. With more than 11,000 confirmed cases it has far surpassed DRC's 2018-2020 Nord-Kivu outbreak (about 3,470 cases), and it has spread beyond DRC: Uganda recorded 20 cases and 2 deaths, Kenya 9 cases and 2 deaths, and single cases have been treated in Nigeria and France.\n\nStatus as of the most recent data (INSP SitRep N°181, reporting date 11 November 2026, published 12 November 2026): 11,197 confirmed cases and 5,471 confirmed deaths nationally (case fatality 48.9%), across 67 health zones in 8 provinces. Cumulative confirmed cases by province: Ituri 7,765 (28 of 36 health zones affected), Nord-Kivu 2,802 (17 of 34 zones), Haut-Uélé 504, Tshopo 98, Bas-Uélé 13, Nord-Ubangi 10, Sud-Kivu 3, Sud-Ubangi 2. Case fatality is 47.3% in Ituri and 55.2% in Nord-Kivu. Ituri remains the epicentre (about 69% of cumulative confirmed cases), but Nord-Kivu has supplied a growing share of new infections: of the 1,463 confirmed cases reported in the 21 days to 3 November, Ituri accounted for 710 and Nord-Kivu for 640 (WHO Disease Outbreak News, 6 November 2026), and INSP SitRep N°178 put Ituri at 57.1% and Nord-Kivu at 32.9% of newly notified cases.\n\nRecent daily province-level splits of new confirmed cases (Ituri vs Nord-Kivu): 3 Nov 23 vs 36; 5 Nov 28 vs 32; 6 Nov 47 vs 24; 7 Nov 24 vs 12; 8 Nov 40 vs 23; 9 Nov 30 vs 17; 10 Nov 44 vs 24; 11 Nov 37 vs 41. National daily totals have run roughly 50-85 confirmed cases per day (seven-day average about 62-66). So while Ituri usually reports more new cases on a given day, Nord-Kivu has out-reported it on 3 of the last 8 days for which splits are available, and the size of the daily gap has ranged from Nord-Kivu +13 to Ituri +23.\n\nHotspots differ by province: in Nord-Kivu the burden is concentrated in Beni (839 cumulative cases as of 10 November, with 8 new that day), Katwa (686) and Butembo (351), plus a newer cluster in Mutwanga; in Ituri the largest contributors are Bunia (2,069 cumulative, 19 new on 10 November) and Mandima (592, 10 new). Trends in these individual health zones drive the province-level daily split.\n\nINSP publishes a daily SitRep for each reporting date, normally on the following day, and all editions are archived at https://ebola-tracker.org/en/reports. Province totals are frequently revised upward retrospectively, so the change in a province's cumulative total between two reports can exceed the number of new cases reported for the intervening day; this question uses the daily new-case figure explicitly attributed to the date in Table 1 of the report.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves using the daily Ebola situation report (SitRep) published by the Democratic Republic of the Congo's Institut National de Santé Publique (INSP) with reporting date 26 November 2026 (expected to be SitRep N°196, published on 27 November 2026), available at https://insp.cd/ and archived at https://ebola-tracker.org/en/reports. Using the province-level daily new confirmed case figures in Table 1 of that report, subtract the number reported for Nord-Kivu province for 26 November 2026 from the number reported for Ituri province for the same day. If that difference is 10 or more, the question resolves Yes; if it is 9 or less, the question resolves No. Only laboratory-confirmed cases count; suspected or probable cases do not.",
-      "fine_print": "If the report's key-points summary and its Table 1 give different daily new confirmed case figures for a province for 26 November 2026, the Table 1 figures govern. If INSP publishes a corrected version (e.g. one marked \"corrigé\") of the SitRep for reporting date 26 November 2026, the corrected figures are used, provided that corrected version appears within 14 days of 27 November 2026. If that SitRep does not report province-level daily new confirmed case counts for 26 November 2026, the figures in the first subsequent INSP SitRep that does report them for that date are used. If no INSP publication ever reports province-level daily confirmed case counts for 26 November 2026, the question is annulled.",
-      "url": "https://www.metaculus.com/questions/46611",
-      "supported_by_current_validator": true
-    }
-  ],
+  "items": [],
   "truncated": false,
-  "refresh_run_id": "44069563705",
-  "refresh_request_id": "req-20261117T105706Z-mb2v2a",
+  "refresh_run_id": "44075576948",
+  "refresh_request_id": "req-20261117T113624Z-v2b113624",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-17T10:58:02.222574+00:00",
-  "freshness_expires_utc": "2026-11-17T11:18:02.222574+00:00",
+  "published_at_utc": "2026-11-17T11:37:15.811775+00:00",
+  "freshness_expires_utc": "2026-11-17T11:57:15.811775+00:00",
   "is_live_tournament_submission_authorized": false
 }
