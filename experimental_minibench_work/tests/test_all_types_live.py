@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from sealed_queue import seal,public_document
-from live_submit import process_one
+from live_submit import process_one,get_forecast_readback
 
 TOKEN="metaculus-test-token-"+("a"*45)
 NOW=dt.datetime(2026,11,17,9,40,tzinfo=dt.timezone.utc)
@@ -129,6 +129,16 @@ class Tests(unittest.TestCase):
                       Client(q),TOKEN,NOW,session)
         self.assertEqual(session.posts,0)
         self.assertTrue(r["state"].startswith("BLOCKED"))
+    def test_group_post_readback_selects_exact_subquestion(self):
+        class GroupSession:
+            def get(self,url,headers=None,timeout=None):
+                return Response(200,{"id":70000,"group_of_questions":{"questions":[
+                    {"id":99999,"my_forecasts":{"latest":{"forecast_values":[0.3,0.7]}}},
+                    {"id":70001,"my_forecasts":{"latest":{"forecast_values":[0.5,0.3,0.2]}}}
+                ]}})
+        result=get_forecast_readback(70000,70001,[0.5,0.3,0.2],TOKEN,GroupSession())
+        self.assertEqual(result["state"],"FORECAST_CONFIRMED")
+
     def test_invalid_distribution_never_posted(self):
         q=NumericQuestion();session=Session(q)
         r=process_one(seal(base("NumericQuestion",percentiles=points([90,80,70,60,50,40])),
