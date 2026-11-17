@@ -43,7 +43,7 @@ def validate_snapshot(doc, now=None):
     for row in items:
         if type(row.get("question_id")) is not int or type(row.get("post_id")) is not int:
             raise ValueError("BAD_IDS")
-        if row.get("question_type") not in ("BinaryQuestion","NumericQuestion","DateQuestion","MultipleChoiceQuestion"):
+        if row.get("question_type") not in ("BinaryQuestion","NumericQuestion","DateQuestion","DiscreteQuestion","MultipleChoiceQuestion"):
             raise ValueError("UNKNOWN_TYPE")
     return checked
 
