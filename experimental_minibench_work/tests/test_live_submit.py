@@ -69,6 +69,38 @@ class LiveTests(unittest.TestCase):
         self.assertTrue(result["forecast_confirmed"])
         self.assertTrue(result["comment_confirmed"])
         self.assertNotIn("0.4",str(result))
+    def test_v2_controller_fallback_can_post_even_without_sol(self):
+        c=Client();s=Session(c)
+        data=sample(schema_version=2,
+            forecast_author="CONTROLLER_FALLBACK",
+            subagent_call_status="FAILED",
+            model_attestation="MODEL_ID_NOT_ATTESTED",
+            sol_model="unavailable",sol_effort="not_run")
+        result=process_one(seal(data,public_document(TOKEN)),c,TOKEN,NOW,s)
+        self.assertEqual(result["state"],"FORECAST_AND_PRIVATE_COMMENT_CONFIRMED")
+        self.assertEqual(result["forecast_author"],"CONTROLLER_FALLBACK")
+        self.assertEqual(result["subagent_call_status"],"FAILED")
+        self.assertEqual(result["model_attestation"],"MODEL_ID_NOT_ATTESTED")
+        self.assertEqual(c.posts,1)
+        self.assertIn("controller fallback",s.text)
+
+    def test_v2_unattested_sol_output_can_post(self):
+        c=Client();s=Session(c)
+        data=sample(schema_version=2,forecast_author="SOL_SUBAGENT",
+            subagent_call_status="COMPLETED",
+            model_attestation="MODEL_ID_NOT_ATTESTED")
+        result=process_one(seal(data,public_document(TOKEN)),c,TOKEN,NOW,s)
+        self.assertEqual(result["state"],"FORECAST_AND_PRIVATE_COMMENT_CONFIRMED")
+        self.assertEqual(result["forecast_author"],"SOL_SUBAGENT")
+        self.assertEqual(c.posts,1)
+
+    def test_v2_fallback_without_correct_status_is_rejected(self):
+        with self.assertRaises(ValueError):
+            validate_data(sample(schema_version=2,
+                forecast_author="CONTROLLER_FALLBACK",
+                subagent_call_status="COMPLETED",
+                model_attestation="MODEL_ID_NOT_ATTESTED"),NOW)
+
     def test_seen_question_not_automatically_excluded(self):
         # Merely having appeared in a prior discussion is not a submission ban.
         result = validate_data(sample(question_id=46868), NOW)
