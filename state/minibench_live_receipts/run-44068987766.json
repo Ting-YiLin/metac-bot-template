@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "scope": "PUBLIC_MINIBENCH_SCORING_STATUS_NO_FORECASTS",
+  "run_id": "44068987766",
+  "workflow": "MINIBENCH_LIVE_SCORING",
+  "processed_at_utc": "2026-11-17T10:53:57.291167+00:00",
+  "state": "NO_NEW_ENCRYPTED_FORECAST",
+  "files_seen": 0,
+  "entries": []
+}
