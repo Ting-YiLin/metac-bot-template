@@ -2,31 +2,19 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-17T09:36:20.915922+00:00",
+  "checked_at_utc": "2026-11-17T09:46:17.604358+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
-  "api_open_rows": 4,
-  "eligible_after_status_and_deadline_check": 4,
+  "api_open_rows": 3,
+  "eligible_after_status_and_deadline_check": 3,
   "supported_binary": 2,
   "counts": {
-    "api_rows": 4,
+    "api_rows": 3,
     "eligible_BinaryQuestion": 2,
-    "eligible_NumericQuestion": 2,
-    "unsupported_type": 2
+    "eligible_NumericQuestion": 1,
+    "unsupported_type": 1
   },
   "items": [
-    {
-      "post_id": 46607,
-      "question_id": 46867,
-      "question_type": "NumericQuestion",
-      "close_time_utc": "2026-11-17T09:45:16+00:00",
-      "question_text": "What will Anthropic (ANT) close at on Friday, November 27, 2026?",
-      "background_info": "Anthropic, PBC has never had a public market for its Class A common stock, and as of 13 November 2026 the shares do not yet trade. Its amended IPO filing (S-1/A No. 2, filed 10 November 2026) set an estimated initial public offering price of $70.00–$78.00 per share for 825,000,000 Class A shares, and the company applied to list on the Nasdaq Global Select Market under the ticker \"ANT\" (https://www.sec.gov/Archives/edgar/data/2130357/000162828026072484/anthropicpbc-sx1ax2.htm). The offering would raise roughly $57.75bn–$64.35bn and implies a fully diluted valuation of about $1.40 trillion at the top of the range, making it one of the largest listings ever (https://techcrunch.com/2026/11/10/anthropic-sets-ipo-price-range-of-70-to-78-per-share-to-reach-an-implied-valuation-of-1-404-trillion).\n\nTimeline: the final offer price is expected to be set on Wednesday, 18 November 2026, with first-day trading on Thursday, 19 November 2026 (https://ipo.anthropic.com/us/). Demand is reported to be around six times oversubscribed, and underwriters have reportedly weighed pricing above the $70–$78 range and a valuation above $1.5 trillion. Google, Nvidia, AMD, Broadcom, Micron, Microsoft and TSMC have reportedly agreed to buy about $26bn of stock at the IPO price. Nasdaq's quote page for ANT lists revenue of $33.24bn for the first nine months of 2026.\n\nThe market backdrop is unsettled: the AI trade has come under pressure, with Nvidia down 4.3% on 12 November, about 11% for the week (a sixth consecutive weekly decline) and roughly $1.6 trillion of market capitalization erased since early October (https://www.cnbc.com/2026/11/13/nvidia-stock-jensen-affair-ai.html). On 13 November the Nasdaq Composite was down about 1.8% and the VIX stood near 21. Because ANT is a brand-new listing, no listed options or other market-implied price for late November yet exists, and there is no trading history to anchor the 27 November close.\n\nMarket calendar: US equity markets are closed on Thursday, 26 November 2026 (Thanksgiving) and close early at 1:00 p.m. ET on Friday, 27 November 2026 (https://www.nasdaq.com/market-activity/stock-market-holiday-schedule), so 27 November is the first session after the holiday.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 4, \"ambiguity\": 4, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves to the closing price, in US dollars, of Anthropic, PBC Class A common stock (ticker ANT, Nasdaq Global Select Market) for the trading session of Friday, 27 November 2026, as shown in the \"Close\" column of the row dated 27 November 2026 on the Yahoo Finance historical prices page for ANT: https://finance.yahoo.com/quote/ANT/history/. For example, a reported close of 94.20 resolves to 94.20. If Yahoo Finance does not display a closing price for that date, the Nasdaq historical quotes page for ANT (https://www.nasdaq.com/market-activity/stocks/ant/historical) will be used instead, and failing that, [credible sources](https://www.metaculus.com/faq/#definitions).",
-      "fine_print": "Friday, 27 November 2026 is a shortened Nasdaq trading session with a 1:00 p.m. ET early close; the official closing price of that abbreviated session is the value used. If ANT has not commenced trading on Nasdaq by 27 November 2026, or if no closing price for that date can be found in any of the sources listed above, the question is annulled.",
-      "url": "https://www.metaculus.com/questions/46607",
-      "supported_by_current_validator": false
-    },
     {
       "post_id": 46608,
       "question_id": 46868,
@@ -65,10 +53,10 @@
     }
   ],
   "truncated": false,
-  "refresh_run_id": "44057058869",
-  "refresh_request_id": null,
-  "refresh_trigger": "CODE_OR_MANUAL",
-  "published_at_utc": "2026-11-17T09:36:32.927625+00:00",
-  "freshness_expires_utc": "2026-11-17T09:56:32.927625+00:00",
+  "refresh_run_id": "44058591419",
+  "refresh_request_id": "req-20261117T094546Z-x8m4q7p2",
+  "refresh_trigger": "WORK_REQUEST",
+  "published_at_utc": "2026-11-17T09:46:28.504681+00:00",
+  "freshness_expires_utc": "2026-11-17T10:06:28.504681+00:00",
   "is_live_tournament_submission_authorized": false
 }
