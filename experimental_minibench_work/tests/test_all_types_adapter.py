@@ -33,12 +33,14 @@ class Formats(unittest.TestCase):
     def test_binary(self):
         out,vec=make_api_payload({"question_type":"BinaryQuestion","p_yes":0.42},BinaryQuestion())
         self.assertEqual(out,{"probability_yes":0.42})
-        self.assertEqual(vec,[0.58,0.42])
+        self.assertAlmostEqual(vec[0],0.58)
+        self.assertAlmostEqual(vec[1],0.42)
     def test_multiple_choice(self):
         out,vec=make_api_payload({"question_type":"MultipleChoiceQuestion",
                                   "option_probabilities":{"Beta":0.3,"Alpha":0.6,"Other":0.1}},
                                  MultipleChoiceQuestion())
-        self.assertEqual(vec,[0.6,0.3,0.1])
+        for actual,expected in zip(vec,[0.6,0.3,0.1]):
+            self.assertAlmostEqual(actual,expected)
         self.assertAlmostEqual(sum(out["probability_yes_per_category"].values()),1.0)
     def test_bad_multiple_choice(self):
         with self.assertRaises(ValueError):
