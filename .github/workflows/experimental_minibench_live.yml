@@ -6,6 +6,9 @@ on:
     paths:
       - '.github/workflows/experimental_minibench_live.yml'
       - 'experimental_minibench_work/live_submit.py'
+      - 'experimental_minibench_work/all_types_adapter.py'
+      - 'experimental_minibench_work/tests/test_all_types_adapter.py'
+      - 'experimental_minibench_work/tests/test_all_types_live.py'
       - 'experimental_minibench_work/sealed_queue.py'
       - 'experimental_minibench_work/tests/test_live_submit.py'
       - 'experimental_minibench_work/tests/test_sealed_queue.py'
@@ -41,6 +44,8 @@ jobs:
         run: |
           uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_sealed_queue.py' -v
           uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_live_submit.py' -v
+          uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_all_types_adapter.py' -v
+          uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_all_types_live.py' -v
       - name: Send authorized MiniBench forecast, private comment and readback
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
