@@ -2,53 +2,20 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-17T20:39:02.304636+00:00",
+  "checked_at_utc": "2026-11-17T21:40:56.658620+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
-  "api_open_rows": 1,
-  "eligible_after_status_and_deadline_check": 1,
+  "api_open_rows": 0,
+  "eligible_after_status_and_deadline_check": 0,
   "supported_binary": 0,
-  "supported_all_formats": 1,
-  "counts": {
-    "api_rows": 1,
-    "eligible_NumericQuestion": 1
-  },
-  "items": [
-    {
-      "post_id": 46616,
-      "question_id": 46876,
-      "question_type": "NumericQuestion",
-      "format_context": {
-        "question_type": "NumericQuestion",
-        "lower_bound": 500.0,
-        "upper_bound": 1500.0,
-        "open_lower_bound": true,
-        "open_upper_bound": true,
-        "zero_point": null,
-        "cdf_size": 201,
-        "recommended_quantile_levels": [
-          10,
-          20,
-          40,
-          60,
-          80,
-          90
-        ]
-      },
-      "close_time_utc": "2026-11-17T21:32:14+00:00",
-      "question_text": "How many confirmed measles cases will Wisconsin DHS report for 2026 as of November 27, 2026?",
-      "background_info": "Wisconsin is experiencing its largest measles outbreak in more than 35 years. DHS publishes statewide case counts in a headline sentence on its \"Outbreaks, Recalls, and Investigations\" page, refreshed on Tuesdays and Fridays.\n\nReported headline statewide 2026 case counts: 159 (Sept 8), 214 (Sept 29), 267 (Oct 13), 392 (Oct 30), 431 (Nov 3), 477 (Nov 6), and 551 as of the Nov 10 update — the 551 figure was reported by Wisconsin Health News, WKOW and NBC15 on Nov 10–12 and is what the DHS outbreaks page displays as of today (Nov 13, 2026). Trend: roughly a doubling over the past month, and about 16–19 newly reported cases per day between Nov 3 and Nov 10, i.e. growth still accelerating in absolute terms rather than levelling off.\n\nAs of Nov 10 there were 551 cases across 19 counties (up from 11 counties on Nov 3), nine hospitalizations, and one death — the first measles-associated death in Wisconsin since 1990. DHS reports that 99.3% of recent cases were in unvaccinated people. The core of the outbreak is in southwest Wisconsin: Grant County (~153 cases), Lafayette County (~122) and Iowa County (97), with Vernon County also involved; smaller, separate clusters have appeared in Chippewa (44 as of Nov 5), Marathon, Rock, Sauk, Shawano, Clark and Buffalo counties, several tied to travel or large gatherings. DHS has authorized early MMR vaccination for infants aged 6–11 months in affected communities and has flagged multiple public exposure sites (e.g. a Weston emergency department). Wisconsin recorded 36 measles cases in all of 2025; nationally the CDC reported 5,182 confirmed 2026 cases as of Nov 5, 2026.\n\nNote that some news coverage lags the dashboard (a Nov 11 story still quoted 477, the Nov 6 figure), so forecasters should anchor on the DHS page itself. Thanksgiving Day (Thursday, Nov 26, 2026) is a Wisconsin state holiday; Friday, Nov 27 is a normal business day, so a Friday update is expected around the time this question resolves. DHS has occasionally posted updates a few days after the data date (Nov 6 data was posted around Nov 9), which is why resolution keys off whatever headline figure is displayed on the page at the resolution moment rather than the \"as of\" label. The central forecasting question is whether case ascertainment continues at the recent pace through the Thanksgiving week or slows as reactive vaccination, school measures and holiday contact patterns change transmission.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves to the headline statewide figure for measles in Wisconsin in 2026 printed on the Wisconsin Department of Health Services (DHS) \"Outbreaks, Recalls, and Investigations\" page (https://www.dhs.wisconsin.gov/outbreaks/index.htm) in the most recent version of that page available at 23:59 UTC on November 27, 2026. The resolution value is the number N in DHS's headline sentence (\"As of [date], the Wisconsin Department of Health Services (DHS) has confirmed N cases of measles in Wisconsin ... in 2026\"), used exactly as DHS publishes it, with no adjustment for case classification. For example, a headline reading \"has confirmed 738 cases of measles in Wisconsin\" resolves to 738, even if a sub-total elsewhere on the page reads \"370 confirmed and 6 probable\". County-level figures and the Southwest Wisconsin outbreak sub-total are never used. The \"as of\" date printed with the headline is irrelevant: whatever headline figure is displayed on the page at that moment is the answer, including if DHS has not posted a new update since November 24, 2026.",
-      "fine_print": "If the measles section has been moved off the outbreaks page, the statewide total 2026 case count shown in DHS's measles data dashboard at https://www.dhs.wisconsin.gov/immunization/measles.htm is used, exactly as displayed there and again without subtracting probable cases. If the outbreaks page cannot be reached and no archived copy of that page from November 27, 2026 exists (e.g., via the Internet Archive), or if no statewide 2026 case total is displayed on either page, the question is annulled.",
-      "url": "https://www.metaculus.com/questions/46616",
-      "supported_by_current_validator": true
-    }
-  ],
+  "supported_all_formats": 0,
+  "counts": {},
+  "items": [],
   "truncated": false,
-  "refresh_run_id": "44171495877",
-  "refresh_request_id": "req-20261117T203829Z-a11c63829",
+  "refresh_run_id": "44182310733",
+  "refresh_request_id": "req-20261117T214026Z-v2k214026",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-17T20:39:22.388519+00:00",
-  "freshness_expires_utc": "2026-11-17T20:59:22.388519+00:00",
+  "published_at_utc": "2026-11-17T21:41:16.566841+00:00",
+  "freshness_expires_utc": "2026-11-17T22:01:16.566841+00:00",
   "is_live_tournament_submission_authorized": false
 }
