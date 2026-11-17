@@ -210,7 +210,7 @@ def process_one(envelope,client,token,now=None,session=requests):
                       forecast_post_error_type=type(exc).__name__)
     for k in range(3):
         try:
-            after=get_forecast_readback(data["post_id"],data["question_id"],data["p_yes"],token,session)
+            after=get_forecast_readback(data["post_id"],data["question_id"],expected_values,token,session)
             result["forecast_readback_state"]=after["state"]
             if after["state"]=="FORECAST_CONFIRMED":
                 result["forecast_confirmed"]=True
