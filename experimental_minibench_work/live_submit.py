@@ -38,9 +38,9 @@ def utc(s):
 
 def validate_data(data,now=None):
     now=now or dt.datetime.now(dt.timezone.utc)
-    expected={"schema_version":1,"scope":"MINIBENCH_WORK_LIVE_V1","tournament":"minibench",
+    expected={"scope":"MINIBENCH_WORK_LIVE_V1","tournament":"minibench",
               "mode":"LIVE","source":"work_luna_sol"}
-    if not isinstance(data,dict) or any(data.get(k)!=v for k,v in expected.items()):
+    if not isinstance(data,dict) or data.get("schema_version") not in (1,2) or any(data.get(k)!=v for k,v in expected.items()):
         raise ValueError("INVALID_LIVE_CONTRACT")
     pid,qid=data.get("post_id"),data.get("question_id")
     if type(pid) is not int or type(qid) is not int or min(pid,qid)<=0:
@@ -55,6 +55,21 @@ def validate_data(data,now=None):
     for field in ("sol_model","sol_effort","research_model"):
         if not isinstance(data.get(field),str) or not data[field].strip():
             raise ValueError("MODEL_PROVENANCE_MISSING")
+    if data["schema_version"]==2:
+        # V2 metadata is descriptive, never a hard routing prerequisite.
+        # A failed/unverifiable subagent must not stop an otherwise valid forecast.
+        if data.get("forecast_author") not in ("SOL_SUBAGENT","CONTROLLER_FALLBACK"):
+            raise ValueError("INVALID_FORECAST_AUTHOR")
+        if data.get("subagent_call_status") not in (
+            "COMPLETED","FAILED","TIMEOUT","UNAVAILABLE","UNKNOWN"):
+            raise ValueError("INVALID_SUBAGENT_STATUS")
+        if data.get("model_attestation") not in (
+            "MODEL_ID_NOT_ATTESTED","RUNTIME_RECEIPT_CONFIRMED"):
+            raise ValueError("INVALID_ATTESTATION_STATUS")
+        if data["forecast_author"]=="CONTROLLER_FALLBACK" and data["subagent_call_status"]=="COMPLETED":
+            raise ValueError("FALLBACK_INCONSISTENT_WITH_COMPLETED_SUBAGENT")
+        if data["forecast_author"]=="SOL_SUBAGENT" and data["subagent_call_status"]!="COMPLETED":
+            raise ValueError("SOL_AUTHOR_WITHOUT_COMPLETED_OUTPUT")
     cutoff=utc(data.get("evidence_cutoff_utc"))
     created=utc(data.get("forecast_created_at_utc"))
     if cutoff>created or created>now+dt.timedelta(minutes=2) or now-created>MAX_FORECAST_AGE:
@@ -174,7 +189,10 @@ def process_one(envelope,client,token,now=None,session=requests):
                       sol_effort=data["sol_effort"],
                       evidence_cutoff_utc=data["evidence_cutoff_utc"],
                       forecast_created_at_utc=data["forecast_created_at_utc"],
-                      reasoning_digest=hashlib.sha256(data["reasoning"].encode()).hexdigest())
+                      reasoning_digest=hashlib.sha256(data["reasoning"].encode()).hexdigest(),
+                      forecast_author=data.get("forecast_author","SOL_SUBAGENT_LEGACY"),
+                      subagent_call_status=data.get("subagent_call_status","LEGACY_UNREPORTED"),
+                      model_attestation=data.get("model_attestation","MODEL_ID_NOT_ATTESTED"))
     except Exception as exc:
         result.update(state="REJECTED_INPUT",error_type=type(exc).__name__)
         return result
@@ -241,7 +259,11 @@ def process_one(envelope,client,token,now=None,session=requests):
         result["state"]="FORECAST_UNCONFIRMED_NEVER_AUTO_RETRY"
         return result
     # Mandatory private rationale. One POST only, readback by comment id.
-    private_text=(f"Autonomous forecast reasoning (Sol final judgment).\n\n"
+    final_author = ("controller fallback (Sol unavailable or failed)"
+                    if data.get("forecast_author")=="CONTROLLER_FALLBACK"
+                    else "Sol subagent" if data.get("forecast_author")=="SOL_SUBAGENT"
+                    else "legacy workflow final judgment")
+    private_text=(f"Autonomous forecast reasoning ({final_author}).\n\n"
                   f"{data['reasoning']}\n\n"
                   f"Evidence sources:\n"+ "\n".join(data["sources"][:12]))
     comment=post_private_comment(data["post_id"],private_text,token,session)
@@ -270,7 +292,7 @@ def main():
         receipt["state"]="BLOCKED_NOT_APPROVED"
     elif not files:
         receipt["state"]="NO_NEW_ENCRYPTED_FORECAST"
-    elif len(files)>3:
+    elif len(files)>24:
         receipt["state"]="BLOCKED_TOO_MANY_FILES"
     else:
         token=os.getenv("METACULUS_TOKEN","")
@@ -280,6 +302,7 @@ def main():
             try:
                 from forecasting_tools import MetaculusClient
                 client=MetaculusClient()
+                processed_questions=set()
                 for path in files:
                     if path.stat().st_size>65000:
                         receipt["entries"].append({"file":path.name,"state":"BLOCKED_FILE_SIZE"})
@@ -288,6 +311,13 @@ def main():
                         envelope=json.loads(path.read_text(encoding="utf-8"))
                         item=process_one(envelope,client,token)
                         item["sealed_file"]=path.name
+                        key=(item.get("post_id"),item.get("question_id"))
+                        if all(type(x) is int for x in key):
+                            if key in processed_questions:
+                                # This is recorded as a possible same-batch duplicate:
+                                # future V2 producers should send one sealed file per commit.
+                                item["batch_duplicate_detected"]=True
+                            processed_questions.add(key)
                         receipt["entries"].append(item)
                     except Exception as exc:
                         receipt["entries"].append({"file":path.name,"state":"PROCESS_ERROR_NO_AUTO_RETRY",
