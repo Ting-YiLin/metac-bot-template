@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "scheme": "X25519-HKDF-SHA256-AES256GCM",
+  "public_key_base64": "mkGlwbl3Xb/775WBxSrSHht0p7S7L4mYjLEvSuJRcmo=",
+  "public_key_id": "9b2fab3cad4e5f040905",
+  "scope": "MINIBENCH_WORK_FORECAST_ENCRYPTION_ONLY",
+  "note": "Public encryption key; cannot submit a forecast"
+}
