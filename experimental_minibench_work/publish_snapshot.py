@@ -43,8 +43,12 @@ def validate_snapshot(doc, now=None):
     for row in items:
         if type(row.get("question_id")) is not int or type(row.get("post_id")) is not int:
             raise ValueError("BAD_IDS")
-        if row.get("question_type") not in ("BinaryQuestion","NumericQuestion","DateQuestion","DiscreteQuestion","MultipleChoiceQuestion"):
-            raise ValueError("UNKNOWN_TYPE")
+        qtype=row.get("question_type")
+        if not isinstance(qtype,str) or not qtype.strip():
+            raise ValueError("INVALID_TYPE_LABEL")
+        known={"BinaryQuestion","NumericQuestion","DateQuestion","DiscreteQuestion","MultipleChoiceQuestion"}
+        if qtype not in known and row.get("supported_by_current_validator") is True:
+            raise ValueError("UNKNOWN_TYPE_MISLABELED_SUPPORTED")
     return checked
 
 
