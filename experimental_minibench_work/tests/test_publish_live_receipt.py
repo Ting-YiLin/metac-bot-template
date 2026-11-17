@@ -16,7 +16,10 @@ def sample():
                          "reasoning":"VERY_PRIVATE_TEXT",
                          "p_yes":0.62,"percentiles":[{"p":0.1,"value":33}],
                          "continuous_cdf":[0.1,0.5,0.8],
-                         "comment_confirmed":True,"forecast_confirmed":True}]}
+                         "comment_confirmed":True,"forecast_confirmed":True,
+                         "forecast_author":"CONTROLLER_FALLBACK",
+                         "subagent_call_status":"FAILED",
+                         "model_attestation":"MODEL_ID_NOT_ATTESTED"}]}
 class Response:
     status_code=201
 class Session:
@@ -33,6 +36,9 @@ class Tests(unittest.TestCase):
         self.assertNotIn("percentiles",txt)
         self.assertNotIn("continuous_cdf",txt)
         self.assertTrue(x["entries"][0]["forecast_confirmed"])
+        self.assertEqual(x["entries"][0]["forecast_author"],"CONTROLLER_FALLBACK")
+        self.assertEqual(x["entries"][0]["subagent_call_status"],"FAILED")
+        self.assertEqual(x["entries"][0]["model_attestation"],"MODEL_ID_NOT_ATTESTED")
     def test_wrong_run_blocks(self):
         with self.assertRaises(ValueError):
             redacted_snapshot(sample(),"888888888")
