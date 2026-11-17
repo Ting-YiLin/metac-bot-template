@@ -19,6 +19,7 @@ import requests
 
 from sealed_queue import unseal
 from minibench_readonly_probe import closing_time,state_is_open
+from all_types_adapter import KINDS, forecast_contract,make_api_payload
 
 QUEUE_DIR=Path("experimental_minibench_work/live_pending")
 RECEIPT=Path("minibench_live_submit_receipt.json")
@@ -38,15 +39,13 @@ def utc(s):
 def validate_data(data,now=None):
     now=now or dt.datetime.now(dt.timezone.utc)
     expected={"schema_version":1,"scope":"MINIBENCH_WORK_LIVE_V1","tournament":"minibench",
-              "mode":"LIVE","source":"work_luna_sol","question_type":"BinaryQuestion"}
+              "mode":"LIVE","source":"work_luna_sol"}
     if not isinstance(data,dict) or any(data.get(k)!=v for k,v in expected.items()):
         raise ValueError("INVALID_LIVE_CONTRACT")
     pid,qid=data.get("post_id"),data.get("question_id")
     if type(pid) is not int or type(qid) is not int or min(pid,qid)<=0:
         raise ValueError("INVALID_IDS")
-    p=data.get("p_yes")
-    if type(p) not in (float,int) or not math.isfinite(p) or not (0.001<=p<=0.999):
-        raise ValueError("INVALID_BINARY_PROBABILITY")
+    forecast_contract(data)
     rationale=data.get("reasoning")
     if not isinstance(rationale,str) or not (50<=len(rationale)<=7000):
         raise ValueError("INVALID_PRIVATE_RATIONALE")
@@ -70,7 +69,8 @@ def select_from_current(client,data,now=None):
              and getattr(q,"id_of_question",None)==data["question_id"]]
     if len(matches)!=1:return None,"NOT_IN_CURRENT_OPEN_MINIBENCH"
     q=matches[0]
-    if type(q).__name__!="BinaryQuestion":return None,"NOT_BINARY"
+    if type(q).__name__!=data["question_type"] or type(q).__name__ not in KINDS:
+        return None,"QUESTION_TYPE_MISMATCH_OR_UNSUPPORTED"
     if not state_is_open(q):return None,"NOT_OPEN"
     if getattr(q,"already_forecasted",None) is not False:return None,"ALREADY_FORECASTED_OR_UNKNOWN"
     close=closing_time(q)
@@ -78,7 +78,8 @@ def select_from_current(client,data,now=None):
     if utc(close)<now+dt.timedelta(minutes=2):return None,"TOO_CLOSE_TO_DEADLINE"
     return q,"ELIGIBLE"
 
-def get_forecast_readback(post_id,question_id,p_yes,token,session=requests):
+def get_forecast_readback(post_id,question_id,expected_values,token,session=requests):
+    """Strict account readback; any unknown/mismatched nonempty vector blocks a POST."""
     r=session.get(f"{API}/posts/{post_id}/",
         headers={"Authorization":"Token "+token},timeout=20)
     if r.status_code!=200:return {"state":"READBACK_HTTP_ERROR","http_status":r.status_code}
@@ -88,15 +89,22 @@ def get_forecast_readback(post_id,question_id,p_yes,token,session=requests):
         return {"state":"READBACK_QUESTION_MISMATCH"}
     latest=(obj.get("my_forecasts") or {}).get("latest") or {}
     values=latest.get("forecast_values")
-    if not isinstance(values,list) or len(values)!=2:
+    if values is None and not latest:
         return {"state":"READBACK_MISSING_OR_UNKNOWN"}
+    if values is None:
+        return {"state":"READBACK_MISSING_OR_UNKNOWN"}
+    if not isinstance(values,list) or len(values)!=len(expected_values):
+        return {"state":"READBACK_WRONG_LENGTH"}
     try:
-        observed=float(values[1])
+        observed=[float(x) for x in values]
+        if not all(math.isfinite(x) for x in observed):
+            raise ValueError("nonfinite")
     except (TypeError,ValueError):
         return {"state":"READBACK_INVALID_VALUE"}
-    if not math.isfinite(observed):return {"state":"READBACK_INVALID_VALUE"}
-    return {"state":"FORECAST_CONFIRMED" if abs(observed-p_yes)<=0.00001 else "READBACK_DIFFERENT_P",
-            "value_match":abs(observed-p_yes)<=0.00001}
+    tolerance=0.0001 if len(expected_values)>10 else 0.00001
+    matched=all(abs(x-y)<=tolerance for x,y in zip(observed,expected_values))
+    return {"state":"FORECAST_CONFIRMED" if matched else "READBACK_DIFFERENT_VALUE",
+            "value_match":matched}
 
 def post_private_comment(post_id,text,token,session=requests):
     headers={"Authorization":"Token "+token}
@@ -162,9 +170,16 @@ def process_one(envelope,client,token,now=None,session=requests):
         result["state"]="BLOCKED_"+eligible
         return result
     result["deadline_utc"]=closing_time(q)
+    try:
+        api_payload, expected_values = make_api_payload(data,q)
+        result["forecast_type"]=data["question_type"]
+        result["readback_expected_length"]=len(expected_values)
+    except Exception as exc:
+        result.update(state="BLOCKED_FORECAST_FORMAT",error_type=type(exc).__name__)
+        return result
     # A separate exact account readback prevents a second post on ambiguous SDK state.
     try:
-        before=get_forecast_readback(data["post_id"],data["question_id"],data["p_yes"],token,session)
+        before=get_forecast_readback(data["post_id"],data["question_id"],expected_values,token,session)
         result["preflight_exact_readback_state"]=before["state"]
         if before["state"]!="READBACK_MISSING_OR_UNKNOWN":
             result["state"]="BLOCKED_PREFLIGHT_"+before["state"]
@@ -175,9 +190,20 @@ def process_one(envelope,client,token,now=None,session=requests):
     # Exactly one forecast POST. Any failure transitions to GET-only verification.
     result["forecast_post_attempted"]=True
     try:
-        client.post_binary_question_prediction(
-            question_id=data["question_id"],
-            prediction_in_decimal=float(data["p_yes"]))
+        if data["question_type"]=="BinaryQuestion":
+            client.post_binary_question_prediction(
+                question_id=data["question_id"],
+                prediction_in_decimal=float(data["p_yes"]))
+        else:
+            response=session.post(
+                f"{API}/questions/forecast/",
+                headers={"Authorization":"Token "+token},
+                json=[{"question":data["question_id"], **api_payload}],
+                timeout=30,
+            )
+            result["forecast_http_status"]=response.status_code
+            if not (200<=response.status_code<300):
+                raise RuntimeError("FORECAST_HTTP_STATUS_"+str(response.status_code))
         result["forecast_post_returned"]=True
     except Exception as exc:
         result.update(forecast_post_returned=False,
@@ -189,7 +215,7 @@ def process_one(envelope,client,token,now=None,session=requests):
             if after["state"]=="FORECAST_CONFIRMED":
                 result["forecast_confirmed"]=True
                 break
-            if after["state"]=="READBACK_DIFFERENT_P":
+            if after["state"] in ("READBACK_DIFFERENT_VALUE","READBACK_WRONG_LENGTH"):
                 break
         except Exception as exc:
             result["readback_error_type"]=type(exc).__name__
