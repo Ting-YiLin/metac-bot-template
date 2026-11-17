@@ -41,8 +41,13 @@ class Tests(unittest.TestCase):
     def test_truncation_fails(self):
         f=feed();f["truncated"]=True
         with self.assertRaises(ValueError):validate_snapshot(f,NOW)
-    def test_unknown_type_fails(self):
+    def test_unknown_type_is_retained_but_not_supported(self):
+        f=feed();f["items"][0]["question_type"]="ConditionalQuestion"
+        f["items"][0]["supported_by_current_validator"]=False
+        self.assertIsNotNone(validate_snapshot(f,NOW))
+    def test_unknown_type_mislabeled_supported_fails(self):
         f=feed();f["items"][0]["question_type"]="Unrecognized"
+        f["items"][0]["supported_by_current_validator"]=True
         with self.assertRaises(ValueError):validate_snapshot(f,NOW)
     def test_publish_isolation(self):
         s=Session();f=feed();original=deepcopy(f)
