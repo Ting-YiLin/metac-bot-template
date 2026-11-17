@@ -1,0 +1,24 @@
+{
+  "_note": "SYNTHETIC_ONLY_DO_NOT_SUBMIT",
+  "target": {
+    "tournament_id": "minibench",
+    "round_verified": true,
+    "question_id": 1024,
+    "post_id": 2048,
+    "question_type": "BinaryQuestion",
+    "status": "OPEN",
+    "already_forecasted": false,
+    "closes_at": "2099-11-17T11:00:00Z"
+  },
+  "forecast": {
+    "question_id": 1024,
+    "p_yes": 0.43,
+    "reasoning": "Synthetic example only: compare a base rate with a hypothetical event mechanism.",
+    "sources": []
+  },
+  "control": {
+    "mode": "dry_run",
+    "submit_authorized": false,
+    "post_state": "NONE"
+  }
+}
