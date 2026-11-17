@@ -16,6 +16,7 @@ BRANCH = "tingyi001-test-state"
 PATH = "state/minibench_work_candidate_feed.json"
 SRC = Path("minibench_readonly_candidate_feed.json")
 OUT = Path("minibench_feed_publish_receipt.json")
+from refresh_protocol import request_id_from_push
 
 
 def validate_snapshot(doc, now=None):
@@ -47,7 +48,7 @@ def validate_snapshot(doc, now=None):
     return checked
 
 
-def publish(doc, token, run_id, session=None, now=None):
+def publish(doc, token, run_id, session=None, now=None, request_id=None):
     if session is None:
         import requests
         session = requests
@@ -57,6 +58,8 @@ def publish(doc, token, run_id, session=None, now=None):
     validate_snapshot(doc, now)
     snapshot = dict(doc)
     snapshot["refresh_run_id"] = str(run_id or "")
+    snapshot["refresh_request_id"] = request_id
+    snapshot["refresh_trigger"] = "WORK_REQUEST" if request_id else "CODE_OR_MANUAL"
     snapshot["published_at_utc"] = now.isoformat()
     snapshot["freshness_expires_utc"] = (now + dt.timedelta(minutes=20)).isoformat()
     snapshot["is_live_tournament_submission_authorized"] = False
@@ -86,9 +89,10 @@ def main():
               "run_id":os.getenv("GITHUB_RUN_ID")}
     try:
         doc = json.loads(SRC.read_text(encoding="utf-8"))
-        out = publish(doc,os.getenv("GITHUB_TOKEN",""),os.getenv("GITHUB_RUN_ID"))
+        request_id = request_id_from_push()
+        out = publish(doc,os.getenv("GITHUB_TOKEN",""),os.getenv("GITHUB_RUN_ID"),request_id=request_id)
         status.update(status="PUBLISHED_STATE_FEED",eligible=len(out["items"]),
-                      feed_path=PATH,feed_branch=BRANCH,
+                      feed_path=PATH,feed_branch=BRANCH,refresh_request_id=out["refresh_request_id"],
                       checked_at_utc=out["checked_at_utc"])
     except Exception as exc:
         # No exception text; HTTP failures may carry authentication details.
