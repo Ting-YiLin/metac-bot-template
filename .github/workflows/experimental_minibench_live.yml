@@ -1,0 +1,56 @@
+name: MiniBench Luna Sol SCORING Queue (Independent v1)
+
+on:
+  push:
+    branches: [experiment/work-luna-sol-minibench-20261117]
+    paths:
+      - '.github/workflows/experimental_minibench_live.yml'
+      - 'experimental_minibench_work/live_submit.py'
+      - 'experimental_minibench_work/sealed_queue.py'
+      - 'experimental_minibench_work/tests/test_live_submit.py'
+      - 'experimental_minibench_work/tests/test_sealed_queue.py'
+      - 'experimental_minibench_work/live_pending/sealed-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: minibench-luna-sol-scored-submission
+  cancel-in-progress: false
+
+jobs:
+  minibench_scoring:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: '0.13.1'
+      - name: Install locked dependencies and explicit encryption module
+        run: |
+          uv sync --locked --no-dev
+          uv pip install --python .venv/bin/python 'cryptography>=45,<47'
+      - name: Offline encryption and live-post safety tests
+        run: |
+          uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_sealed_queue.py' -v
+          uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_live_submit.py' -v
+      - name: Send authorized MiniBench forecast, private comment and readback
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          BTF3_MINIBENCH_LIVE_APPROVED: '1'
+        run: uv run --no-sync python experimental_minibench_work/live_submit.py
+      - name: Store redacted proof of execution (never raw probability or rationale)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minibench-live-redacted-${{ github.run_id }}
+          path: minibench_live_submit_receipt.json
+          if-no-files-found: warn
+          retention-days: 30
