@@ -1,0 +1,25 @@
+name: Work MiniBench Experimental Dry-Run Validation
+
+on:
+  push:
+    branches:
+      - experiment/work-luna-sol-minibench-20261117
+    paths:
+      - 'experimental_minibench_work/**'
+      - '.github/workflows/experimental_minibench_work_ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline_validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check dry-run gates (no credentials, no submission)
+        run: python -m unittest discover -s experimental_minibench_work/tests -v
