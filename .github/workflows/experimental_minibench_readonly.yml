@@ -10,6 +10,9 @@ on:
       - 'experimental_minibench_work/publish_snapshot.py'
       - 'experimental_minibench_work/tests/test_minibench_readonly_probe.py'
       - 'experimental_minibench_work/tests/test_publish_snapshot.py'
+      - 'experimental_minibench_work/refresh_protocol.py'
+      - 'experimental_minibench_work/tests/test_refresh_protocol.py'
+      - 'experimental_minibench_work/refresh_requests/req-*.json'
   workflow_dispatch:
 
 permissions:
@@ -25,6 +28,8 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -35,6 +40,10 @@ jobs:
         run: |
           python -m unittest discover -s experimental_minibench_work/tests -p 'test_minibench_readonly_probe.py' -v
           python -m unittest discover -s experimental_minibench_work/tests -p 'test_publish_snapshot.py' -v
+          python -m unittest discover -s experimental_minibench_work/tests -p 'test_refresh_protocol.py' -v
+      - name: Validate optional Work refresh request before touching credentials
+        run: |
+          python -c "import sys; sys.path.insert(0, 'experimental_minibench_work'); from refresh_protocol import request_id_from_push; print('REFRESH_REQUEST_VALID' if request_id_from_push() else 'NO_REFRESH_REQUEST')"
       - name: Install locked Metaculus dependency
         run: uv sync --locked --no-dev
       - name: Authenticated MiniBench read-only scan (no posting)
