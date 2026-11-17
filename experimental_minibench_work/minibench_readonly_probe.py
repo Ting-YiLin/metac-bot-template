@@ -122,7 +122,8 @@ def collect(client, now=None):
         "bot_account_tournament_admission_verified": False,
         "api_open_rows": counts["api_rows"],
         "eligible_after_status_and_deadline_check": len(items),
-        "supported_binary": sum(x["supported_by_current_validator"] for x in items),
+        "supported_binary": sum(x["question_type"]=="BinaryQuestion" and x["supported_by_current_validator"] for x in items),
+        "supported_all_formats": sum(x["supported_by_current_validator"] for x in items),
         "counts": dict(counts),
         "items": items[:MAX_ITEMS],
         "truncated": len(items) > MAX_ITEMS,
@@ -152,6 +153,7 @@ def run(client_factory=None, token=None, now=None):
             receipt["api_open_rows"] = feed["api_open_rows"]
             receipt["eligible_unforecasted"] = feed["eligible_after_status_and_deadline_check"]
             receipt["eligible_binary"] = feed["supported_binary"]
+            receipt["eligible_supported_all_types"] = feed["supported_all_formats"]
             receipt["nonbinary_unsupported"] = feed["counts"].get("unsupported_type", 0)
             receipt["account_admission_verified"] = False
         except Exception as exc:
