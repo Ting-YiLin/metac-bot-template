@@ -9,6 +9,7 @@ import datetime as dt
 import json
 import os
 from collections import Counter
+from all_types_adapter import forecast_format_skeleton, KINDS
 from pathlib import Path
 
 TOURNAMENT = "minibench"
@@ -89,18 +90,26 @@ def collect(client, now=None):
             continue
         qtype = type(q).__name__
         counts["eligible_" + qtype] += 1
-        if qtype != "BinaryQuestion":
+        if qtype not in KINDS:
             counts["unsupported_type"] += 1
         url = getattr(q, "page_url", None)
+        try:
+            format_context = forecast_format_skeleton(q)
+        except Exception:
+            # Retain question in coverage statistics; mark metadata incomplete,
+            # never invent bounds or options.
+            format_context = {"question_type": qtype, "format_error": "SDK_METADATA_MISSING"}
+            counts["format_context_missing"] += 1
         item = {
             "post_id": pid, "question_id": qid, "question_type": qtype,
+            "format_context": format_context,
             "close_time_utc": close_iso,
             "question_text": text_field(q, "question_text", 12000),
             "background_info": text_field(q, "background_info"),
             "resolution_criteria": text_field(q, "resolution_criteria"),
             "fine_print": text_field(q, "fine_print"),
             "url": url if isinstance(url, str) and url.startswith("https://www.metaculus.com/") else None,
-            "supported_by_current_validator": qtype == "BinaryQuestion",
+            "supported_by_current_validator": qtype in KINDS and "format_error" not in format_context,
         }
         items.append(item)
     items.sort(key=lambda item: (item["close_time_utc"], item["post_id"], item["question_id"]))
