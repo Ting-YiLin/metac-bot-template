@@ -33,11 +33,27 @@ V2 密封預測輸入使用既有公共欄位，`schema_version=2`。保留 `sco
 ## 2. 全題型抓題與固定選題順序
 
 1. 先讀 `tingyi001-test-state:state/minibench_work_candidate_feed.json`，檢查新鮮度、賽事、`refresh_request_id`、OPEN（仍開放）、截止時間、官方帳戶尚未投。
-2. 如快照過期，依 `WORK_START.md` 的 `refresh_requests/req-*.json` 範例建立**新的只讀刷新請求**，讀取匹配的刷新收據；不得使用過期快照。刷新失敗只記錄並嘗試下次排程，不應造假題目或資格。
+2. 如快照過期，依 `WORK_START.md` 的 `refresh_requests/req-*.json` 範例建立**唯一一份新的只讀刷新請求**並保存 `request_id`（請求識別碼）與 GitHub `commit_sha`（完整40碼版本雜湊）。**此時不得結束本次工作或直接宣稱 BLOCKED_REFRESH。** 立即進入下方「2A 同輪刷新橋接」，確認匹配的新題庫後，繼續研究及提交所有合格題目；不得使用過期快照或捏造資格。
 3. 不以曾在聊天中出現過的題目為由排除。僅依官方賽事、未投、截止與可靠格式資料篩選。
 4. 支援 `BinaryQuestion`（二元）、`MultipleChoiceQuestion`（多選）、`NumericQuestion`（數值）、`DateQuestion`（日期）、`DiscreteQuestion`（離散數值），**不得只做二元**。特殊 `ConditionalQuestion`（條件複合題）若未取得有效子題格式，僅記該題 `UNSUPPORTED_COMPLEX_TYPE`，其他題繼續。
 5. 按**最早截止時間優先**、同時點按 `question_id` 升序；全部候選都要依序處理，**不限制每輪兩題**。若有3～4題或更多，能完成幾題就完成幾題；如工作環境達到實際資源／執行限制，記錄剩餘題目供下輪恢復，不把它們報為完成。
 6. 每題研究前重新檢查是否已投及是否截止，防止前一題耗時造成後續資料過期。
+
+## 2A. 同輪刷新橋接（V2.1 必經；專門修正過早 BLOCKED_REFRESH）
+
+**已觀察的失敗機制：** 2026-11-18 澳洲時間05:42，GitHub 只讀刷新確認4題合格、可生成格式，但後續排程沒有找到對應正式提交。另一輪 Work 建立 `refresh_requests/req-*.json` 後，在 GitHub 工作流程還未開始或還未發布題庫時直接回報 `BLOCKED_REFRESH` 結束；隨後工作流程正常發布，卻沒有觸發研究與提交。這是**刷新→研究交接失敗**，不是模型提交功能失效。
+
+1. **先檢查當前有效快照**：若已存在新鮮、範圍正確、有真實刷新收據且未過期的快照，直接用它研究；無須因為本輪沒有新的請求識別碼而再刷新。新鮮的 `items=[]` 可以是 `NO_ACTION`，舊快照的0題不可以。
+2. **只在過期時發出一次刷新**：記下 `request_id`（刷新請求）、`commit_sha`（建立請求檔案的完整 Git 版本雜湊）。不要在等待期間連續產生新的刷新請求。
+3. **同輪等待並核實**：優先在可執行 Python（程式語言）的 Work 運算環境讀取本檔所在的實驗分支，執行：
+   `python experimental_minibench_work/refresh_bridge.py --request-id <當輪真實請求ID> --commit-sha <當輪完整40碼SHA> --wait-seconds 180 --interval-seconds 12`
+   如 Work 不支援本機命令列，則以 GitHub 連接工具進行**相同的重複唯讀檢查**，先讀 `actions/runs`，找到符合 `head_sha`、`head_branch` 且 `path=.github/workflows/experimental_minibench_readonly.yml` 的該次執行，等到其 conclusion=success，再讀狀態分支題庫。應持續檢查至結果發布，不可在第一次查詢不到時就結束。
+4. **四重配對**：新快照必須同時符合 `refresh_run_id`（剛完成的 GitHub 執行 ID）、`refresh_request_id`（本輪請求 ID）、`refresh_trigger=WORK_REQUEST`、`freshness_expires_utc`（未過期）以及 `tournament_requested=minibench`（正式賽）。任何一項不符均不能用該快照提交。
+5. **READY（可研究）就接續下一步**：`eligible_after_status_and_deadline_check>0`（有合格題）時，**當次 Work 不得返回刷新收據當作完成，而須立即對全部候選進行 A/G1/G2/B/D/C，逐題加密→提交→官方回讀。** 若新快照確實有0題，才准回報 `NO_ACTION`（正常空批）。
+6. **有上限的等待與明確故障**：預設等待最多180秒，12秒間隔；只有匹配刷新工作流程失敗、發生權限／API（介面）錯誤，或等滿180秒仍無匹配新快照，才准標 `BLOCKED_REFRESH_FAILED`／`BLOCKED_REFRESH_TIMEOUT` 並記錄 `request_id`、`commit_sha`、檢查次數、最近工作流程及未完成題目。此為真正的刷新阻擋，**不是模型失敗**；不停止既有排程。Work 實際無法持續至限額時，仍要如實標記 `BLOCKED_EXECUTION_LIMIT`，絕不可謊稱已等待。
+7. **下一輪恢復**：先核對先前 `request_id`／提交 SHA 是否已有完成的刷新結果；若新快照仍有效則直接研究，不要立刻建立第二份刷新。若已過期再建立一次新的請求。不得將上一輪 `BLOCKED_REFRESH` 視為永久 NO_ACTION 或永久排除相關題目。
+
+**不可變的保護：** 刷新橋接只做唯讀查核，不提交預測、不輸出秘密；只有完成各題研究、加密入隊和正式回讀才算成功。維持 Sol 子代理失敗→主控回退、模型未核證不中止、每題最多一次正式 POST（提交）、模糊 POST 絕不重試等 V2 安全原則。
 
 ## 3. 每題研究及官方格式契約
 
