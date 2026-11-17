@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope": "PUBLIC_MINIBENCH_SCORING_STATUS_NO_FORECASTS",
+  "run_id": "44066723602",
+  "workflow": "MINIBENCH_LIVE_SCORING",
+  "processed_at_utc": "2026-11-17T10:38:58.912481+00:00",
+  "state": "BATCH_PROCESSED",
+  "files_seen": 1,
+  "entries": [
+    {
+      "state": "FORECAST_AND_PRIVATE_COMMENT_CONFIRMED",
+      "question_id": 46869,
+      "post_id": 46609,
+      "forecast_type": "NumericQuestion",
+      "forecast_post_attempted": true,
+      "forecast_confirmed": true,
+      "comment_confirmed": true,
+      "comment_post_state": "PRIVATE_COMMENT_CONFIRMED",
+      "forecast_post_returned": true,
+      "forecast_http_status": 201,
+      "preflight_exact_readback_state": "READBACK_MISSING_OR_UNKNOWN",
+      "forecast_readback_state": "FORECAST_CONFIRMED",
+      "readback_expected_length": 201,
+      "deadline_utc": "2026-11-17T10:43:45+00:00",
+      "sealed_file": "sealed-6af193c20e71.json"
+    }
+  ]
+}
