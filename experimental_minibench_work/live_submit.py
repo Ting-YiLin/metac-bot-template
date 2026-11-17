@@ -309,14 +309,19 @@ def main():
                         continue
                     try:
                         envelope=json.loads(path.read_text(encoding="utf-8"))
+                        # Reject a second attempt in the SAME batch before any POST,
+                        # even if the Metaculus account GET has not propagated yet.
+                        candidate=unseal(envelope,token)
+                        key=(candidate.get("post_id"),candidate.get("question_id"))
+                        if all(type(x) is int and x>0 for x in key) and key in processed_questions:
+                            receipt["entries"].append({
+                                "state":"BLOCKED_DUPLICATE_IN_SAME_BATCH",
+                                "post_id":key[0],"question_id":key[1],
+                                "sealed_file":path.name,"forecast_post_attempted":False})
+                            continue
                         item=process_one(envelope,client,token)
                         item["sealed_file"]=path.name
-                        key=(item.get("post_id"),item.get("question_id"))
-                        if all(type(x) is int for x in key):
-                            if key in processed_questions:
-                                # This is recorded as a possible same-batch duplicate:
-                                # future V2 producers should send one sealed file per commit.
-                                item["batch_duplicate_detected"]=True
+                        if item.get("forecast_post_attempted") and all(type(x) is int for x in key):
                             processed_questions.add(key)
                         receipt["entries"].append(item)
                     except Exception as exc:
