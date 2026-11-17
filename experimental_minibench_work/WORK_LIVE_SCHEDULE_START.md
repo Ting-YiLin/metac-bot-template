@@ -1,93 +1,81 @@
-# MiniBench 全自主正式計分啟動規格｜2026-11-17
+# MiniBench 全題型連續自動提交 V2｜2026-11-17
 
-**使用者已明確給予 GO（正式上線授權），不再需要逐題人工核准。**
+**正式上線已獲使用者 GO（正式授權）**。本版本由使用者核准：全部符合資格的題目依序完成，**不得因子代理呼叫失敗、模型身分未核證而停止**；不需要逐題人工批准。原加密機制維持，私人預測不得發布到公開 GitHub（程式碼平台）。
 
-執行分支：`experiment/work-luna-sol-minibench-20261117`。狀態分支：`tingyi001-test-state`。正式賽：`minibench`。本方案保留 `main`（主分支）、舊排程、`run_live_free.yaml` 原停用鎖不動。
+- 程式庫：`Ting-YiLin/metac-bot-template`。
+- 執行分支：`experiment/work-luna-sol-minibench-20261117`。
+- 狀態分支：`tingyi001-test-state`。
+- 賽事：`minibench`（正式計分）。
+- 不更動 `main`（主分支）、`run_live_free.yaml`（舊通道停用鎖）或其他無關排程；不得新建第二個每小時預測排程。
 
-## 一、排程與模型
+## 1. 模型路由：優先執行，不以身分不確定作為停工理由
 
-每小時由 ChatGPT Work（工作模式）主控執行一次，使用由使用者配置的 Luna High（高思考）做 A 摘要、G1 缺口、G2 補搜、B 先驗與 D 反證。每一題的 C（最終預測）**實際建立** Sol 6.1 High（高思考）子代理，讓其獨立質疑 Luna 並輸出 p_yes（事件成立機率）及理由。
+1. **主控**：使用者在 ChatGPT Work（工作模式）介面選 Luna High（高思考）；完成 A（整理）、G1（資料缺口）、G2（補搜）、B（先驗）、D（反證）。
+2. **最終 C 層**：每題優先嘗試實際建立 Sol 6.1 High（高思考）子代理，要求輸出最終預測、結算條款解讀、方向及反例。若取得有效輸出，即使用該結果，`forecast_author="SOL_SUBAGENT"`、`subagent_call_status="COMPLETED"`。
+3. **呼叫失敗的回退**：如子代理無法建立、超時、錯誤，**不得停止整題或整輪**。由目前實際可用的主控模型獨立完成 C 層（包含完整機率／分位數與理由），記 `forecast_author="CONTROLLER_FALLBACK"`，及實際 `subagent_call_status="FAILED"/"TIMEOUT"/"UNAVAILABLE"/"UNKNOWN"`。不能在 fallback 時把主控輸出冒稱為 Sol。
+4. **身分核證不足**：如 Sol 確有輸出、但缺獨立模型執行憑證，仍採用 Sol 輸出；如主控介面選定 Luna High 但環境無憑證，照常繼續。記 `model_attestation="MODEL_ID_NOT_ATTESTED"`；**不能單獨因此輸出 `BLOCKED_MODEL_ROUTING`**。若真正有獨立執行憑證才可標 `RUNTIME_RECEIPT_CONFIRMED`，並保留憑證。
+5. **執行能力不足**：若某一執行端未提供 Work 專屬功能，但 GitHub 操作、可用模型及研究仍可完成，可以按上述回退流程繼續；僅當根本無法取得題目、研究、加密或提交能力時記錄具體 `BLOCKED_CAPABILITY`，不要虛報已提交。
+6. **不改模型估計以迎合預覽**；不能人工選擇或替換正在開放題的機率。僅允許系統自動研究與格式校正。
 
-**不能用模型名稱欄位冒充真實模型呼叫。** 當前排程若不是 Work、不能建立指定模型的子代理，則本輪 `BLOCKED_MODEL_ROUTING`，不可改用未經授權的其他模型直接提交。模型、思考模式由 Work 任務介面設定，不在程式中自動切換。
-
-## 二、題庫刷新及避免人工介入
-
-1. 讀取 `tingyi001-test-state:state/minibench_work_candidate_feed.json`。驗證正式賽識別碼、刷新時間、效期、模型可用性及 OPEN／未投狀態。
-2. 快照過期或無來源收據時：根據 `experimental_minibench_work/WORK_START.md` 的格式，於實驗分支建立全新 `refresh_requests/req-*.json`，在相同執行回合讀回配對的 `refresh_request_id`。若未匹配，`BLOCKED_REFRESH`，不可使用舊快照。
-3. 依截止時間與預先固定的選題規則選取所有支援題型：`BinaryQuestion`（二元）、`MultipleChoiceQuestion`（多選）、`NumericQuestion`（連續數值）、`DateQuestion`（日期）、`DiscreteQuestion`（離散數值）。五型一律同等進入研究階段，不能因非二元而放棄；只有格式上下文不足或官方未支援的條件式複合題，才記錄 `BLOCKED_FORMAT_METADATA`／`UNSUPPORTED_COMPLEX_TYPE`，並繼續其他題目。
-4. 官方禁止人工看過未截止的機器人預測後，**依該預覽針對性改模型、重新跑同題或人工覆寫結果**；但單純曾在對話顯示題目或機率，**不是永久排除該題的充分條件**。系統不得依歷史聊天是否曾看過某題建立題號黑名單；只按正式賽規則、當期 OPEN、未投、截止時間、題型及真實人工干預事實判斷。題目選取依自動截止排序，不由人工逐題挑選。
-5. 沒有題目是 `NO_ACTION`，不代表排程應取消、暫停或停止；僅結束當次執行。
-
-## 三、加密正式隊列（不可公佈機率或理由）
-
-**公開 GitHub 儲存庫只能提交加密預測。** 從狀態分支讀取 `state/minibench_work_public_key.json`（公鑰），確認 `scope=MINIBENCH_WORK_FORECAST_ENCRYPTION_ONLY`；若不存在或版本不符，阻擋，不得將明文預測提交到 GitHub。
-
-每題完成後，在 Work 私有運算環境中準備以下明文結構（不要貼到公開 repo）：
+V2 密封預測輸入使用既有公共欄位，`schema_version=2`。保留 `scope="MINIBENCH_WORK_LIVE_V1"`、`tournament="minibench"`、`mode="LIVE"`、`source="work_luna_sol"`、`post_id`、`question_id`、`question_type`、`reasoning`、`sources`、`research_model`、`sol_model`、`sol_effort`、`evidence_cutoff_utc`、`forecast_created_at_utc`，**另須加入**：
 
 ```json
 {
-  "schema_version":1,"scope":"MINIBENCH_WORK_LIVE_V1",
-  "tournament":"minibench","mode":"LIVE","source":"work_luna_sol",
-  "question_type":"BinaryQuestion",
-  "post_id":1234,"question_id":5678,"p_yes":0.321,
-  "reasoning":"C 層最終判斷與結算依據，至少50字元。",
-  "sources":["https://example.org/actual-official-source"],
-  "sol_model":"gpt-6.1-sol","sol_effort":"high","research_model":"luna-high",
-  "evidence_cutoff_utc":"YYYY-MM-DDTHH:MM:SSZ",
-  "forecast_created_at_utc":"YYYY-MM-DDTHH:MM:SSZ"
+  "schema_version": 2,
+  "forecast_author": "SOL_SUBAGENT",
+  "subagent_call_status": "COMPLETED",
+  "model_attestation": "MODEL_ID_NOT_ATTESTED"
 }
 ```
 
-僅把真實研究內容代入上述格式；`example.org`及範例題號不可直接使用。時間必須由當次執行實際記錄。
+如回退，改為 `forecast_author="CONTROLLER_FALLBACK"` 與真實失敗狀態；`sol_model` 可填 `unavailable`，`sol_effort` 可填 `not_run`，`research_model` 用可確認的介面設定（如 `luna-high-ui-selected`），不要假造執行時模型 ID。V1 歷史信封仍可讀，但**新工作一律產生 V2**。
 
-## 五題型輸出格式（沿用相同加密信封與公共欄位）
+## 2. 全題型抓題與固定選題順序
 
-Work（工作模式）讀取最新題庫每題的 `format_context`（格式上下文）。Sol 6.1 High（高思考）先參照正式結算條款，依題型在上述 JSON 預測主體中填寫**唯一對應**欄位：
+1. 先讀 `tingyi001-test-state:state/minibench_work_candidate_feed.json`，檢查新鮮度、賽事、`refresh_request_id`、OPEN（仍開放）、截止時間、官方帳戶尚未投。
+2. 如快照過期，依 `WORK_START.md` 的 `refresh_requests/req-*.json` 範例建立**新的只讀刷新請求**，讀取匹配的刷新收據；不得使用過期快照。刷新失敗只記錄並嘗試下次排程，不應造假題目或資格。
+3. 不以曾在聊天中出現過的題目為由排除。僅依官方賽事、未投、截止與可靠格式資料篩選。
+4. 支援 `BinaryQuestion`（二元）、`MultipleChoiceQuestion`（多選）、`NumericQuestion`（數值）、`DateQuestion`（日期）、`DiscreteQuestion`（離散數值），**不得只做二元**。特殊 `ConditionalQuestion`（條件複合題）若未取得有效子題格式，僅記該題 `UNSUPPORTED_COMPLEX_TYPE`，其他題繼續。
+5. 按**最早截止時間優先**、同時點按 `question_id` 升序；全部候選都要依序處理，**不限制每輪兩題**。若有3～4題或更多，能完成幾題就完成幾題；如工作環境達到實際資源／執行限制，記錄剩餘題目供下輪恢復，不把它們報為完成。
+6. 每題研究前重新檢查是否已投及是否截止，防止前一題耗時造成後續資料過期。
 
-| 題型 | `question_type` | 預測欄位 | 必須遵守 |
-|---|---|---|---|
-| 二元 | `BinaryQuestion` | `"p_yes":0.321` | 是的機率0.001至0.999 |
-| 多選 | `MultipleChoiceQuestion` | `"option_probabilities":{"A":0.6,"B":0.3,"C":0.1}` | 使用題庫 `options` 的**完全相同名稱**，所有選項總和為1 |
-| 數值 | `NumericQuestion` | `"percentiles":[{"p":0.1,"value":12},...]` | 數值與 `lower_bound,upper_bound,zero_point` 一致 |
-| 日期 | `DateQuestion` | `"percentiles":[{"p":0.1,"value":"2026-12-01T00:00:00Z"},...]` | 日期 ISO 8601（含時區），不可用未標時區的日期 |
-| 離散數值 | `DiscreteQuestion` | `"percentiles":[{"p":0.1,"value":2},...]` | 數值為離散結果；系統按 `cdf_size` 轉換 |
+## 3. 每題研究及官方格式契約
 
-**百分位數固定為6個：** `p=0.1,0.2,0.4,0.6,0.8,0.9`，對應的 `value` 必須非遞減。數值／日期／離散三類由 `all_types_adapter.py` 及鎖定版 `forecasting-tools`（官方預測工具）生成相應長度的 CDF（累積機率分布）並遵守開放/封閉上下界；若生成失敗，只記錄當題錯誤而跳過，絕不可直接改用單點數值提交。
+各題使用相同 A→G1→G2→B→D→C 研究流程，事前檢查題目結算條款，保存來源 URL（來源網址）、T0（資訊截止）與理由，格式如下：
 
-**注意：** 此表僅為 JSON（資料格式）示例，不能把示例機率、選項或日期直接提交。Sol 應輸出實際研究所得的量化百分位數，並由程式檢查，無須模型手寫201點分布。現有 `live_submit.py` 在解密後先核對當期真題型及選項，再 POST（提交）並 GET（讀回）完整分布向量；私人理由照舊強制提交。已有二元題路徑不變。
+| 題型 | 最終預測欄位 | 驗證 |
+|---|---|---|
+| 二元 | `p_yes` | 0.001～0.999 |
+| 多選 | `option_probabilities`（選項機率字典） | 與官方選項名稱逐字匹配，總和1 |
+| 數值 | `percentiles`（六個百分位數） | 轉成201點 CDF（累積分布），除非真題規格另訂 |
+| 日期 | `percentiles`（帶時區日期） | 依題目日期上下界換算 CDF |
+| 離散數值 | `percentiles` | 按真題 `cdf_size`（分布點數）換算，不強制201 |
 
-若題庫只讀回應的 `format_context` 含 `format_error`，勿猜測選項或上下界，記錄該題 `BLOCKED_FORMAT_METADATA` 並處理下一題。
+六個百分位數 `p=0.1,0.2,0.4,0.6,0.8,0.9`，值非遞減；數值與日期上下界、`zero_point`（對數尺度零點）、`open_lower_bound`、`open_upper_bound`（開放邊界）一律取自當期官方題目。使用 `all_types_adapter.py` 及已鎖定的 `forecasting-tools`（預測工具套件）轉換；**不可編造答案、示例機率或用二元機率冒充其他題型**。
 
+## 4. 逐題提交：一題一收據，失敗後繼續下一題
 
+每題完成 C 層後立即執行，**不要只研究數值題就停止**：
 
-在 Work 的臨時運算環境中執行 `sealed_queue.py` 的 `encrypt` 指令（需 `cryptography` Python 套件），以公鑰加密成保密封包：
+1. 以現有 `state/minibench_work_public_key.json`（公開金鑰）在 Work 內執行 `sealed_queue.py encrypt`，只向公開實驗分支新增 `live_pending/sealed-<hex>.json`（加密信封）；**不得上傳明文機率／理由／權杖**。
+2. **一題一個 GitHub 提交版本（commit，版本提交）**，觸發 `.github/workflows/experimental_minibench_live.yml`。先等當題的 GitHub Actions（自動工作流程）完成，讀取精確對應的執行 ID／封包檔名／狀態分支 `state/minibench_live_receipts/run-<run_id>.json`，再研究及提交下一題；不因某題失敗而整批停止。
+3. 每題最終以 `FORECAST_AND_PRIVATE_COMMENT_CONFIRMED`（預測與私人理由均回讀確認）判定正式成功；不能把工作流程 success（執行成功）、加密入隊或模擬測試當正式預測成功。
+4. 若 `BLOCKED_ALREADY_FORECASTED_OR_UNKNOWN`、截止、`BLOCKED_FORECAST_FORMAT`、來源不足、加密失敗或提交被拒絕，記錄題號／題型／故障分類／收據，繼續下一題。
+5. **不確定的 POST（寫入）絕不重試**：`FORECAST_UNCONFIRMED_NEVER_AUTO_RETRY` 或私人理由未知成功狀態，只做 GET（讀回）核對；不得自動重發相同預測。這是防止真正重複提交的必要邊界，與模型身分不確定完全不同。
+6. 防重複使用官方帳戶當期已投狀態、正式提交前的 GET（讀回）與現有 GitHub Actions 併發序列；同批相同題號重複信封被程式跳過。發現其他執行輪仍在處理同題時先只讀核查，避免同題重複研究和提交。
+7. 從任何中斷恢復時，優先核對現存加密隊列與持久化收據，再讀最新官方帳戶已投狀態；只接續未成功、尚未提交且不是未知 POST 的題目，不能把歷史已投題目重做。
 
-`python sealed_queue.py encrypt --public public_key.json --input forecast_private.json --output sealed.json`
+公開回報及持久收據只能保存：`question_id`、`post_id`、題型、進行階段、`forecast_author`、`subagent_call_status`、`model_attestation`、加密檔名、工作流程 ID、提交／回讀／私人理由狀態、失敗類別和時間；**禁止未結算機率、原始分位數與私人理由出現在公開 GitHub 或聊天回報**。
 
-再透過 GitHub 連接工具，在實驗分支**只建立**新檔：
+## 5. 整批與長期驗收
 
-`experimental_minibench_work/live_pending/sealed-<12至40碼小寫十六進位識別字>.json`
+- 單輪依序完成所有當下符合資格的題目（測試情境至少2～4題）；不得設定無依據的固定兩題上限。
+- 記錄 `total_seen`（掃描題數）、`eligible`（合格）、`attempted`（嘗試）、`confirmed`（成功）、`blocked`（阻擋）、`remaining`（留待恢復）及每題耗時；成功率須以**實際官方回讀確認**計算。
+- 額外分開統計 Sol 正常完成／Sol 失敗由主控回退／僅模型身分未核證；對照各組覆蓋率與後續評分，不虛報模型來源。
+- 單題出錯依序紀錄並繼續；全球性認證、題庫刷新或 GitHub 權限阻擋才可結束**本輪**，保留排程，下輪再試。
+- `NO_ACTION`（無合格題）是正常空批次，不能停用任何既有排程。
+- 歷史成功：二元題 GitHub run `44061634254`、數值題 `44066723602`（官方201點 CDF／私人理由回讀成功）。多選、日期、離散目前仍需真題驗收。
 
-檔案內容必須是加密 envelope（封包），包括 `version,key_id,ephemeral_pub,nonce,ciphertext` 五欄；**不得提交明文 p_yes、reasoning、來源或私有密鑰**。研究原始資料留在 Work 內，不要寫入公開 Repo。
+## 6. 啟動指令
 
-## 四、正式提交通道
-
-這項新檔案會觸發 `.github/workflows/experimental_minibench_live.yml`（正式計分提交工作流程）。由 GitHub Actions 透過既有 `METACULUS_TOKEN` 解密，重新查核真正的當期題目與帳戶已投狀態，驗證時間／機率／來源；正式支援五種常見題型。複合條件式題需先核實官方個別子題的回讀結構，不得偽裝成普通單題。
-
-每題最多一次 POST（提交），再以 API GET（讀取）驗證**機率值精確匹配**。確認預測後，使用官方私有留言 API 發送分析理由 `is_private=true`，再嘗試讀回留言。所有未知 POST 結果絕不自動重投；只讀回或待人工稽核，不可造成重複。
-
-正式賽成功只能回報 `FORECAST_AND_PRIVATE_COMMENT_CONFIRMED`；若預測已確認但留言未確認，必須標 `FORECAST_CONFIRMED_COMMENT_UNCONFIRMED_NO_AUTO_RETRY`。API timeout 且預測未確認時標 `FORECAST_UNCONFIRMED_NEVER_AUTO_RETRY`。
-
-## 五、每次執行最小紀錄
-
-Work：觸發時間／刷新請求識別碼／題目ID／截止時間／模型實際呼叫收據／加密隊列檔名／研究快照時間／是否成功進隊列。
-
-GitHub Actions：執行 run_id、版本 commit、單次 POST 嘗試、平台讀回是否匹配、私人留言是否讀回、失效分類；公開紀錄**不得顯示尚未結算之原始機率與理由**。加密原始隊列保留供後續稽核與結算後分析。
-
-## 六、重要現況與限制
-
-- 正式計分工作流程的「**空批次不提交**」與加密單元測試已通過；目前**尚無真正加密 Sol 預測入隊列及正式賽 POST 收據**。
-- Work 是否可以透過目前的「ChatGPT 排程」自動啟動並保留主控 Luna High／子代理 Sol 6.1 High 設定，需由排程實際執行收據驗證。不能因排程成功建立就宣稱已經跑了 Work。
-- MiniBench 官方要求全自主、不得由人工預覽開放賽題預測後作針對性改動；新題不透過人工逐題裁決。
-- 競賽帳戶是否已完成必填參與表單尚未獨立核查，不得宣稱已具獲獎資格。
-- 五種題型的格式轉換與模擬提交通道已接入；正式多選／數值／日期／離散題實際提交及官方回讀須持續取得新題收據，未測試到的類型仍標為 NOT_YET_LIVE_CONFIRMED。
+Work 使用者已設定 Luna High；啟動時直接依本文件執行一次正式多題連續研究與提交，**不得再詢問逐題授權**；不以模型自述或子代理失敗中止。完成後逐題回報收據與尚未解決問題，不公開答案機率。維持既有加密、GitHub Secrets（秘密權杖）、舊通道停用鎖及既有排程。
