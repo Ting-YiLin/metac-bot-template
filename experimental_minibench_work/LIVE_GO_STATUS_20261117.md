@@ -15,7 +15,7 @@ User gave explicit GO for autonomous MiniBench submission, with ongoing monitori
 ## Verified evidence
 
 - Earlier Work independent Sol 6.1 High on test-area case #43327: C stage completed without scored posting.
-- Scored question #46868 only went through PASS_DRY_RUN and was shown to user in open-state pilot; **excluded from future scored queue**.
+- Historical note: question #46868 went through PASS_DRY_RUN and its draft forecast appeared in a discussion. An earlier hard-coded ban on that question was an **unsupported precaution**, not an official Metaculus prohibition. That ban has been removed. Automated eligibility is determined by tournament membership, account state, deadline, supported type and actual human targeting/override—not mere prior viewing.
 - Encrypted channel tests: 5/5 passed, submission/readback tests 7/7 passed in [GitHub Actions 44057138377](https://github.com/Ting-YiLin/metac-bot-template/actions/runs/44057138377).
 - Unsubmitted empty live run: `NO_NEW_ENCRYPTED_FORECAST`, `files_seen=0`, `forecast_confirmations=0`, `private_comment_confirmations=0`.
 - Authenticated OPEN question slice and separate public-key publication verified; no credential was stored in GitHub public content.
@@ -42,3 +42,11 @@ Official 2026 rules permit fully autonomous bots but prohibit human selection/tu
 - `ACCOUNT_PRIZE_ELIGIBILITY_CHECKED`: NO
 
 This is a deployment receipt, not a false claim of scored forecast success.
+
+## 2026-11-17 User-directed correction to selection policy
+
+- User rejected unilateral exclusion of any question solely because a human saw it.
+- Official Metaculus rule prohibits *using a preview of an open/upcoming bot forecast to adjust the bot for that question, rerunning a disliked forecast, or human copy/paste submissions*. It does not make prior viewing an automatic question-level disqualification.
+- Removed `EXCLUDED_PREVIEWED_QUESTION_IDS` gate and its test; replaced with a regression test demonstrating that prior viewing is not a stand-alone rejection criterion.
+- Kept API-level OPEN / unforecasted / exact identifiers / time / once-only submission / private comment / readback controls unchanged.
+- This is a general policy correction, not an instruction to manually submit a particular question or change its model forecast.
