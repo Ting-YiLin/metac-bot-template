@@ -58,3 +58,8 @@ A. Work 取得有效題庫 → B. Luna＋Sol 真實研究與分位數／選項�
 - https://www.metaculus.com/api/
 - https://github.com/Metaculus/metac-bot-template/blob/main/main_with_no_framework.py
 - https://github.com/Metaculus/forecasting-tools/blob/main/forecasting_tools/data_models/numeric_report.py
+
+## 最新真實題庫格式煙霧測試（UTC 10:28）
+
+[Read-only format run 44065034943](https://github.com/Ting-YiLin/metac-bot-template/actions/runs/44065034943) 完成：以現有 MiniBench 開放題的**真實官方上下界和型別**，在記憶體中生成合成分位數作格式檢查（不呼叫提交 API）。當時API回傳3題，其中2題未投；格式檢查 `BinaryQuestion` 1／1 PASS，`NumericQuestion` 1／1 PASS，數值題生成201點CDF；另1題已投故跳過。blocked=0，submitted=0。多選、日期、離散型當時沒有可測真題，不應宣稱它們已通過真實平台端到端測試。
+
