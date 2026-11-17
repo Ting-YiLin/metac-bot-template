@@ -19,7 +19,8 @@ ALLOWED_ENTRY=("state","question_id","post_id","forecast_type",
                "comment_post_state","forecast_post_returned","forecast_http_status",
                "forecast_post_error_type","error_type","preflight_exact_readback_state",
                "forecast_readback_state","readback_expected_length",
-               "deadline_utc","sealed_file","account_competition_admission_verified")
+               "deadline_utc","sealed_file","account_competition_admission_verified",
+               "forecast_author","subagent_call_status","model_attestation")
 
 def redacted_snapshot(doc,run_id):
     if doc.get("raw_forecasts_redacted") is not True or str(doc.get("run_id"))!=str(run_id):
