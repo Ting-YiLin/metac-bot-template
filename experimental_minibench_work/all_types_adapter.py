@@ -82,8 +82,21 @@ def _numeric_cdf(q, data):
 
     # Reuse standardized, bound-aware interpolation and platform granularity
     # from the competition template's official forecasting-tools dependency.
-    dist=NumericDistribution.from_question(
-        [Percentile(percentile=float(p),value=v) for p,v in parsed], q)
+    if canonical_type(q)=="DateQuestion":
+        lower=float(q.lower_bound.timestamp())
+        upper=float(q.upper_bound.timestamp())
+    else:
+        lower=float(q.lower_bound)
+        upper=float(q.upper_bound)
+    dist=NumericDistribution(
+        declared_percentiles=[Percentile(percentile=float(p),value=v) for p,v in parsed],
+        open_upper_bound=q.open_upper_bound,
+        open_lower_bound=q.open_lower_bound,
+        upper_bound=upper,lower_bound=lower,
+        zero_point=getattr(q,"zero_point",None),
+        cdf_size=q.cdf_size,
+        is_date=(canonical_type(q)=="DateQuestion"),
+    )
     cdf=[float(p.percentile) for p in dist.get_cdf()]
     _validate_cdf(cdf,q)
     return cdf
