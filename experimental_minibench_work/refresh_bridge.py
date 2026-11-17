@@ -63,6 +63,7 @@ def find_exact_run(runs, sha):
         and r.get("head_sha") == sha
         and r.get("event") == "push"
         and r.get("head_branch") == BRANCH
+        and str(r.get("path", "")).endswith("/" + WORKFLOW)
     ]
     if not exact:
         return None
@@ -153,7 +154,7 @@ def probe_once(request_id, commit_sha, get_json=http_json, now=None):
     if not REQUEST_PATTERN.fullmatch(request_id) or not SHA_PATTERN.fullmatch(commit_sha):
         raise BridgeError("INVALID_REQUEST_IDENTIFIERS")
     params={"branch": BRANCH, "event": "push", "per_page": 50}
-    runs_doc = get_json(f"{API}/actions/workflows/{WORKFLOW}/runs", params=params)
+    runs_doc = get_json(f"{API}/actions/runs", params=params)
     run = find_exact_run(runs_doc.get("workflow_runs"), commit_sha)
     progress = evaluate_run(run)
     if progress["state"] != "WAIT_FEED":
