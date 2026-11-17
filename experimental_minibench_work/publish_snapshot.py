@@ -10,7 +10,6 @@ import json
 import os
 from pathlib import Path
 
-import requests
 
 REPO = "Ting-YiLin/metac-bot-template"
 BRANCH = "tingyi001-test-state"
@@ -48,7 +47,10 @@ def validate_snapshot(doc, now=None):
     return checked
 
 
-def publish(doc, token, run_id, session=requests, now=None):
+def publish(doc, token, run_id, session=None, now=None):
+    if session is None:
+        import requests
+        session = requests
     now = now or dt.datetime.now(dt.timezone.utc)
     if not token:
         raise RuntimeError("NO_GITHUB_TOKEN")
