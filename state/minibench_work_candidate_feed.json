@@ -2,47 +2,55 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-17T10:02:48.947199+00:00",
+  "checked_at_utc": "2026-11-17T10:17:40.117318+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
   "api_open_rows": 3,
-  "eligible_after_status_and_deadline_check": 3,
+  "eligible_after_status_and_deadline_check": 2,
   "supported_binary": 2,
   "counts": {
     "api_rows": 3,
-    "eligible_BinaryQuestion": 2,
-    "eligible_NumericQuestion": 1,
-    "unsupported_type": 1
+    "eligible_BinaryQuestion": 1,
+    "already_forecasted": 1,
+    "eligible_NumericQuestion": 1
   },
   "items": [
     {
       "post_id": 46609,
       "question_id": 46869,
       "question_type": "NumericQuestion",
+      "format_context": {
+        "question_type": "NumericQuestion",
+        "lower_bound": 5300.0,
+        "upper_bound": 6800.0,
+        "open_lower_bound": true,
+        "open_upper_bound": true,
+        "zero_point": null,
+        "cdf_size": 201,
+        "recommended_quantile_levels": [
+          10,
+          20,
+          40,
+          60,
+          80,
+          90
+        ]
+      },
       "close_time_utc": "2026-11-17T10:43:45+00:00",
       "question_text": "How many confirmed U.S. measles cases for 2026 will CDC report in its November 27, 2026 update?",
       "background_info": "2026 is the worst U.S. measles year in more than three decades. On its [Measles Cases and Outbreaks](https://www.cdc.gov/measles/data-research/index.html) page (update of November 13, 2026), the CDC reports 5,412 confirmed measles cases in the United States for 2026 as of November 12, 2026 — more than double the 2,289 cases reported in all of 2025 and the highest annual total since 1991. The 2026 tally includes 6 measles-associated deaths, a hospitalization rate of about 11%, 43 outbreaks, and 96% of cases among people who were unvaccinated or of unknown vaccination status.\n\nRecent CDC weekly totals (data as of 12:00 PM ET Thursday, normally published Fridays): 3,294 (Sept 10), 3,659 (Sept 24), 3,886 (Oct 1), 4,852 (Oct 29), 5,182 (Nov 5, +330), and 5,412 (Nov 12, +230). [CIDRAP](https://www.cidrap.umn.edu/measles/us-measles-total-2026-tops-5100-cases) noted that the Nov 5 report marked the 13th consecutive week of triple-digit weekly increases, though the size of the weekly increment has fluctuated (a slower October was followed by a +330 jump, then +230).\n\nThe outbreak is concentrated in a few states. The [Pennsylvania Department of Health](https://www.pa.gov/agencies/health/newsroom/pa-department-of-health-provides-statewide-update-on-measles-out17) reported 1,505 confirmed cases across 45 counties as of November 9 (290 hospitalizations, 6 deaths, more than 11,000 MMR doses administered by its nurses), while South Carolina (about 670 cases), Wisconsin and Minnesota also have large clusters. CDC kindergarten MMR coverage data show several states far below the ~95% herd-immunity threshold (e.g., Idaho ~75%).\n\nOther trackers publish different numbers on different schedules, which is why this question names CDC: the Johns Hopkins US Measles Tracker showed 5,400 as of November 6 (versus CDC's 5,182 for November 5), and PAHO's Situation Report #15 (November 6) reported 4,852 U.S. cases through epidemiological week 43. PAHO is weighing whether the region loses its measles elimination status.\n\nThe CDC page has updated weekly since 2025, sometimes shifting its publication day (Fridays, then Wednesdays from June 2025, then Fridays again during 2026) and labeling updates with the Thursday data cutoff; this question therefore keys on the publication date, not the cutoff. The remaining updates of November 2026 are expected around November 20 and November 27; Thanksgiving falls on Thursday, November 26, 2026, so the Thanksgiving-week update could be published early, published late, or cover a shifted data cutoff — and holiday reporting lags could depress its increment. A reasonable forecast centers on two further weekly increments of roughly 200–300 cases on top of 5,412.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
       "resolution_criteria": "This question resolves to the national cumulative total of confirmed measles cases that the CDC reports for 2026 in the weekly update to its [Measles Cases and Outbreaks](https://www.cdc.gov/measles/data-research/index.html) page published on Friday, November 27, 2026, regardless of the data-cutoff (\"as of\") date that update uses. The value to be used is the page's national 2026 total — the figure in the statement \"As of [date], X confirmed measles cases were reported in the United States in 2026,\" equivalently the 2026 \"Total Cases\" figure in the page's summary table — reported in whole cases (for example, the November 13, 2026 update showed 5,412 for 2026 and would resolve as 5,412). If no update is published on November 27, 2026, the first CDC update published after November 26, 2026 governs. If the page has since been overwritten by later weekly updates, the Internet Archive (web.archive.org) copy of the relevant update may be used to read the figure.",
       "fine_print": "Only CDC's own national 2026 total counts. Figures published by the Johns Hopkins US Measles Tracker, PAHO situation reports, individual state health departments, or news outlets do not count, even where they differ from CDC's. CDC's 2026 total includes confirmed cases among international visitors to the U.S. and cases reported by all jurisdictions, excludes probable cases reported by jurisdictions, and is subject to revision; the figure displayed in the governing update applies regardless of any later revision.",
       "url": "https://www.metaculus.com/questions/46609",
-      "supported_by_current_validator": false
-    },
-    {
-      "post_id": 46610,
-      "question_id": 46870,
-      "question_type": "BinaryQuestion",
-      "close_time_utc": "2026-11-17T12:21:42+00:00",
-      "question_text": "Will the CBRT's November 2026 Financial Stability Report devote a dedicated box to the 2026 fund liquidations?",
-      "background_info": "The Central Bank of the Republic of Türkiye (CBRT) publishes its Financial Stability Report (FSR) twice a year. Per the CBRT's official calendar (https://tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/Announcements/Calendar), the next edition is scheduled for release on 27 November 2026. The most recent edition, FSR 2026-I (22 May 2026, Volume 42), runs to roughly 80 pages across five chapters (I. Overview, II. Global Financial Outlook, III. Non-Financial Sector, IV. Financial Sector, V. Non-Bank Financial Sector) and contained six numbered \"Box\" special-topic sections — Box II.1 (geopolitical risks and the credit market), Box II.2 (gold reserves), Box III.1.I (household deposits), Box IV.1.I (gold prices and credit conditions), Box IV.2.I (bank liquidity and loan pricing) and Box IV.5 (financial-market measures) — each listed by title in the report's contents (https://tcmb.gov.tr/wps/wcm/connect/dd2f6428-5ce2-434f-8e6f-ec48e7f9b281/Cover+Page%2C+Foreword+and+Contents.pdf?MOD=AJPERES). Note that box labels follow no single pattern: they appear as \"Box II.1\", \"Box III.1.I\" and \"Box IV.5\". Boxes are the vehicle the CBRT uses for a dedicated analytical deep-dive on a topical risk; Chapter V carried no box in May 2026.\n\nThe November 2026 edition lands two months after the largest fund crisis in Turkish capital-markets history. On 17 September 2026 the Capital Markets Board (SPK) ordered the liquidation of 131 investment funds managed by seven portfolio-management companies (Tera, Pusula, Hedef, Atlas, A1 Capital, Pardus and Bulls), alleging manipulation and inflated valuations. The funds held roughly TRY 1 trillion (about USD 20 billion) in assets as of mid-September and had 455,758 investors; the episode drove a sharp selloff on Borsa Istanbul, and the liquidation window was extended from three to six months on 20 September.\n\nOfficial commentary so far has stressed containment. A CBRT research blog on 4 November 2026 (\"Fund Liquidations and the Real Sector: What Do Firm-Level Data Tell Us?\", https://www.tcmb.gov.tr/wps/wcm/connect/blog/en/main%20menu/analyses/fund_liquidations_and_the_real_sector_what_do_firm-level_data_tell_us) estimated that about 3,000 real-sector firms held TRY 116 billion in the affected funds (TRY 57 billion of it in money-market funds) as of 15 September — about 1.2% of the sector's total assets and 0.9% of outstanding commercial loans — and concluded the impact on the real sector was limited. S&P said on 20 October that the liquidation had not caused financial contagion and that household exposure was limited, while Fitch flagged risks at securities firms.\n\nThe stakes for the FSR are elevated because the affected industry is no longer peripheral: FSR 2026-I reported that the non-bank financial sector's share of Türkiye's total financial system rose from 12% in 2020 to 26% in Q1 2026, with investment funds at TRY 11.9 trillion (about 17% of GDP), 2,118 mutual funds by April 2026 and money-market funds at TRY 2.8 trillion as of end-April 2026. With no Monetary Policy Committee meeting in November (the next rate decision is 10 December 2026), the report is the CBRT's main financial-stability communication around this date.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves on the basis of the English-language edition of the Central Bank of the Republic of Türkiye's Financial Stability Report scheduled for publication on 27 November 2026, accessible from the CBRT's 2026 Financial Stability Report page (https://tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/Publications/Reports/Financial+Stability+Report/2026) through its \"Click For Full Text\" and \"Cover Page, Foreword and Contents\" links. It resolves YES if that report's table of contents lists at least one numbered box — any \"Box\" label format counts, e.g. \"Box II.1\", \"Box III.1.I\" or \"Box IV.5\" — whose title explicitly refers to the liquidation or winding-up of investment funds, to the Capital Markets Board (SPK)'s September 2026 action, or to the funds placed in liquidation. It resolves NO if no box title makes such a reference, including where the liquidations appear only in a chapter's body text or inside a box with a different title.",
-      "fine_print": "A box whose title refers to investment funds generally, without referring to the liquidation, to the SPK's September 2026 action, or to funds placed in liquidation, does not count toward YES. If publication is delayed beyond 27 November 2026, resolution waits for the report to appear; the Turkish-language edition of the same report may be used if the English edition is unavailable. If the CBRT does not publish a November 2026 edition of the Financial Stability Report by 31 December 2026, the question is annulled.",
-      "url": "https://www.metaculus.com/questions/46610",
       "supported_by_current_validator": true
     },
     {
       "post_id": 46611,
       "question_id": 46871,
       "question_type": "BinaryQuestion",
+      "format_context": {
+        "question_type": "BinaryQuestion"
+      },
       "close_time_utc": "2026-11-17T12:56:53+00:00",
       "question_text": "Will Ituri province report at least 10 more new confirmed Ebola cases than Nord-Kivu province for 26 November 2026?",
       "background_info": "The Democratic Republic of the Congo is experiencing its 17th Ebola outbreak, caused by Bundibugyo virus (BDBV) and declared by the Ministry of Health on 15 May 2026. With more than 11,000 confirmed cases it has far surpassed DRC's 2018-2020 Nord-Kivu outbreak (about 3,470 cases), and it has spread beyond DRC: Uganda recorded 20 cases and 2 deaths, Kenya 9 cases and 2 deaths, and single cases have been treated in Nigeria and France.\n\nStatus as of the most recent data (INSP SitRep N°181, reporting date 11 November 2026, published 12 November 2026): 11,197 confirmed cases and 5,471 confirmed deaths nationally (case fatality 48.9%), across 67 health zones in 8 provinces. Cumulative confirmed cases by province: Ituri 7,765 (28 of 36 health zones affected), Nord-Kivu 2,802 (17 of 34 zones), Haut-Uélé 504, Tshopo 98, Bas-Uélé 13, Nord-Ubangi 10, Sud-Kivu 3, Sud-Ubangi 2. Case fatality is 47.3% in Ituri and 55.2% in Nord-Kivu. Ituri remains the epicentre (about 69% of cumulative confirmed cases), but Nord-Kivu has supplied a growing share of new infections: of the 1,463 confirmed cases reported in the 21 days to 3 November, Ituri accounted for 710 and Nord-Kivu for 640 (WHO Disease Outbreak News, 6 November 2026), and INSP SitRep N°178 put Ituri at 57.1% and Nord-Kivu at 32.9% of newly notified cases.\n\nRecent daily province-level splits of new confirmed cases (Ituri vs Nord-Kivu): 3 Nov 23 vs 36; 5 Nov 28 vs 32; 6 Nov 47 vs 24; 7 Nov 24 vs 12; 8 Nov 40 vs 23; 9 Nov 30 vs 17; 10 Nov 44 vs 24; 11 Nov 37 vs 41. National daily totals have run roughly 50-85 confirmed cases per day (seven-day average about 62-66). So while Ituri usually reports more new cases on a given day, Nord-Kivu has out-reported it on 3 of the last 8 days for which splits are available, and the size of the daily gap has ranged from Nord-Kivu +13 to Ituri +23.\n\nHotspots differ by province: in Nord-Kivu the burden is concentrated in Beni (839 cumulative cases as of 10 November, with 8 new that day), Katwa (686) and Butembo (351), plus a newer cluster in Mutwanga; in Ituri the largest contributors are Bunia (2,069 cumulative, 19 new on 10 November) and Mandima (592, 10 new). Trends in these individual health zones drive the province-level daily split.\n\nINSP publishes a daily SitRep for each reporting date, normally on the following day, and all editions are archived at https://ebola-tracker.org/en/reports. Province totals are frequently revised upward retrospectively, so the change in a province's cumulative total between two reports can exceed the number of new cases reported for the intervening day; this question uses the daily new-case figure explicitly attributed to the date in Table 1 of the report.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
@@ -53,10 +61,10 @@
     }
   ],
   "truncated": false,
-  "refresh_run_id": "44061116779",
-  "refresh_request_id": "req-20261117T100225Z-ap2x4p12ws",
-  "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-17T10:03:03.040335+00:00",
-  "freshness_expires_utc": "2026-11-17T10:23:03.040335+00:00",
+  "refresh_run_id": "44063450730",
+  "refresh_request_id": null,
+  "refresh_trigger": "CODE_OR_MANUAL",
+  "published_at_utc": "2026-11-17T10:17:51.599738+00:00",
+  "freshness_expires_utc": "2026-11-17T10:37:51.599738+00:00",
   "is_live_tournament_submission_authorized": false
 }
