@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "scope": "MINIBENCH_WORK_DRY_RUN",
+  "tournament": "minibench",
+  "mode": "DRY_RUN",
+  "source": "work_luna_sol",
+  "post_id": 46608,
+  "question_id": 46868,
+  "p_yes": 0.35,
+  "reasoning": "Sol 6.1 High estimates 35.0% for the exact public-confirmation event, separating physical recovery from qualifying public confirmation. NNRA reported that two of six stolen projectors contained Ir-192 and that a national committee assigned investigation and recovery work, but the latest official statement found by the 17 November cutoff reported no recovery. IAEA data indicate higher recovery rates for higher-category sources, but provide no directly applicable short-window public-confirmation base rate; older Nigerian and international cases are only rough analogues. The short remaining window, unknown search progress, and possible delay or insufficient specificity in any announcement weigh against YES. YES requires a federal or Rivers authority to confirm by 2026-11-28 23:59 UTC that at least one actual Ir-192 source was retrieved; an operator-only statement, empty projector/container recovery, location without retrieval, or late statement does not qualify.",
+  "sources": [
+    "https://nnra.gov.ng/nnra/post-nnra_convenes_national_nuclear_security_committee_meeting_on_reported_security_breach_at_industrial_radiography_facility",
+    "https://www.iaea.org/sites/default/files/24/05/itdb_factsheet_2024.pdf",
+    "https://nucleus.iaea.org/sites/nss-oui/Published%20Collections/m_cf69469a-99ce-4443-b225-f8abf10cdff3/m_cf69469a-99ce-4443-b225-f8abf10cdff3__13_0.Html",
+    "https://nnra.gov.ng/nnra/"
+  ],
+  "evidence_cutoff_utc": "2026-11-17T09:20:00Z",
+  "forecast_created_at_utc": "2026-11-17T09:20:00Z"
+}
