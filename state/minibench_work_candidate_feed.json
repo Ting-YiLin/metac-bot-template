@@ -2,91 +2,18 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-17T19:42:52.455958+00:00",
+  "checked_at_utc": "2026-11-17T20:39:02.304636+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
-  "api_open_rows": 4,
-  "eligible_after_status_and_deadline_check": 4,
+  "api_open_rows": 1,
+  "eligible_after_status_and_deadline_check": 1,
   "supported_binary": 0,
-  "supported_all_formats": 4,
+  "supported_all_formats": 1,
   "counts": {
-    "api_rows": 4,
-    "eligible_NumericQuestion": 1,
-    "eligible_DiscreteQuestion": 1,
-    "eligible_MultipleChoiceQuestion": 2
+    "api_rows": 1,
+    "eligible_NumericQuestion": 1
   },
   "items": [
-    {
-      "post_id": 46613,
-      "question_id": 46873,
-      "question_type": "MultipleChoiceQuestion",
-      "format_context": {
-        "question_type": "MultipleChoiceQuestion",
-        "options": [
-          "SUPP",
-          "PDP",
-          "PBB or PRS (or a candidate who is not a member of SUPP or PDP)",
-          "No GPS candidate for Bawang Assan publicly named before the cutoff"
-        ]
-      },
-      "close_time_utc": "2026-11-17T19:51:44+00:00",
-      "question_text": "Which party's member will GPS name as its candidate for Sarawak's Bawang Assan seat before nomination day on 28 November 2026?",
-      "background_info": "Sarawak votes in its 13th state election for all 82 seats of the Sarawak State Legislative Assembly on 12 December 2026, with nomination day on 28 November 2026 and early voting on 8 December (https://sarawaktok.bernama.com/news.php?c=03&id=2630937). The state assembly was dissolved on 26 October 2026. The ruling coalition, Gabungan Parti Sarawak (GPS) — made up of PBB, SUPP, PRS and PDP and chaired by Sarawak Premier Abang Johari Tun Openg — has confirmed it will contest all 82 seats (https://ukas.sarawak.gov.my/web/subpage/news_view/51962), with PBB allocated 47 of them (https://www.thestar.com.my/news/nation/2026/11/08/sarawak-polls-039no-rush039-to-finalise-pbb-candidates-says-abang-jo).\n\nBawang Assan is a state constituency in the Sibu area. Dato Sri Wong Soon Koh represented it from its creation in 1991, first for SUPP, then as a direct Barisan Nasional candidate in 2016, and in 2021 on a Parti Sarawak Bersatu (PSB) ticket, when he won 5,952 votes with a 913-vote majority over SUPP's Robert Lau Hui Yew (5,039) — i.e. the seat was held against GPS in 2021. After PSB was dissolved, Wong and Engkilili assemblyman Johnical Rayong joined PDP, a GPS component. PDP therefore claims Bawang Assan on incumbency grounds, while SUPP claims it as a \"traditional/legacy\" seat and has named its Bawang Assan branch chairman and SUPP Youth Central chairman, Councillor Kevin Lau, as its pick; SUPP has also been pushing to \"recapture\" the seat. Local reporting has speculated that PDP may field its Youth chief, Joshua Ting, fuelled by a widely publicised meeting with Wong. On 31 October, caretaker Deputy Premier Dr Sim Kui Hian said the decision rests with GPS chairman Abang Johari.\n\nAs of 13 November 2026 no GPS candidate for Bawang Assan has been officially named, and commentaries describe the seat as a test of GPS solidarity. On 11 November SUPP submitted its candidate list to the Premier, leaving Batu Lintang and Bawang Assan for him to decide (https://dayakdaily.com/supp-submits-candidate-list-premier-to-decide-on-batu-lintang-bawang-assan). On 5 November Abang Johari said GPS's candidate list was not finalised and that there was \"no rush\" (https://www.bernama.com/en/politics/news.php?id=2630521); on 6 November PBB information chief Abdul Karim Rahman Hamzah said the GPS line-up is expected to be announced during the presentation of appointment letters, ahead of nomination day (https://sarawaktok.bernama.com/news.php?c=03&id=2630937). In 2021 GPS released its full candidate list two days before nomination day (https://dayakdaily.com/gps-candidate-list-for-12th-sarawak-election-to-be-released-2-days-before-nomination-day), which for a 28 November 2026 nomination day implies a release in the final days of November — so the Bawang Assan decision is expected to become public shortly before, or on the eve of, nomination. DayakDaily, The Borneo Post, Bernama, The Star and TVS are all covering the GPS line-up closely and would report the Bawang Assan pick immediately.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves according to which party's member is publicly named by Gabungan Parti Sarawak (GPS) as its candidate for the Bawang Assan state seat before 16:00 UTC on 27 November 2026 (00:00 Malaysia time on 28 November 2026, the start of nomination day), as reported by [credible sources](https://www.metaculus.com/faq/#definitions). Select \"SUPP\" or \"PDP\" according to the party membership of the person GPS names for Bawang Assan; unilateral statements by a component party that it will field a particular person in Bawang Assan do not count unless they reflect GPS's decision, such as an announcement by GPS chairman Abang Johari Tun Openg or the naming of candidates at the presentation of appointment letters. Timing is set by when GPS's choice was made public, not by when it was first reported, so an announcement made before the cutoff counts even if credible reporting appears afterwards. If no GPS candidate for Bawang Assan had been publicly named by the cutoff, select \"No GPS candidate for Bawang Assan publicly named before the cutoff\".",
-      "fine_print": "A person's party membership as described in credible reporting at the time of the announcement decides the option, irrespective of earlier party affiliations. If GPS officially names one Bawang Assan candidate and then replaces that person before the cutoff, the most recent official naming before the cutoff decides.",
-      "url": "https://www.metaculus.com/questions/46613",
-      "supported_by_current_validator": true
-    },
-    {
-      "post_id": 46614,
-      "question_id": 46874,
-      "question_type": "MultipleChoiceQuestion",
-      "format_context": {
-        "question_type": "MultipleChoiceQuestion",
-        "options": [
-          "November 25, 2026 or earlier (no further extension)",
-          "November 26 – December 4, 2026",
-          "December 5 – December 15, 2026",
-          "December 16, 2026 or later"
-        ]
-      },
-      "close_time_utc": "2026-11-17T20:06:55+00:00",
-      "question_text": "What will be the last date for filing claims and objections in Delhi's SIR, as of November 27, 2026?",
-      "background_info": "Delhi is conducting a Special Intensive Revision (SIR) of its electoral rolls with October 1, 2026 as the qualifying date. Booth-level officers visited households from June 30 to August 17, 2026, and the draft roll published on August 31, 2026 contained about 97.5 lakh electors, after roughly 47.56 lakh people who had been on the rolls (about 1.45 crore as of June 30) were not carried forward; notices were issued to about 33.14 lakh electors. The claims-and-objections period originally ran from August 31 to September 30, 2026. It has since been extended twice: ECI press note ECI/PN/120/2026 of September 26, 2026 pushed the last date to October 30, and ECI notification No. 23/2026-ERS (Vol. II) dated October 29, 2026 (published in the Delhi Gazette on October 31) pushed it to November 25, 2026, set disposal of claims and objections for December 15, 2026, and set publication of the final roll for December 22, 2026. Both earlier extensions were notified only 1-4 days before the deadline then in force.\n\nThe matter is in litigation: the Supreme Court heard the Delhi SIR dispute over the ECI's Form 6 requirement on October 28 and November 4, 2026, has listed it for November 19, and observed that the ECI could be asked to extend the date further if required. On November 6, 2026 the ECI instructed the Chief Electoral Officers of Delhi and six states to give electors left out of the draft roll one more opportunity to submit Annexure-A enumeration forms, with fresh door-to-door verification; about 15,000 booth-level officers in Delhi would each have to reach roughly 300 voters, and distribution of the fresh forms had not begun as of November 12-13, with officials saying it was expected from the week of November 16. Filing volumes are rising: 304,352 Form 6 applications were received between August 31 and November 11, 2026 (the three-lakh mark was crossed on November 9), alongside about 82,000 Form 7 objections and 372,000 Form 8 corrections.\n\nReporting by The Times of India (November 12) and The Tribune (November 13) says a further extension is likely and that an extension of around two weeks is under consideration but not yet approved, with the CEO Delhi's office to review the timeline either in the week of November 16 or closer to November 25. Status quo as of November 13, 2026: the last date for filing claims and objections in Delhi's SIR is November 25, 2026, with disposal of claims and objections due by December 15 and the final electoral roll due on December 22.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves to the option containing the last date for filing claims and objections in the Special Intensive Revision (SIR) of Delhi's electoral rolls, as specified in the most recent official schedule in force at 23:59 IST (18:29 UTC) on November 27, 2026. Only official documents dated on or before November 27, 2026 count: Election Commission of India (ECI) notifications, letters and press notes, Chief Electoral Officer (CEO) Delhi notifications and press notes, and Delhi Gazette publications of such notifications; a revision dated November 26 or 27, 2026 counts even if it is uploaded later. The baseline is ECI notification No. 23/2026-ERS (Vol. II) dated October 29, 2026, published in the Delhi Gazette as entry SG-DL-E-31102026-277561 (https://gazettetracker.com/g/SG-DL-E-31102026-277561), which sets this last date as November 25, 2026; if no later revision of that date is issued on or before November 27, 2026, the question resolves to \"November 25, 2026 or earlier (no further extension)\". If a revision sets different last dates for different categories of claims or objections, the last date applicable to Form 6 claims filed by individual electors governs. A revised last date of, for example, December 9, 2026 would resolve to \"December 5 – December 15, 2026\". If the official documents cannot be retrieved, resolution uses [credible sources](https://www.metaculus.com/faq/#definitions).",
-      "fine_print": "\"Last date for filing claims and objections\" means the final day on which an elector may file a claim (Form 6, Form 6A) or an objection (Form 7) under the SIR claims-and-objections period, as stated in the governing schedule. A change limited to the house-to-house verification, to the distribution or submission of Annexure-A enumeration forms, or to the deadline for disposal of claims and objections does not change this date; only a change to the final date for filing claims and objections does. If more than one revision is dated on or before November 27, 2026, the latest-dated one governs. If the governing document extends the period but states no closing date, the question resolves to \"December 16, 2026 or later\".",
-      "url": "https://www.metaculus.com/questions/46614",
-      "supported_by_current_validator": true
-    },
-    {
-      "post_id": 46615,
-      "question_id": 46875,
-      "question_type": "DiscreteQuestion",
-      "format_context": {
-        "question_type": "DiscreteQuestion",
-        "lower_bound": 37.5,
-        "upper_bound": 92.5,
-        "open_lower_bound": true,
-        "open_upper_bound": true,
-        "zero_point": null,
-        "cdf_size": 12,
-        "recommended_quantile_levels": [
-          10,
-          20,
-          40,
-          60,
-          80,
-          90
-        ]
-      },
-      "close_time_utc": "2026-11-17T20:07:38+00:00",
-      "question_text": "On Black Friday (November 27, 2026), what will be the deepest percentage-off discount advertised on the childrensplace.com homepage?",
-      "background_info": "The Children's Place, Inc. (PLCE), the Secaucus, New Jersey-based children's apparel retailer with roughly 514 North American stores plus the Gymboree brand, filed for Chapter 11 protection in the U.S. Bankruptcy Court for the District of New Jersey on November 8, 2026, seeking a court-supervised sale of substantially all its assets (bids due December 9, 2026; sale targeted for completion by the end of December 2026). Store-closing sales had already begun on November 6, 2026, and on November 12, 2026 a joint venture of GA Group, Tiger Group, SB360 Capital Partners, Gordon Brothers and Hilco Global announced court-approved going-out-of-business sales at all The Children's Place and Gymboree locations in the United States and Canada, together with an online inventory liquidation on both e-commerce platforms. Under the liquidators' consulting agreement, the sale term runs to a February 28, 2027 termination date.\n\nPricing so far: the launch event was a \"Total Inventory Blowout\" advertised as 25–60% off everything, in stores and online, and news coverage through mid-November described a childrensplace.com banner reading \"Everything Must Go / All Stores Closing\" with 30–60% off. As of November 13, 2026 the homepage (https://www.childrensplace.com/us/home) displays promotional messaging such as \"30–60% off everything\", \"40–60% off\", \"all clearance 60% off+\", \"all outerwear 30% off\" and \"extra 20% off everything with code WOW20\", while individual product cards carry badges in the 30–45%-off range. The site's promos rotate quickly (an on-site clearance countdown was due to expire in mid-November), and liquidators running going-out-of-business sales normally ratchet markdowns deeper as inventory clears, with the deepest levels typically appearing in the final weeks before the termination date. Black Friday, November 27, 2026, is the biggest promotional day in U.S. retail, so how deep the markdown goes that day is genuinely uncertain.\n\nSources: company announcement page https://corporate.childrensplace.com/what-we-announced ; joint venture release https://gagroup.com/blog/going-out-of-business-sales-underway-at-all-the-childrens-place-and-gymboree-locations .\n\nResolution data note: childrensplace.com's root domain only redirects and is blocked to automated archiving, but the storefront homepage at /us/home is captured by the Internet Archive's Wayback Machine roughly once or twice a day (typically around 08:50 and 20:50 UTC), and those archived pages render the full promotional banner text, so the November 27, 2026 capture can be read directly at https://web.archive.org/web/20261127170000/https://www.childrensplace.com/us/home .\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "Resolution uses the capture of The Children's Place homepage at https://www.childrensplace.com/us/home held by the Internet Archive Wayback Machine whose timestamp is closest to 17:00 UTC (12:00 US Eastern) on November 27, 2026 — the capture served at https://web.archive.org/web/20261127170000/https://www.childrensplace.com/us/home — and where two captures are equally close, the earlier one is used. The resolution value is the single largest percentage figure presented in the promotional text of that captured homepage (its banners, headlines, category tiles and deal modules) as a reduction off merchandise prices, including \"up to\" and range wording, with a range or \"X% off+\" read as its highest figure (e.g. \"take 30–60% off everything\" → 60; \"all clearance 60% off+\" → 60; \"up to 70% off select styles\" → 70). Percentage figures shown on individual product cards as a sale-price-versus-original-price comparison, and percentages relating to shipping, rewards, financing or fabric composition, do not count. Stated discounts are never combined or stacked with one another. If the captured homepage renders normally but displays no qualifying discount percentage, the value is 0.",
-      "fine_print": "If the selected capture is an error page or renders no promotional content at all (for example a bot-block page or a script-only shell), the capture on November 27, 2026 that does render the homepage's promotional text and is closest to 17:00 UTC is used instead, taking the earlier one if two are equally close; if no capture dated November 27, 2026 renders the homepage, the closest such capture in time to 17:00 UTC on that date is used. Percentages present only inside banner images whose text cannot be read on the captured page do not count unless the same figure also appears as text. The value is the percentage number itself (a \"70% off\" promotion resolves as 70, not 0.70).",
-      "url": "https://www.metaculus.com/questions/46615",
-      "supported_by_current_validator": true
-    },
     {
       "post_id": 46616,
       "question_id": 46876,
@@ -118,10 +45,10 @@
     }
   ],
   "truncated": false,
-  "refresh_run_id": "44161492478",
-  "refresh_request_id": "req-20261117T194234Z-v2r10399",
+  "refresh_run_id": "44171495877",
+  "refresh_request_id": "req-20261117T203829Z-a11c63829",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-17T19:43:15.254070+00:00",
-  "freshness_expires_utc": "2026-11-17T20:03:15.254070+00:00",
+  "published_at_utc": "2026-11-17T20:39:22.388519+00:00",
+  "freshness_expires_utc": "2026-11-17T20:59:22.388519+00:00",
   "is_live_tournament_submission_authorized": false
 }
