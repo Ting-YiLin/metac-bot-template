@@ -12,6 +12,8 @@ on:
       - 'experimental_minibench_work/tests/test_publish_snapshot.py'
       - 'experimental_minibench_work/refresh_protocol.py'
       - 'experimental_minibench_work/tests/test_refresh_protocol.py'
+      - 'experimental_minibench_work/publish_public_key.py'
+      - 'experimental_minibench_work/sealed_queue.py'
       - 'experimental_minibench_work/refresh_requests/req-*.json'
   workflow_dispatch:
 
@@ -46,6 +48,8 @@ jobs:
           python -c "import sys; sys.path.insert(0, 'experimental_minibench_work'); from refresh_protocol import request_id_from_push; print('REFRESH_REQUEST_VALID' if request_id_from_push() else 'NO_REFRESH_REQUEST')"
       - name: Install locked Metaculus dependency
         run: uv sync --locked --no-dev
+      - name: Install encryption dependency for public-key publication
+        run: uv pip install --python .venv/bin/python 'cryptography>=45,<47'
       - name: Authenticated MiniBench read-only scan (no posting)
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
@@ -54,6 +58,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: uv run python experimental_minibench_work/publish_snapshot.py
+      - name: Publish token-derived public encryption key (never private key)
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run --no-sync python experimental_minibench_work/publish_public_key.py
       - name: Store evidence from this run only
         if: always()
         uses: actions/upload-artifact@v4
