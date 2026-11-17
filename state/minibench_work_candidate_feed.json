@@ -2,17 +2,17 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-17T09:04:39.899274+00:00",
+  "checked_at_utc": "2026-11-17T09:36:20.915922+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
-  "api_open_rows": 3,
-  "eligible_after_status_and_deadline_check": 3,
-  "supported_binary": 1,
+  "api_open_rows": 4,
+  "eligible_after_status_and_deadline_check": 4,
+  "supported_binary": 2,
   "counts": {
-    "api_rows": 3,
+    "api_rows": 4,
+    "eligible_BinaryQuestion": 2,
     "eligible_NumericQuestion": 2,
-    "unsupported_type": 2,
-    "eligible_BinaryQuestion": 1
+    "unsupported_type": 2
   },
   "items": [
     {
@@ -50,13 +50,25 @@
       "fine_print": "Only CDC's own national 2026 total counts. Figures published by the Johns Hopkins US Measles Tracker, PAHO situation reports, individual state health departments, or news outlets do not count, even where they differ from CDC's. CDC's 2026 total includes confirmed cases among international visitors to the U.S. and cases reported by all jurisdictions, excludes probable cases reported by jurisdictions, and is subject to revision; the figure displayed in the governing update applies regardless of any later revision.",
       "url": "https://www.metaculus.com/questions/46609",
       "supported_by_current_validator": false
+    },
+    {
+      "post_id": 46610,
+      "question_id": 46870,
+      "question_type": "BinaryQuestion",
+      "close_time_utc": "2026-11-17T12:21:42+00:00",
+      "question_text": "Will the CBRT's November 2026 Financial Stability Report devote a dedicated box to the 2026 fund liquidations?",
+      "background_info": "The Central Bank of the Republic of Türkiye (CBRT) publishes its Financial Stability Report (FSR) twice a year. Per the CBRT's official calendar (https://tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/Announcements/Calendar), the next edition is scheduled for release on 27 November 2026. The most recent edition, FSR 2026-I (22 May 2026, Volume 42), runs to roughly 80 pages across five chapters (I. Overview, II. Global Financial Outlook, III. Non-Financial Sector, IV. Financial Sector, V. Non-Bank Financial Sector) and contained six numbered \"Box\" special-topic sections — Box II.1 (geopolitical risks and the credit market), Box II.2 (gold reserves), Box III.1.I (household deposits), Box IV.1.I (gold prices and credit conditions), Box IV.2.I (bank liquidity and loan pricing) and Box IV.5 (financial-market measures) — each listed by title in the report's contents (https://tcmb.gov.tr/wps/wcm/connect/dd2f6428-5ce2-434f-8e6f-ec48e7f9b281/Cover+Page%2C+Foreword+and+Contents.pdf?MOD=AJPERES). Note that box labels follow no single pattern: they appear as \"Box II.1\", \"Box III.1.I\" and \"Box IV.5\". Boxes are the vehicle the CBRT uses for a dedicated analytical deep-dive on a topical risk; Chapter V carried no box in May 2026.\n\nThe November 2026 edition lands two months after the largest fund crisis in Turkish capital-markets history. On 17 September 2026 the Capital Markets Board (SPK) ordered the liquidation of 131 investment funds managed by seven portfolio-management companies (Tera, Pusula, Hedef, Atlas, A1 Capital, Pardus and Bulls), alleging manipulation and inflated valuations. The funds held roughly TRY 1 trillion (about USD 20 billion) in assets as of mid-September and had 455,758 investors; the episode drove a sharp selloff on Borsa Istanbul, and the liquidation window was extended from three to six months on 20 September.\n\nOfficial commentary so far has stressed containment. A CBRT research blog on 4 November 2026 (\"Fund Liquidations and the Real Sector: What Do Firm-Level Data Tell Us?\", https://www.tcmb.gov.tr/wps/wcm/connect/blog/en/main%20menu/analyses/fund_liquidations_and_the_real_sector_what_do_firm-level_data_tell_us) estimated that about 3,000 real-sector firms held TRY 116 billion in the affected funds (TRY 57 billion of it in money-market funds) as of 15 September — about 1.2% of the sector's total assets and 0.9% of outstanding commercial loans — and concluded the impact on the real sector was limited. S&P said on 20 October that the liquidation had not caused financial contagion and that household exposure was limited, while Fitch flagged risks at securities firms.\n\nThe stakes for the FSR are elevated because the affected industry is no longer peripheral: FSR 2026-I reported that the non-bank financial sector's share of Türkiye's total financial system rose from 12% in 2020 to 26% in Q1 2026, with investment funds at TRY 11.9 trillion (about 17% of GDP), 2,118 mutual funds by April 2026 and money-market funds at TRY 2.8 trillion as of end-April 2026. With no Monetary Policy Committee meeting in November (the next rate decision is 10 December 2026), the report is the CBRT's main financial-stability communication around this date.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
+      "resolution_criteria": "This question resolves on the basis of the English-language edition of the Central Bank of the Republic of Türkiye's Financial Stability Report scheduled for publication on 27 November 2026, accessible from the CBRT's 2026 Financial Stability Report page (https://tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/Publications/Reports/Financial+Stability+Report/2026) through its \"Click For Full Text\" and \"Cover Page, Foreword and Contents\" links. It resolves YES if that report's table of contents lists at least one numbered box — any \"Box\" label format counts, e.g. \"Box II.1\", \"Box III.1.I\" or \"Box IV.5\" — whose title explicitly refers to the liquidation or winding-up of investment funds, to the Capital Markets Board (SPK)'s September 2026 action, or to the funds placed in liquidation. It resolves NO if no box title makes such a reference, including where the liquidations appear only in a chapter's body text or inside a box with a different title.",
+      "fine_print": "A box whose title refers to investment funds generally, without referring to the liquidation, to the SPK's September 2026 action, or to funds placed in liquidation, does not count toward YES. If publication is delayed beyond 27 November 2026, resolution waits for the report to appear; the Turkish-language edition of the same report may be used if the English edition is unavailable. If the CBRT does not publish a November 2026 edition of the Financial Stability Report by 31 December 2026, the question is annulled.",
+      "url": "https://www.metaculus.com/questions/46610",
+      "supported_by_current_validator": true
     }
   ],
   "truncated": false,
-  "refresh_run_id": "44052206741",
+  "refresh_run_id": "44057058869",
   "refresh_request_id": null,
   "refresh_trigger": "CODE_OR_MANUAL",
-  "published_at_utc": "2026-11-17T09:04:52.591995+00:00",
-  "freshness_expires_utc": "2026-11-17T09:24:52.591995+00:00",
+  "published_at_utc": "2026-11-17T09:36:32.927625+00:00",
+  "freshness_expires_utc": "2026-11-17T09:56:32.927625+00:00",
   "is_live_tournament_submission_authorized": false
 }
