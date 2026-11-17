@@ -69,9 +69,10 @@ class LiveTests(unittest.TestCase):
         self.assertTrue(result["forecast_confirmed"])
         self.assertTrue(result["comment_confirmed"])
         self.assertNotIn("0.4",str(result))
-    def test_previewed_question_excluded(self):
-        with self.assertRaises(ValueError):
-            validate_data(sample(question_id=46868),NOW)
+    def test_seen_question_not_automatically_excluded(self):
+        # Merely having appeared in a prior discussion is not a submission ban.
+        result = validate_data(sample(question_id=46868), NOW)
+        self.assertEqual(result["question_id"], 46868)
     def test_duplicate_account_fails_closed(self):
         q=BinaryQuestion();q.already_forecasted=True
         c=Client([q]);s=Session(c)
