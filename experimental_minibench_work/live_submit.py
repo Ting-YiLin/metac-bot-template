@@ -84,9 +84,26 @@ def get_forecast_readback(post_id,question_id,expected_values,token,session=requ
         headers={"Authorization":"Token "+token},timeout=20)
     if r.status_code!=200:return {"state":"READBACK_HTTP_ERROR","http_status":r.status_code}
     body=r.json()
-    obj=body.get("question",{})
-    if not isinstance(obj,dict) or obj.get("id")!=question_id:
+    # Question may be nested inside a group or conditional post.
+    # Match the exact subquestion ID *and* own-forecast field, never any
+    # similarly numbered post/project/category ID in the JSON.
+    matched=[]
+    stack=[body]
+    visited=0
+    while stack and visited<500:
+        node=stack.pop()
+        visited+=1
+        if isinstance(node,dict):
+            if node.get("id")==question_id and "my_forecasts" in node:
+                matched.append(node)
+            for value in node.values():
+                if isinstance(value,(dict,list)):
+                    stack.append(value)
+        elif isinstance(node,list):
+            stack.extend(x for x in node if isinstance(x,(dict,list)))
+    if len(matched)!=1:
         return {"state":"READBACK_QUESTION_MISMATCH"}
+    obj=matched[0]
     latest=(obj.get("my_forecasts") or {}).get("latest") or {}
     values=latest.get("forecast_values")
     if values is None and not latest:
