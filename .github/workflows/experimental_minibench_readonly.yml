@@ -7,6 +7,8 @@ on:
     paths:
       - '.github/workflows/experimental_minibench_readonly.yml'
       - 'experimental_minibench_work/minibench_readonly_probe.py'
+      - 'experimental_minibench_work/all_types_adapter.py'
+      - 'experimental_minibench_work/all_types_format_smoke.py'
       - 'experimental_minibench_work/publish_snapshot.py'
       - 'experimental_minibench_work/tests/test_minibench_readonly_probe.py'
       - 'experimental_minibench_work/tests/test_publish_snapshot.py'
@@ -54,6 +56,11 @@ jobs:
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
         run: uv run python experimental_minibench_work/minibench_readonly_probe.py
+      - name: Exercise all five-format conversion on current question metadata (synthetic, no POST)
+        continue-on-error: true
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+        run: uv run --no-sync python experimental_minibench_work/all_types_format_smoke.py
       - name: Publish sanitized fresh feed to isolated state branch
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -71,6 +78,7 @@ jobs:
           path: |
             minibench_readonly_probe_receipt.json
             minibench_readonly_candidate_feed.json
+            minibench_format_probe_receipt.json
             minibench_feed_publish_receipt.json
           if-no-files-found: warn
           retention-days: 7
