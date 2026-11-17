@@ -112,6 +112,21 @@ class Tests(unittest.TestCase):
         self.assertEqual(r["readback_expected_length"],201)
         self.assertEqual(s.expected[0],0.0)
         self.assertEqual(s.expected[-1],1.0)
+    def test_numeric_controller_fallback_unattested(self):
+        payload=base("NumericQuestion",
+            schema_version=2,
+            forecast_author="CONTROLLER_FALLBACK",
+            subagent_call_status="TIMEOUT",
+            model_attestation="MODEL_ID_NOT_ATTESTED",
+            sol_model="unavailable",sol_effort="not_run",
+            percentiles=points([10,20,40,60,80,90]))
+        r,session=self.go(NumericQuestion(),payload)
+        self.assertEqual(r["state"],"FORECAST_AND_PRIVATE_COMMENT_CONFIRMED")
+        self.assertEqual(r["forecast_author"],"CONTROLLER_FALLBACK")
+        self.assertEqual(r["subagent_call_status"],"TIMEOUT")
+        self.assertEqual(r["readback_expected_length"],201)
+        self.assertIn("controller fallback",session.text)
+
     def test_discrete(self):
         r,s=self.go(DiscreteQuestion(),base("DiscreteQuestion",
             percentiles=points([1,2,3,4,6,7])))
