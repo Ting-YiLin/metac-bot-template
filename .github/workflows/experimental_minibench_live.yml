@@ -9,6 +9,8 @@ on:
       - 'experimental_minibench_work/all_types_adapter.py'
       - 'experimental_minibench_work/tests/test_all_types_adapter.py'
       - 'experimental_minibench_work/tests/test_all_types_live.py'
+      - 'experimental_minibench_work/publish_live_receipt.py'
+      - 'experimental_minibench_work/tests/test_publish_live_receipt.py'
       - 'experimental_minibench_work/sealed_queue.py'
       - 'experimental_minibench_work/tests/test_live_submit.py'
       - 'experimental_minibench_work/tests/test_sealed_queue.py'
@@ -16,7 +18,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write # needed only to publish redacted receipts to separate state branch
 
 concurrency:
   group: minibench-luna-sol-scored-submission
@@ -46,11 +48,17 @@ jobs:
           uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_live_submit.py' -v
           uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_all_types_adapter.py' -v
           uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_all_types_live.py' -v
+          uv run --no-sync python -m unittest discover -s experimental_minibench_work/tests -p 'test_publish_live_receipt.py' -v
       - name: Send authorized MiniBench forecast, private comment and readback
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
           BTF3_MINIBENCH_LIVE_APPROVED: '1'
         run: uv run --no-sync python experimental_minibench_work/live_submit.py
+      - name: Archive durable redacted run status in isolated state branch
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run --no-sync python experimental_minibench_work/publish_live_receipt.py
       - name: Store redacted proof of execution (never raw probability or rationale)
         if: always()
         uses: actions/upload-artifact@v4
