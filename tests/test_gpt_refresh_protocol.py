@@ -105,5 +105,58 @@ class RefreshRequestTests(unittest.TestCase):
         git.assert_not_called()
 
 
+    def test_immutable_result_create_without_old_sha(self):
+        import base64
+        from integrations.gpt_chat_queue.export_candidates import (
+            publish_to_github, RESULT_DIR
+        )
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        request_id, _ = valid_request(now)
+        path = f"{RESULT_DIR}/{request_id}.json"
+        api = MagicMock()
+        api.get.return_value.status_code = 404
+        api.put.return_value.status_code = 201
+        record = {"refresh_request_id": request_id, "refresh_status": "COMPLETE",
+                  "eligible_unforecasted": 0, "items": []}
+        self.assertTrue(publish_to_github(
+            record, "fake-test-token", path=path, create_only=True, requests_module=api
+        ))
+        written = api.put.call_args.kwargs["json"]
+        self.assertNotIn("sha", written)
+        self.assertEqual(written["branch"], "tingyi001-test-state")
+        self.assertEqual(json.loads(base64.b64decode(written["content"]))["refresh_request_id"], request_id)
+
+    def test_immutable_result_cannot_overwrite(self):
+        from integrations.gpt_chat_queue.export_candidates import publish_to_github, RESULT_DIR
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        request_id, _ = valid_request(now)
+        api = MagicMock()
+        api.get.return_value.status_code = 200
+        with self.assertRaisesRegex(RuntimeError, "REQUEST_RESULT_ALREADY_EXISTS"):
+            publish_to_github(
+                {}, "fake-test-token", path=f"{RESULT_DIR}/{request_id}.json",
+                create_only=True, requests_module=api,
+            )
+        api.put.assert_not_called()
+
+    def test_immutable_result_rejects_other_paths(self):
+        from integrations.gpt_chat_queue.export_candidates import publish_to_github
+        api = MagicMock()
+        with self.assertRaisesRegex(ValueError, "FORBIDDEN_FEED_OUTPUT_PATH"):
+            publish_to_github({}, "fake-test-token", path="state/other.json",
+                              create_only=True, requests_module=api)
+        api.get.assert_not_called()
+
+    def test_mutable_legacy_feed_remains_supported(self):
+        from integrations.gpt_chat_queue.export_candidates import publish_to_github
+        api = MagicMock()
+        api.get.return_value.status_code = 200
+        api.get.return_value.json.return_value = {"sha": "old-sha"}
+        api.put.return_value.status_code = 200
+        self.assertTrue(publish_to_github({"eligible_unforecasted": 0},
+                                          "fake-test-token", requests_module=api))
+        self.assertEqual(api.put.call_args.kwargs["json"]["sha"], "old-sha")
+
+
 if __name__ == "__main__":
     unittest.main()
