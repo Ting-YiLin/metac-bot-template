@@ -2,30 +2,31 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-18T12:06:37.420744+00:00",
+  "checked_at_utc": "2026-11-18T12:57:30.683410+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
-  "api_open_rows": 1,
+  "api_open_rows": 2,
   "eligible_after_status_and_deadline_check": 1,
   "supported_binary": 0,
   "supported_all_formats": 1,
   "counts": {
-    "api_rows": 1,
-    "eligible_DiscreteQuestion": 1
+    "api_rows": 2,
+    "eligible_NumericQuestion": 1,
+    "already_forecasted": 1
   },
   "items": [
     {
-      "post_id": 46618,
-      "question_id": 46878,
-      "question_type": "DiscreteQuestion",
+      "post_id": 46619,
+      "question_id": 46879,
+      "question_type": "NumericQuestion",
       "format_context": {
-        "question_type": "DiscreteQuestion",
-        "lower_bound": 1.5,
-        "upper_bound": 6.5,
-        "open_lower_bound": false,
+        "question_type": "NumericQuestion",
+        "lower_bound": 6.5,
+        "upper_bound": 8.8,
+        "open_lower_bound": true,
         "open_upper_bound": true,
         "zero_point": null,
-        "cdf_size": 6,
+        "cdf_size": 201,
         "recommended_quantile_levels": [
           10,
           20,
@@ -35,20 +36,20 @@
           90
         ]
       },
-      "close_time_utc": "2026-11-18T14:19:14+00:00",
-      "question_text": "How many storms will the UK–Ireland–Netherlands storm-naming group have named by the end of 28 November 2026?",
-      "background_info": "Since 2015/16 the Met Office, Met Éireann (Ireland) and KNMI (Netherlands) have jointly named winter storms affecting their countries, drawing on a shared alphabetical list of 21 names per season (letters Q, U, X, Y and Z are excluded). A low-pressure system is named when it is expected to have enough impact — typically enough to warrant amber or red wind warnings, or equivalent severe-weather warnings — in the UK, Ireland or the Netherlands. The 2026/27 season runs from 1 September 2026 to 31 August 2027, and its list, released on 1 September 2026, runs: Austen, Boelo, Chloe, Dano, Evelyn, Finn, Gwendolyn, Heather, Ivy, Jade, Kilian, Laoise, Miriam, Nicola, Olaf, Phelim, Ruban, Shaun, Theo, Vesna, Wende.\n\nTwo names have been used so far this season. Storm Austen was named on 20 October 2026 (impact on the UK 23 October 2026), bringing cancelled flights, school closures and power cuts to southern England and Wales. Storm Boelo was named by KNMI on 22 October 2026, with wind warnings for 24–25 October, two fatalities and widespread power cuts. Third-party trackers last checked against the Met Office storm centre on 3, 5 and 7 November 2026 all reported no further naming, with Chloe as the next name, and the Met Office table as of 13 November 2026 likewise lists only Austen and Boelo.\n\nNaming frequency varies a lot by year: the Met Office and Met Éireann report 14 named storms in the 2023/24 season but only 4 in 2025/26. Late November is historically an active part of the season — Storm Debi was named 13 November 2023, Storm Bert 22 November 2024 and Storm Conall 27 November 2024 — so a third naming before the end of November is plausible but far from certain. The Met Office long-range outlook updated on 11 November 2026, covering Thursday 26 November to Thursday 10 December, describes \"changeable or unsettled conditions ... initially, with Atlantic weather systems bringing spells of rain and strong winds at times\".\n\nThe Met Office UK Storm Centre page is the practical source of truth: its table records each named storm with its \"Date named\" and \"Date of impact on UK and/or Ireland and/or Netherlands\", and the naming date is the field this question uses.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 4, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "Resolves to the number of distinct names from the 2026/27 west-group list (Austen, Boelo, Chloe, Dano, Evelyn, Finn, Gwendolyn, Heather, Ivy, Jade, Kilian, Laoise, Miriam, Nicola, Olaf, Phelim, Ruban, Shaun, Theo, Vesna, Wende) that have been assigned to a storm with a \"Date named\" on or before 28 November 2026, as shown in the named-storm table at the Met Office UK Storm Centre: https://weather.metoffice.gov.uk/warnings-and-advice/uk-storm-centre. For example, a resolution of 3 means a third name had been announced by that date; a resolution of 2 means no third storm had been named. As of 13 November 2026 the table lists two storms — Austen (named 20 October 2026) and Boelo (named 22 October 2026) — so 2 is the current count. Dates on the Met Office table are UK local calendar dates (GMT in November, equivalent to UTC); if the table is unavailable or not yet updated, the storm-names page of Met Éireann (https://www.met.ie/forecasts/storm-names) or [credible sources](https://www.metaculus.com/faq/#definitions) may be used instead. Each name counts once, and a name is credited on the date it was announced, not the date the storm affected land.",
-      "fine_print": "Only names from the 2026/27 west-group list count; a storm named by another European naming group (for example the French/Spanish/Portuguese or northern groups) does not count even if it affects the UK, Ireland or the Netherlands.",
-      "url": "https://www.metaculus.com/questions/46618",
+      "close_time_utc": "2026-11-18T15:34:49+00:00",
+      "question_text": "What will be the highest observed water level (ft above MLLW) at NOAA's La Jolla, CA tide gauge (station 9410230) on November 26-27, 2026?",
+      "background_info": "Late October 2026 brought record water levels to the Southern California coast. NOAA reports all-time highest observed levels (measured above Mean Higher High Water) during October 24-30 at San Diego (2.80 ft), La Jolla (2.65 ft), Los Angeles (2.70 ft), Santa Barbara (2.65 ft) and Santa Monica (2.72 ft): https://oceanservice.noaa.gov/news/nov26/california-record-water-levels.html . At La Jolla (9410230) that 2.65 ft above MHHW peak corresponds to roughly 8.0 ft above MLLW, given the station's MHHW-MLLW separation of 5.32 ft; the station's highest astronomical tide is 7.20 ft MLLW. The driver was a strong El Nino combined with a downwelling Kelvin wave, near-record ocean heat (Scripps Pier SST about 75.4 F) and large west swell; gauges from La Jolla to San Francisco ran 12-17 inches above astronomical prediction, and the Los Angeles Times reported average sea level 1.4 ft higher than expected in San Diego and 1.3 ft higher in Los Angeles for the week ending October 30: https://www.latimes.com/california/story/2026-11-02/el-ninos-worst-case-scenario-for-california-coast-high-tides-record-heat-big-storms .\n\nThe next king tides run roughly November 23-27, 2026, with the City of Newport Beach warning that water levels could rise 12 inches or more above October's record 8.4 ft high tide: https://visitnewportbeach.com/wp-content/uploads/2026/11/CITY-OF-NEWPORT-BEACH-ASKS-RESIDENTS-TO-PREPARE-FOR-HIGHER-KING-TIDES-INCREASED-RISK-OF-COASTAL-FLOODING.pdf . NOAA's harmonic predictions for station 9410230 give a high tide of 6.84 ft MLLW at 09:15 PST on November 26 and 6.50 ft at 10:05 PST on November 27; the 6.96 ft high at 08:29 PST on November 25 falls just before this question's window. Positive non-tidal residuals have persisted: on the morning of November 13 the gauge was already reading about 5.9 ft MLLW at 07:36 PST, ahead of a predicted high of 5.23 ft at 10:04 PST (roughly 1 ft above prediction), and National Weather Service offices were quoting total water levels about 1.3-1.4 ft above normal (formatted as \"ft above normal (ft MLLW)\") for the November 8-11 high tides. Background on the Kelvin wave and gauge residuals: https://www.calcoasttides.com/blog/kelvin-wave-california-2026 .\n\nStation 9410230 at La Jolla (Scripps Pier) is used because it is the nearest active NOAA open-coast gauge to Newport Beach with real-time 6-minute observations (the Newport Bay Entrance station, 9410580, was decommissioned in 1994 and issues predictions only: https://tidesandcurrents.noaa.gov/stationhome.html?id=9410580 ), and it is the gauge NOAA itself cited for the region's October records. Whether the Thanksgiving king tide approaches or breaks the late-October record depends chiefly on the surge and wave-setup residual on the morning high tides of November 26-27.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
+      "resolution_criteria": "This question resolves to the highest observed water level, in feet above MLLW, recorded at NOAA Tides & Currents station 9410230 (La Jolla, CA) during the local calendar days November 26 and November 27, 2026, Pacific Standard Time (2026-11-26 08:00 UTC through 2026-11-28 07:59 UTC). The resolution value is the maximum of the station's 6-minute observed water level values in that window (datum MLLW, units English), as displayed on NOAA's water level page for the station: https://tidesandcurrents.noaa.gov/waterlevels.html?id=9410230 (set Datum to MLLW, Units to English, Interval to 6 minutes, and enter the November 26-27, 2026 date range). The same series is available from NOAA's CO-OPS Data Retrieval API with product=water_level, station=9410230, datum=MLLW, units=english, interval=6. For example, if the highest 6-minute reading in the window is 8.11 ft, the question resolves to 8.11. Resolution uses the preliminary observed data NOAA publishes in near real time; any later verification or revision of those values does not change the resolution.",
+      "fine_print": "If valid 6-minute observations are missing within one hour of either predicted high tide in the window (09:15 PST on November 26; 10:05 PST on November 27), the question is annulled, because the window's maximum could not be established. Late posting of the data is not a reason to annul; resolution simply waits until NOAA publishes the window's observations.",
+      "url": "https://www.metaculus.com/questions/46619",
       "supported_by_current_validator": true
     }
   ],
   "truncated": false,
-  "refresh_run_id": "44300765227",
-  "refresh_request_id": "req-20261118T120625Z-54bae583",
+  "refresh_run_id": "44308857282",
+  "refresh_request_id": "req-20261118T125718Z-12f8e2e4",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-18T12:06:57.615533+00:00",
-  "freshness_expires_utc": "2026-11-18T12:26:57.615533+00:00",
+  "published_at_utc": "2026-11-18T12:57:50.070935+00:00",
+  "freshness_expires_utc": "2026-11-18T13:17:50.070935+00:00",
   "is_live_tournament_submission_authorized": false
 }
