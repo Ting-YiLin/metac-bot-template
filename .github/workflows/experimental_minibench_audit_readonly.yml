@@ -43,6 +43,7 @@ jobs:
       - name: Probe official API with existing token, no submission, redacted output
         env:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           AUDIT_OUTPUT_DIR: audit_public_results
           AUDIT_SOURCE_COMMIT: 1dbf44015fbba9979cf9ebe1fe2831c7dbc3dce6
         run: python experimental_minibench_audit/collector.py
