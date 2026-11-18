@@ -1,0 +1,56 @@
+name: MiniBench independent READ-ONLY settlement scoring audit
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - experiment/minibench-score-audit-20261118
+    paths:
+      - experimental_minibench_audit/**
+      - .github/workflows/experimental_minibench_audit_readonly.yml
+# GitHub schedule only operates from DEFAULT branch. No schedule is activated
+# here because existing main branch, live workflows and schedules are immutable.
+permissions:
+  contents: read
+concurrency:
+  group: minibench-readonly-audit
+  cancel-in-progress: false
+jobs:
+  readonly_audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline scoring and security regression
+        run: |
+          python -m unittest discover -s experimental_minibench_audit/tests -p 'test_*.py' -v
+          python - <<'PY'
+          import ast,pathlib
+          base=pathlib.Path('experimental_minibench_audit')
+          for path in base.glob('*.py'):
+              tree=ast.parse(path.read_text())
+              for n in ast.walk(tree):
+                  if isinstance(n,ast.Call):
+                      if isinstance(n.func,ast.Attribute) and n.func.attr.lower() in {'post','put','patch','delete'}:
+                          raise AssertionError('HTTP_MUTATION_CALL_IN_READONLY_AUDIT')
+                      if isinstance(n.func,ast.Attribute) and n.func.attr=='Request':
+                          methods=[k.value for k in n.keywords if k.arg=='method']
+                          assert len(methods)==1 and isinstance(methods[0],ast.Constant) and methods[0].value=='GET'
+          print('HTTP_GET_ONLY_STATIC_GUARD_PASS')
+          PY
+      - name: Probe official API with existing token, no submission, redacted output
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          AUDIT_OUTPUT_DIR: audit_public_results
+          AUDIT_SOURCE_COMMIT: 1dbf44015fbba9979cf9ebe1fe2831c7dbc3dce6
+        run: python experimental_minibench_audit/collector.py
+      - name: Upload public-only state and scoring status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minibench-audit-public-only-${{ github.run_id }}
+          path: audit_public_results/
+          if-no-files-found: warn
+          retention-days: 7
