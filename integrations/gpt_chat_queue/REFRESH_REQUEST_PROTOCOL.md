@@ -63,6 +63,52 @@ publishes with a matching request ID, GPT only accepts that matching result.
     validation gates. The **submission** workflow still has
     `GPT_QUEUE_LIVE_SUBMIT: '0'` (real submissions disabled).
 
+## Immutable return channel and three-minute acceptance budget (v2)
+
+**Do not use the mutable** `state/gpt_chat_candidate_feed.json` **as the primary
+acknowledgement for a GPT request.** A scheduled backup refresh can overwrite it
+after the requested update, and chat-level reads may show a stale copy.
+
+Each valid on-demand `request_id` creates a separate, create-only JSON file:
+
+`tingyi001-test-state:state/gpt_chat_refresh_results/{request_id}.json`
+
+This file contains the normal candidate fields PLUS:
+- `refresh_request_id` equals the request file name (without .json);
+- `refresh_trigger=GPT_REQUEST`;
+- `refresh_status=COMPLETE`;
+- `refresh_run_id` and `refresh_completed_at_utc`.
+
+GitHub Actions persists this immutable file **before** updating the legacy
+shared candidate feed. The per-request file is never intentionally overwritten.
+Missing result file means *pending or failed*, not an empty candidate list.
+
+GPT read procedure:
+1. Create a unique read-only request, save the exact ID.
+2. Read **that ID's dedicated result path**, not the shared feed.
+3. Verify the matching ID, success status, scope, timestamp and eligible-item
+   consistency. If an eligible binary question exists, check real-time state.
+4. When a dedicated result is not yet present, check the matching GitHub
+   Actions run state. While the task runtime permits, continue polling about
+   every 15–20 seconds, up to a **180-second overall budget** measured from
+   request creation. Never busy-loop with multiple immediate read calls.
+5. If the workflow finishes unsuccessfully, mark BLOCKED_REFRESH_ERROR.
+   If 180 actual seconds have elapsed without the requested result, mark
+   BLOCKED_REFRESH_TIMEOUT. If the chat task cannot remain active for 180
+   seconds and must exit earlier, mark PENDING_REFRESH_UNCONFIRMED
+   (not TIMEOUT), including the request ID so a future check can reconcile it.
+6. Missing/new question = NO_ACTION only with a verified dedicated result and
+   truly zero eligible questions. Never stop the recurring schedule.
+
+**Important platform limitation:** ChatGPT scheduled turns do not provide a
+guaranteed programmatic sleep or a guaranteed three-minute active runtime.
+This is a target polling window, not a service-level guarantee. If strict
+three-minute waiting is required, implement the wait and monitoring on the
+GitHub side where wall-clock time and retries are deterministic.
+
+The existing `gpt_chat_queue.yaml` still has `GPT_QUEUE_LIVE_SUBMIT: '0'`.
+This request channel never submits a prediction.
+
 ## Change boundaries
 
 The request cannot authorize submitting to Metaculus, running a model,
