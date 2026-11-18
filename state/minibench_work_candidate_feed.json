@@ -2,39 +2,23 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-18T19:01:56.354020+00:00",
+  "checked_at_utc": "2026-11-18T20:02:24.129511+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
   "api_open_rows": 1,
-  "eligible_after_status_and_deadline_check": 1,
-  "supported_binary": 1,
-  "supported_all_formats": 1,
+  "eligible_after_status_and_deadline_check": 0,
+  "supported_binary": 0,
+  "supported_all_formats": 0,
   "counts": {
     "api_rows": 1,
-    "eligible_BinaryQuestion": 1
+    "already_forecasted": 1
   },
-  "items": [
-    {
-      "post_id": 46620,
-      "question_id": 46880,
-      "question_type": "BinaryQuestion",
-      "format_context": {
-        "question_type": "BinaryQuestion"
-      },
-      "close_time_utc": "2026-11-18T21:43:57+00:00",
-      "question_text": "Will the Banco Central del Paraguay announce a payment start date for ueno bank CDA holders by 28 November 2026?",
-      "background_info": "ueno bank S.A. is a Paraguayan bank whose failure triggered one of the largest banking resolutions in the country's history. On 2 November 2026 the Directorio of the Banco Central del Paraguay (BCP) ordered the start of resolution proceedings under Law 2334/2003, after the bank's solvency ratio fell below 50% of the legal minimum following adjustments to its financial statements.\n\nDeposits are protected by the Fondo de Garantía de Depósitos (FGD) up to 75 monthly minimum wages per depositor, i.e. G. 228,300,000 (roughly US$37,000). After Congress passed Law 7745/26 (promulgated 4 November 2026), the BCP began paying an anticipo of up to 40 minimum wages (G. 121,760,000, about US$19,000) per depositor, net of overdue debts. Payments ran in successive tranches between 5 and 11 November. By 11 November the BCP said it had reached all 1,812,348 depositors entitled to the anticipo, disbursing about G. 3.9 trillion (roughly US$643–644 million) ([20minutos/EFE](https://www.20minutos.es/internacional/ueno-bank-completa-anticipo-todos-los-clientes-cubiertos-por-garantia-estatal_7060007_0.html); [Perspectivas](https://perspectivas.com.py/noticias/el-bcp-llego-al-100-de-los-ahorristas-de-ueno-pero-lo-mas-dificil-recien-empieza)). The FGD's calculated coverage for ueno bank is about US$740 million, so a further round is still needed to lift depositors with balances above G. 121,760,000 up to the G. 228,300,000 ceiling; the BCP said on 12 November that it would extend payments from the following week to complete the 75-wage limit, subject to finishing the bank's \"balance de exclusión\".\n\nCertificados de Depósito de Ahorro (CDA) — savings certificates issued by the bank — have not yet been paid. The BCP says they require additional title verification, and on 12 November 2026 it opened a platform for CDA holders to validate ownership ([Última Hora](https://www.ultimahora.com/tenes-un-cda-en-ueno-esto-tenes-que-saber-para-recibir-el-reembolso-del-fdg); [ABC Color](https://www.abc.com.py/economia/2026/11/10/ueno-bank-como-se-recuperaran-los-cda-y-fondos-mutuos)). As of 13 November 2026 no payment date for CDA holders had been announced; FGD officials said CDA holders would be paid after the anticipo stage, and that CDA payment cannot rely on the same automated account data used for sight deposits.\n\nBalances above the G. 228,300,000 cap have no automatic guarantee and would have to be recovered through liquidation of the bank's assets, a much slower path. Roughly US$2.8 billion in deposits sat at the intervened bank, and public and pension funds are heavily exposed — including about US$516 million of IPS social-security money. The crisis also toppled the government: President Santiago Peña left office on 5 November 2026 and Vice-President Pedro Alliana was sworn in as President on 6 November 2026 ([La Tribuna](https://www.latribuna.com.py/politica/2026/11/06/pedro-alliana-asume-la-presidencia-tras-la-destitucion-de-santiago-pena/)). Prosecutors have imputed dozens of people, and Congress is considering several Ueno-related bills.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves **Yes** if, by 28 November 2026 (23:59 Paraguay local time, UTC−3), the Banco Central del Paraguay (BCP), including its Equipo Interventor, or the Fondo de Garantía de Depósitos (FGD) has publicly stated a specific calendar day on which FGD payments to holders of Certificados de Depósito de Ahorro (CDA) issued by ueno bank S.A. begin or began. The stated day may fall on any date, before or after 28 November 2026, and the statement may cover only a subset of ueno bank's CDA holders (for example, only those with balances below a threshold). The first such statement by the BCP or FGD resolves the question Yes, and later restatements, revisions or postponements of the CDA payment date do not change that outcome.\n\nIt resolves **No** if no BCP, Equipo Interventor or FGD statement giving a calendar day for the start of ueno bank CDA payments is publicly available by that deadline. The statement must be issued by one of those bodies — published through its official channels or directly quoted in [credible sources](https://www.metaculus.com/faq/#definitions); unattributed media reports of a date do not count.",
-      "fine_print": "Statements that CDA holders will be paid \"in the second stage\", \"in the coming weeks\", \"in December\" or in any other named month or period without a specific calendar day do not count, nor do announcements about CDA registration or title-verification deadlines, about the CDA validation platform, or about payments to any other class of claimant (deposits already covered by the 40-minimum-wage anticipo, mutual-fund investors, or balances above the G. 228,300,000 guarantee cap).",
-      "url": "https://www.metaculus.com/questions/46620",
-      "supported_by_current_validator": true
-    }
-  ],
+  "items": [],
   "truncated": false,
-  "refresh_run_id": "44376072662",
-  "refresh_request_id": "req-20261118T190144Z-8743fcb0",
+  "refresh_run_id": "44386714502",
+  "refresh_request_id": "req-20261118T200207Z-4f0015ce",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-18T19:02:15.277377+00:00",
-  "freshness_expires_utc": "2026-11-18T19:22:15.277377+00:00",
+  "published_at_utc": "2026-11-18T20:02:44.879822+00:00",
+  "freshness_expires_utc": "2026-11-18T20:22:44.879822+00:00",
   "is_live_tournament_submission_authorized": false
 }
