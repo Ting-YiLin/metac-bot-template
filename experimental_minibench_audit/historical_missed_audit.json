@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "tournament": "minibench",
+  "source_lock": "1dbf44015fbba9979cf9ebe1fe2831c7dbc3dce6",
+  "source_refresh_runs": [
+    "44161492478",
+    "44171495877"
+  ],
+  "full_tournament_census": false,
+  "observed_unique_eligible": 4,
+  "observations": 5,
+  "confirmed_submission_in_these_slices": 0,
+  "first_breakpoint": "NOT_ESTABLISHED",
+  "cause_status": "INCOMPLETE_EVIDENCE",
+  "notes": "Absence of receipt is not proof of the exact point of failure. Distinguish snapshot survival time from worker available time.",
+  "cases": [
+    {
+      "post_id": 46613,
+      "question_id": 46873,
+      "question_type": "MultipleChoiceQuestion",
+      "first_seen_utc": "2026-11-17T19:42:52.455958+00:00",
+      "closes_utc": "2026-11-17T19:51:44+00:00",
+      "minutes_remaining": 8.859,
+      "root_cause": "INCOMPLETE_EVIDENCE"
+    },
+    {
+      "post_id": 46614,
+      "question_id": 46874,
+      "question_type": "MultipleChoiceQuestion",
+      "first_seen_utc": "2026-11-17T19:42:52.455958+00:00",
+      "closes_utc": "2026-11-17T20:06:55+00:00",
+      "minutes_remaining": 24.042,
+      "root_cause": "INCOMPLETE_EVIDENCE"
+    },
+    {
+      "post_id": 46615,
+      "question_id": 46875,
+      "question_type": "DiscreteQuestion",
+      "first_seen_utc": "2026-11-17T19:42:52.455958+00:00",
+      "closes_utc": "2026-11-17T20:07:38+00:00",
+      "minutes_remaining": 24.759,
+      "root_cause": "INCOMPLETE_EVIDENCE"
+    },
+    {
+      "post_id": 46616,
+      "question_id": 46876,
+      "question_type": "NumericQuestion",
+      "first_seen_utc": "2026-11-17T19:42:52.455958+00:00",
+      "last_seen_utc": "2026-11-17T20:39:02.304636+00:00",
+      "closes_utc": "2026-11-17T21:32:14+00:00",
+      "minutes_remaining": 109.359,
+      "root_cause": "INCOMPLETE_EVIDENCE"
+    }
+  ]
+}
