@@ -13,11 +13,12 @@ from pathlib import Path
 
 import requests
 
-from refresh_protocol import request_id_from_push
+from refresh_protocol import request_id_from_push, ID_RE
 
 REPO = "Ting-YiLin/metac-bot-template"
 BRANCH = "tingyi001-test-state"
 PATH = "state/gpt_chat_candidate_feed.json"
+RESULT_DIR = "state/gpt_chat_refresh_results"
 OUT = Path("gpt_chat_candidate_feed_receipt.json")
 
 
@@ -66,10 +67,19 @@ def collect_feed(client, now=None):
     }
 
 
-def publish_to_github(feed, token, *, requests_module=requests):
+def publish_to_github(feed, token, *, path=PATH, create_only=False,
+                      requests_module=requests):
+    """Write candidate feed or create immutable per-request result on state branch."""
     if not token:
         raise RuntimeError("GITHUB_TOKEN_MISSING")
-    url = f"https://api.github.com/repos/{REPO}/contents/{PATH}"
+    if path != PATH and not (
+        create_only
+        and path.startswith(RESULT_DIR + "/")
+        and path.endswith(".json")
+        and ID_RE.fullmatch(path[len(RESULT_DIR) + 1:-5])
+    ):
+        raise ValueError("FORBIDDEN_FEED_OUTPUT_PATH")
+    url = f"https://api.github.com/repos/{REPO}/contents/{path}"
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
@@ -79,9 +89,14 @@ def publish_to_github(feed, token, *, requests_module=requests):
     old = requests_module.get(url, params={"ref": BRANCH}, headers=headers, timeout=20)
     if old.status_code not in (200, 404):
         raise RuntimeError("GITHUB_FEED_READ_" + str(old.status_code))
+    if create_only and old.status_code != 404:
+        raise RuntimeError("REQUEST_RESULT_ALREADY_EXISTS")
     payload = {
         "branch": BRANCH,
-        "message": "Refresh public testing-area question feed (read only)",
+        "message": (
+            "Record immutable read-only candidate refresh result"
+            if create_only else "Refresh public testing-area question feed (read only)"
+        ),
         "content": base64.b64encode(
             (json.dumps(feed, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
         ).decode("ascii"),
@@ -89,7 +104,8 @@ def publish_to_github(feed, token, *, requests_module=requests):
     if old.status_code == 200:
         payload["sha"] = old.json()["sha"]
     put = requests_module.put(url, headers=headers, json=payload, timeout=25)
-    if put.status_code not in (200, 201):
+    expected = 201 if create_only else (200, 201)
+    if put.status_code not in ((expected,) if isinstance(expected, int) else expected):
         raise RuntimeError("GITHUB_FEED_WRITE_" + str(put.status_code))
     return True
 
@@ -106,12 +122,21 @@ def main():
         feed["refresh_run_id"] = os.getenv("GITHUB_RUN_ID")
         feed["refresh_trigger_commit"] = os.getenv("GITHUB_SHA")
         feed["refresh_completed_at_utc"] = datetime.now(timezone.utc).isoformat()
+        feed["refresh_status"] = "COMPLETE"
         result.update({
             "status": "FETCHED",
             "eligible_unforecasted": feed["eligible_unforecasted"],
             "open_questions_seen": feed["open_questions_seen"],
         })
-        publish_to_github(feed, os.getenv("GITHUB_TOKEN", ""))
+        token = os.getenv("GITHUB_TOKEN", "")
+        if request_id:
+            # Write an append-only result BEFORE the shared mutable feed. A
+            # later scheduled refresh can never overwrite this request's data.
+            immutable_path = f"{RESULT_DIR}/{request_id}.json"
+            publish_to_github(feed, token, path=immutable_path, create_only=True)
+            result["immutable_result_path"] = immutable_path
+            result["immutable_result_written"] = True
+        publish_to_github(feed, token)
         result["status"] = "PUBLISHED_TO_STATE_BRANCH"
     except Exception as exc:
         result["status"] = "FAILED_NO_FEED_UPDATE"
