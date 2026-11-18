@@ -55,3 +55,16 @@ jobs:
           path: audit_public_results/
           if-no-files-found: warn
           retention-days: 7
+
+      - name: Archive executable audit source for independent replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minibench-audit-source-${{ github.run_id }}
+          path: |
+            experimental_minibench_audit/score_core.py
+            experimental_minibench_audit/collector.py
+            experimental_minibench_audit/tests/test_scoring.py
+            .github/workflows/experimental_minibench_audit_readonly.yml
+          if-no-files-found: error
+          retention-days: 7
