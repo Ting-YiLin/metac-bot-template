@@ -13,7 +13,10 @@ from pathlib import Path
 
 import requests
 
-from refresh_protocol import request_id_from_push, ID_RE
+try:
+    from .refresh_protocol import request_id_from_push, ID_RE
+except ImportError:
+    from refresh_protocol import request_id_from_push, ID_RE
 
 REPO = "Ting-YiLin/metac-bot-template"
 BRANCH = "tingyi001-test-state"
