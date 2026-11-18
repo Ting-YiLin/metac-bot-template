@@ -34,7 +34,7 @@ def discover_verified_receipts(github_token):
         cases=[]
         for file in listing:
             name=file.get('name','')
-            if not re.fullmatch(r'run-[0-9]+\\.json',name):continue
+            if not re.fullmatch(r'run-[0-9]+\.json',name):continue
             encoded=query(root+'/'+name+'?ref=tingyi001-test-state')
             raw=base64.b64decode(encoded.get('content',''))
             obj=json.loads(raw)
