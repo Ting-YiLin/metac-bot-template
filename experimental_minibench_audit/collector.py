@@ -140,7 +140,7 @@ def process_case(item,token,commit):
             if len(opts)!=len(vector):raise ValueError('OPTION_VECTOR_MISMATCH')
             out.update(choice_metrics(vector,win))
         elif kind in ('NumericQuestion','DateQuestion','DiscreteQuestion'):
-            if q.get('zero_point') is not None or str(q.get('scaling','linear')).lower() not in ('linear','none'):
+            if q.get('zero_point') is not None or str(q.get('scaling',q.get('scale','linear'))).lower() not in ('linear','none'):
                 raise ValueError('AUX_NOT_SUPPORTED_SCALE')
             lo=q.get('lower_bound');hi=q.get('upper_bound')
             if kind=='DateQuestion':
