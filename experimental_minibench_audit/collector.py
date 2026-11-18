@@ -71,6 +71,15 @@ def process_case(item,token,commit):
         out.update(platform_state=state,resolution_class=cls,has_resolution=raw is not None)
         history=get_history(q)
         out.update(my_history_accessible=history is not None,historic_vector_readable=False)
+        # Probe historical vector in transient memory even before resolution.
+        # Only status flags are persisted; probability values never leave the runner.
+        if history is not None:
+            hist_fore,hist_err=choose_last_before_close(history,q.get('scheduled_close_time') or q.get('close_time'))
+            out['forecast_timestamp_present']=(hist_err is None)
+            if hist_fore is not None and vector_valid(hist_fore.get('forecast_values'),kind):
+                vector_probe=hist_fore['forecast_values']
+                out['historic_vector_readable']=(kind!='BinaryQuestion' or len(vector_probe)==2)
+                out['forecast_valid_before_close']=out['historic_vector_readable']
         if cls!='RESOLVED_VALID':
             out.update(score_status=cls,reason_missing='NOT_ELIGIBLE_FOR_SCORING')
             return out
