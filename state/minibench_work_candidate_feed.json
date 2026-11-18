@@ -2,53 +2,23 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-18T01:37:56.177929+00:00",
+  "checked_at_utc": "2026-11-18T02:42:19.672436+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
   "api_open_rows": 1,
-  "eligible_after_status_and_deadline_check": 1,
+  "eligible_after_status_and_deadline_check": 0,
   "supported_binary": 0,
-  "supported_all_formats": 1,
+  "supported_all_formats": 0,
   "counts": {
     "api_rows": 1,
-    "eligible_NumericQuestion": 1
+    "already_forecasted": 1
   },
-  "items": [
-    {
-      "post_id": 46617,
-      "question_id": 46877,
-      "question_type": "NumericQuestion",
-      "format_context": {
-        "question_type": "NumericQuestion",
-        "lower_bound": 97000.0,
-        "upper_bound": 111000.0,
-        "open_lower_bound": true,
-        "open_upper_bound": true,
-        "zero_point": null,
-        "cdf_size": 201,
-        "recommended_quantile_levels": [
-          10,
-          20,
-          40,
-          60,
-          80,
-          90
-        ]
-      },
-      "close_time_utc": "2026-11-18T04:25:35+00:00",
-      "question_text": "What 2026 cumulative dengue case count will Colombia's INS report in the latest weekly epidemiological bulletin published on or before 27 November 2026?",
-      "background_info": "Dengue is hyperendemic in Colombia, with all four serotypes circulating in 2026, and national epidemics recur roughly every three years (2010, 2013, 2016, 2019, 2023). The Instituto Nacional de Salud (INS) publishes a weekly Boletín Epidemiológico Semanal (BES) that, among its tracer events, reports the dengue cases notified in the week and the year-to-date accumulated total, together with incidence per 100,000 inhabitants and lethality. BES figures are preliminary and are revised in later issues as late notifications are processed, so each bulletin's accumulated total exceeds the sum of its weekly counts — a share of every issue's notifications refers to earlier weeks.\n\nStatus quo (mid-November 2026): the 2026 dengue epidemic has been in an outbreak situation nationally since around August, with roughly 190 municipalities above expected levels and 23–25 territorial entities in outbreak. Trajectory of the accumulated case count: 68,370 at epidemiological week (EW) 31 (week ending 8 August), 70,350 at EW32, 83,556 at EW38 (3 October), 94,618 at EW42 (24 October) and 97,894 at EW43 (25–31 October) — the latest issue, published 6 November 2026. The EW43 issue recorded 3,821 dengue notifications in that report (2,646 in EW43 itself and 1,175 from earlier weeks), an incidence of 290.3 per 100,000, 65 confirmed deaths with 45 more under investigation, and lethality of 0.07%; the INS reported increases above 30% in 25 territorial entities, and cases in EW39–42 were 33.8% above EW35–38. Growth over EW38→EW43 averaged roughly 2,900 cases per week. On 10 November the Ministry of Health reported 98,096 cases and 73 confirmed deaths, noting that October produced 13% of the year's diagnoses and 23% of its deaths. The 2026 total remains below 2025 (which ended at about 123,800 cases), but the gap has narrowed from 27% below at EW33 to about 13% below at EW42 as recent weeks ran above last year's. On 8 October IDEAM declared El Niño conditions, which the government cites as raising dengue risk; the Ministry of Health has intensified vector control and early-warning measures.\n\nPublication timing: the BES is posted on Thursdays or Fridays, typically five to six days after the end of the epidemiological week it covers (EW36 covering 6–12 September appeared 17 September; EW39 covering 27 September–3 October appeared 8 October; EW40 covering 4–10 October appeared 15 October; EW41 appeared 23 October; EW43 covering 25–31 October appeared 6 November). The EW45 issue (8–14 November) is therefore expected around 19–20 November and the EW46 issue (15–21 November) around 26–27 November 2026 — the latter is the issue most likely to be the most recent one available on the resolution date, though the resolution criteria also cover the case where it slips.\n\nUseful things to research when forecasting: week-on-week increments in recent BES issues (including the EW44 and EW45 issues, expected in mid- and late November), how much of each issue's total comes from late notification of earlier weeks, typical late-November seasonality in Colombia's dengue curve versus the unusual late-2026 upswing, and whether El Niño conditions and vector-control measures are showing up in the notification trend.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves to the year-to-date 2026 dengue case total reported in the most recent issue of Colombia's Boletín Epidemiológico Semanal (BES, Instituto Nacional de Salud) posted on the INS website on or before 27 November 2026 (Colombia local time, UTC−5). Issues are reachable via the INS BES portal at https://www.ins.gov.co/publicaciones/SitePages/BES.aspx; the latest issue published as of mid-November 2026 is the one for epidemiological week 43 (25–31 October 2026), and the resolving issue will normally be the week 46 issue (15–21 November 2026), or the week 45 issue (8–14 November 2026) if week 46 is not posted in time. The resolved value is the bulletin's accumulated dengue total for 2026 — the combined figure covering all clinical classifications (dengue without warning signs, with warning signs, and severe dengue) shown alongside the week's new dengue case count in the bulletin's national-situation / tracer-events entry for dengue, whether that cumulative is labelled by epidemiological week or by epidemiological period (the week-43 issue reported 97,894). Report the value in cases (e.g. 97,894 resolves as 97,894). If the INS bulletin cannot be retrieved, the figure reported for that bulletin by [credible sources](https://www.metaculus.com/faq/#definitions) may be used.",
-      "fine_print": "An issue counts as published on the date it is posted on the INS website; a week-46 issue posted after 23:59 Colombia time (UTC−5) on 27 November 2026 does not count, and the week-45 issue is used instead. If the INS portal gives no posting date for an issue, use the publication date printed on the bulletin itself or, failing that, the earliest date on which the issue was publicly available (e.g. the first web-archive capture). If a single bulletin presents different accumulated dengue totals in different places (for example the national command table, \"Tabla de mando nacional\", versus the dengue section), use the dengue-section figure described above.",
-      "url": "https://www.metaculus.com/questions/46617",
-      "supported_by_current_validator": true
-    }
-  ],
+  "items": [],
   "truncated": false,
-  "refresh_run_id": "44217246647",
-  "refresh_request_id": "req-20261118T013736Z-v2q013736",
+  "refresh_run_id": "44225183176",
+  "refresh_request_id": "req-20261118T024207Z-v2s024207",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-18T01:38:14.128403+00:00",
-  "freshness_expires_utc": "2026-11-18T01:58:14.128403+00:00",
+  "published_at_utc": "2026-11-18T02:42:42.555898+00:00",
+  "freshness_expires_utc": "2026-11-18T03:02:42.555898+00:00",
   "is_live_tournament_submission_authorized": false
 }
