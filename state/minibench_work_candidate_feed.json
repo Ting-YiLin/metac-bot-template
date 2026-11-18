@@ -2,54 +2,23 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-18T12:57:30.683410+00:00",
+  "checked_at_utc": "2026-11-18T14:01:58.854103+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
   "api_open_rows": 2,
-  "eligible_after_status_and_deadline_check": 1,
+  "eligible_after_status_and_deadline_check": 0,
   "supported_binary": 0,
-  "supported_all_formats": 1,
+  "supported_all_formats": 0,
   "counts": {
     "api_rows": 2,
-    "eligible_NumericQuestion": 1,
-    "already_forecasted": 1
+    "already_forecasted": 2
   },
-  "items": [
-    {
-      "post_id": 46619,
-      "question_id": 46879,
-      "question_type": "NumericQuestion",
-      "format_context": {
-        "question_type": "NumericQuestion",
-        "lower_bound": 6.5,
-        "upper_bound": 8.8,
-        "open_lower_bound": true,
-        "open_upper_bound": true,
-        "zero_point": null,
-        "cdf_size": 201,
-        "recommended_quantile_levels": [
-          10,
-          20,
-          40,
-          60,
-          80,
-          90
-        ]
-      },
-      "close_time_utc": "2026-11-18T15:34:49+00:00",
-      "question_text": "What will be the highest observed water level (ft above MLLW) at NOAA's La Jolla, CA tide gauge (station 9410230) on November 26-27, 2026?",
-      "background_info": "Late October 2026 brought record water levels to the Southern California coast. NOAA reports all-time highest observed levels (measured above Mean Higher High Water) during October 24-30 at San Diego (2.80 ft), La Jolla (2.65 ft), Los Angeles (2.70 ft), Santa Barbara (2.65 ft) and Santa Monica (2.72 ft): https://oceanservice.noaa.gov/news/nov26/california-record-water-levels.html . At La Jolla (9410230) that 2.65 ft above MHHW peak corresponds to roughly 8.0 ft above MLLW, given the station's MHHW-MLLW separation of 5.32 ft; the station's highest astronomical tide is 7.20 ft MLLW. The driver was a strong El Nino combined with a downwelling Kelvin wave, near-record ocean heat (Scripps Pier SST about 75.4 F) and large west swell; gauges from La Jolla to San Francisco ran 12-17 inches above astronomical prediction, and the Los Angeles Times reported average sea level 1.4 ft higher than expected in San Diego and 1.3 ft higher in Los Angeles for the week ending October 30: https://www.latimes.com/california/story/2026-11-02/el-ninos-worst-case-scenario-for-california-coast-high-tides-record-heat-big-storms .\n\nThe next king tides run roughly November 23-27, 2026, with the City of Newport Beach warning that water levels could rise 12 inches or more above October's record 8.4 ft high tide: https://visitnewportbeach.com/wp-content/uploads/2026/11/CITY-OF-NEWPORT-BEACH-ASKS-RESIDENTS-TO-PREPARE-FOR-HIGHER-KING-TIDES-INCREASED-RISK-OF-COASTAL-FLOODING.pdf . NOAA's harmonic predictions for station 9410230 give a high tide of 6.84 ft MLLW at 09:15 PST on November 26 and 6.50 ft at 10:05 PST on November 27; the 6.96 ft high at 08:29 PST on November 25 falls just before this question's window. Positive non-tidal residuals have persisted: on the morning of November 13 the gauge was already reading about 5.9 ft MLLW at 07:36 PST, ahead of a predicted high of 5.23 ft at 10:04 PST (roughly 1 ft above prediction), and National Weather Service offices were quoting total water levels about 1.3-1.4 ft above normal (formatted as \"ft above normal (ft MLLW)\") for the November 8-11 high tides. Background on the Kelvin wave and gauge residuals: https://www.calcoasttides.com/blog/kelvin-wave-california-2026 .\n\nStation 9410230 at La Jolla (Scripps Pier) is used because it is the nearest active NOAA open-coast gauge to Newport Beach with real-time 6-minute observations (the Newport Bay Entrance station, 9410580, was decommissioned in 1994 and issues predictions only: https://tidesandcurrents.noaa.gov/stationhome.html?id=9410580 ), and it is the gauge NOAA itself cited for the region's October records. Whether the Thanksgiving king tide approaches or breaks the late-October record depends chiefly on the surge and wave-setup residual on the morning high tides of November 26-27.\n\n`{\"format\": \"llm_question\", \"info\": {\"sdk_version\": \"0.6.1\", \"rating\": {\"quality\": 3, \"ambiguity\": 3, \"resolvability\": 4, \"passes\": true}}}`",
-      "resolution_criteria": "This question resolves to the highest observed water level, in feet above MLLW, recorded at NOAA Tides & Currents station 9410230 (La Jolla, CA) during the local calendar days November 26 and November 27, 2026, Pacific Standard Time (2026-11-26 08:00 UTC through 2026-11-28 07:59 UTC). The resolution value is the maximum of the station's 6-minute observed water level values in that window (datum MLLW, units English), as displayed on NOAA's water level page for the station: https://tidesandcurrents.noaa.gov/waterlevels.html?id=9410230 (set Datum to MLLW, Units to English, Interval to 6 minutes, and enter the November 26-27, 2026 date range). The same series is available from NOAA's CO-OPS Data Retrieval API with product=water_level, station=9410230, datum=MLLW, units=english, interval=6. For example, if the highest 6-minute reading in the window is 8.11 ft, the question resolves to 8.11. Resolution uses the preliminary observed data NOAA publishes in near real time; any later verification or revision of those values does not change the resolution.",
-      "fine_print": "If valid 6-minute observations are missing within one hour of either predicted high tide in the window (09:15 PST on November 26; 10:05 PST on November 27), the question is annulled, because the window's maximum could not be established. Late posting of the data is not a reason to annul; resolution simply waits until NOAA publishes the window's observations.",
-      "url": "https://www.metaculus.com/questions/46619",
-      "supported_by_current_validator": true
-    }
-  ],
+  "items": [],
   "truncated": false,
-  "refresh_run_id": "44308857282",
-  "refresh_request_id": "req-20261118T125718Z-12f8e2e4",
+  "refresh_run_id": "44319789247",
+  "refresh_request_id": "req-20261118T140139Z-8913f4c02a",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-18T12:57:50.070935+00:00",
-  "freshness_expires_utc": "2026-11-18T13:17:50.070935+00:00",
+  "published_at_utc": "2026-11-18T14:02:17.342751+00:00",
+  "freshness_expires_utc": "2026-11-18T14:22:17.342751+00:00",
   "is_live_tournament_submission_authorized": false
 }
