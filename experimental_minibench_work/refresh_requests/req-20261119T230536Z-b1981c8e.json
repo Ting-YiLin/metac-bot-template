@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "request_id": "req-20261119T230536Z-b1981c8e",
+  "source": "chatgpt_work_scheduled_forecast",
+  "tournament": "minibench",
+  "intent": "READ_ONLY_REFRESH",
+  "created_at_utc": "2026-11-19T23:05:36Z"
+}
