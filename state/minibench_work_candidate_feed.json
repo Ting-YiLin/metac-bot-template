@@ -2,7 +2,7 @@
   "schema_version": 1,
   "scope": "AUTHENTICATED_OPEN_SLICE_ONLY_READ_ONLY_NO_SUBMISSION",
   "tournament_requested": "minibench",
-  "checked_at_utc": "2026-11-19T19:01:30.353186+00:00",
+  "checked_at_utc": "2026-11-19T20:03:13.423443+00:00",
   "complete_60_question_census": false,
   "bot_account_tournament_admission_verified": false,
   "api_open_rows": 0,
@@ -12,10 +12,10 @@
   "counts": {},
   "items": [],
   "truncated": false,
-  "refresh_run_id": "44593924198",
-  "refresh_request_id": "req-20261119T190116Z-e200090c",
+  "refresh_run_id": "44604620639",
+  "refresh_request_id": "req-20261119T200258Z-7eeeffc4",
   "refresh_trigger": "WORK_REQUEST",
-  "published_at_utc": "2026-11-19T19:01:49.153932+00:00",
-  "freshness_expires_utc": "2026-11-19T19:21:49.153932+00:00",
+  "published_at_utc": "2026-11-19T20:03:33.711415+00:00",
+  "freshness_expires_utc": "2026-11-19T20:23:33.711415+00:00",
   "is_live_tournament_submission_authorized": false
 }
