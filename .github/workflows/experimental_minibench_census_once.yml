@@ -1,0 +1,30 @@
+name: MiniBench one-shot full metadata census (GET only)
+on:
+  push:
+    branches:
+      - experiment/work-luna-sol-minibench-20261117
+    paths:
+      - '.github/workflows/experimental_minibench_census_once.yml'
+permissions:
+  contents: read
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Census all MiniBench statuses and times (GET only)
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+        run: python experimental_minibench_work/readonly_census_20261120.py
+      - name: Store safe metadata-only audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minibench-metadata-census-once-20261120
+          path: minibench_census_20261120.json
+          if-no-files-found: ignore
+          retention-days: 7
