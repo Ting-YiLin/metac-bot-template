@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "checked_at_utc": "2026-11-28T08:54:45.158793+00:00",
+  "checked_at_utc": "2026-11-28T09:49:30.586433+00:00",
   "tournament": "bot-testing-area",
   "open_questions_seen": 10,
   "eligible_unforecasted": 0,
   "excluded_or_forecasted": 10,
   "items": [],
   "scope": "READ_ONLY_QUESTION_FEED_NO_FORECAST_NO_SUBMISSION",
-  "refresh_request_id": "req-20261128T085427Z-7c3f91ab2e",
+  "refresh_request_id": "req-20261128T094911Z-d3i514cgb0",
   "refresh_trigger": "GPT_REQUEST",
-  "refresh_run_id": "46127976222",
-  "refresh_trigger_commit": "55afa93cf9ad855cd740ece539f7835e4c745091",
-  "refresh_completed_at_utc": "2026-11-28T08:54:50.338675+00:00",
+  "refresh_run_id": "46132246213",
+  "refresh_trigger_commit": "78f55f667053db9bdca6d3577b2e97363c363b52",
+  "refresh_completed_at_utc": "2026-11-28T09:49:35.226996+00:00",
   "refresh_status": "COMPLETE"
 }
